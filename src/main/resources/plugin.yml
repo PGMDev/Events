@@ -1,0 +1,4 @@
+name: Ingame
+main: rip.bolt.ingame.Tournament
+version: 1.0.0-SNAPSHOT
+depend: [PGM]

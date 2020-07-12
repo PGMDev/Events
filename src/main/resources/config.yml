@@ -1,0 +1,9 @@
+# default config
+observers-must-ready: true
+
+api:
+  enabled: false
+  url: https://localhost:3000/v1/
+  key: authorisation-key
+  getMatch: /match/{server}
+  matchResults: /match/{server}/finish
