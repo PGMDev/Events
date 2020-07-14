@@ -87,7 +87,7 @@ public class RankedManager implements Listener {
         for (Team team : match.getTeams())
             Tournament.get().getTeamManager().addTeam(team);
 
-        format = new TournamentFormatImpl(Tournament.get().getTeamManager(), new TournamentRoundOptions(true, false, true, Duration.ofMinutes(30), Duration.ofSeconds(30), Duration.ofSeconds(40), new BestOfCalculation<>(1)), new RoundReferenceHolder());
+        format = new TournamentFormatImpl(Tournament.get().getTeamManager(), new TournamentRoundOptions(false, false, true, Duration.ofMinutes(30), Duration.ofSeconds(30), Duration.ofSeconds(40), new BestOfCalculation<>(1)), new RoundReferenceHolder());
         SingleRound ranked = new SingleRound(format, new SingleRoundOptions("ranked", Duration.ofSeconds(5), Duration.ofSeconds(300), match.getMap(), 1, true, true));
         format.addRound(ranked);
 
