@@ -28,9 +28,9 @@ players:
 
 ## Running
 
-* Ensure that `plugins/Ingame/teams/` contains all the teams playing in this tournament and `plugins/Ingame/pools/` contains the pools for this tournament.
+* Ensure that `plugins/Ingame/teams/` contains all the teams playing in this tournament and `plugins/Ingame/formats/` contains the pools for this tournament.
 * Register each team playing with `/tm register <team>`
-* Start the pool with `/tm create <pool>` where `<pool>.xml` is a valid file in `plugins/Ingame/pools`
+* Start the pool with `/tm create <pool>` where `<pool>.xml` is a valid file in `plugins/Ingame/formats`
 * Ingame, at the moment, only runs with [Bolt's fork of PGM](https://github.com/bolt-rip/PGM). This will definitely change in the future, as we are looking forward to pushing our changes to upstream. In the meantime, you can get it compiled [here](https://cdn.discordapp.com/attachments/564897116749692948/731025211876704319/PGM.jar).
 
 ### Permissions
