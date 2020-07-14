@@ -1,0 +1,39 @@
+<format best-of="3">
+	<veto>
+		<decider>
+			<match id="veto_decider">Facility TE</match>
+		</decider>
+		<options>
+			<veto name="CTW">
+				<decider>
+					<result-from id="veto_decider" />
+				</decider>
+				<options>
+					<match>Race for Victory 2</match>
+					<match>Fairy Tales 2: A Tale or Two</match>
+					<match>Golden Drought II</match>
+					<match>Deepwind Jungle TE</match>
+					<match>NextGen TE</match>
+				</options>
+				<order ban-until="1" starting-team="2" />
+			</veto>
+			<veto name="DTM">
+				<decider>
+					<result-from id="veto_decider" />
+				</decider>
+				<options>
+					<match>Warlock</match>
+					<match>Spaceship Battles TE</match>
+					<match>The Fenland</match>
+					<match>Ender Blast</match>
+					<match>BoomBox</match>
+				</options>
+				<order ban-until="1" starting-team="2" />
+			</veto>
+			<match>Limbo II</match>
+			<match>Facility TE</match>
+			<match>Dwyer Hill</match>
+		</options>
+	</veto>
+	<match>Boom</match><!-- Tiebreaker -->
+</format>

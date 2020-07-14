@@ -1,0 +1,15 @@
+<format best-of="3">
+	<veto>
+		<decider>
+			<match>Warlock</match>
+		</decider>
+		<options>
+			<match>Abstract</match>
+			<match>Race for Victory 2</match>
+			<match>Fairy Tales 2: A Tale or Two</match>
+			<match>Limbo II</match>
+			<match>Golden Drought II</match>
+		</options>
+	</veto>
+	<match>Boom</match><!-- Tiebreaker -->
+</format>

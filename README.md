@@ -1,12 +1,12 @@
 # Ingame
 
-Plugin to used to manage competitive matches on bolt.rip. Upon joining or cycling, all players on the match's registered teams will be forced onto their respective teams. Ingame also manages cycling & starting matches as well as readying teams. Maps played in a match can be customised using a pool file. Customisable vetos are also supported.
+Plugin to used to manage competitive matches on bolt.rip. Upon joining or cycling, all players on the match's registered teams will be forced onto their respective teams. Ingame also manages cycling & starting matches as well as readying teams. Maps played in a match can be customised using a format file. Customisable vetos are also supported.
 
 ## Setup
 
 * For an offline tournament, make sure `api.enabled` is set to `false` in `config.yml`.
 * Put each team that is playing in its own yml file in `plugins/Ingame/teams`.
-* Put each pool in its own file in `plugins/Ingame/pools`.
+* Put each format in its own file in `plugins/Ingame/format`.
 
 ### Sample Team file
 
@@ -28,9 +28,9 @@ players:
 
 ## Running
 
-* Ensure that `plugins/Ingame/teams/` contains all the teams playing in this tournament and `plugins/Ingame/formats/` contains the pools for this tournament.
+* Ensure that `plugins/Ingame/teams/` contains all the teams playing in this tournament and `plugins/Ingame/formats/` contains the formats for this tournament.
 * Register each team playing with `/tm register <team>`
-* Start the pool with `/tm create <pool>` where `<pool>.xml` is a valid file in `plugins/Ingame/formats`
+* Start the format with `/tm create <format>` where `<format>.xml` is a valid file in `plugins/Ingame/formats`
 * Ingame, at the moment, only runs with [Bolt's fork of PGM](https://github.com/bolt-rip/PGM). This will definitely change in the future, as we are looking forward to pushing our changes to upstream. In the meantime, you can get it compiled [here](https://cdn.discordapp.com/attachments/564897116749692948/731025211876704319/PGM.jar).
 
 ### Permissions
@@ -48,9 +48,9 @@ players:
 
 | Tag | Definition | Attributes | Expects child |
 | --- | ---------- | ---------- | ------------- |
-| `<format>` | Represents a map pool. Should be the root element in your pool.xml file. | `best-of="3"` - what this match should be out of | Round(s) |
+| `<format>` | Represents a map format. Should be the root element in your format.xml file. It is also a round and therefore can be used to create a nested best of 3. | `best-of="3"` - what this match should be out of | Round(s) |
 | `<match>` | Represents a single match. | `id` - defaults to map name | The name of the map to be played on this round |
-| `<result-from>` | Uses the result from a round with a matching id - useful to stop repeating veto deciders | `id="map-name"` | N/A |
+| `<result-from />` | Uses the result from a round with a matching id - useful to stop repeating veto deciders | `id="map-name"` | N/A |
 | `<veto>` | Represents a veto round | `id="veto"` | **Required:** `<decider>`, `<options>`, `<order>` |
 | `<decider>` | Which team vetoes first | N/A | A round |
 | `<options>` | What vetos should there be | `name` on the child element - what name should be displayed in the veto | Round(s) |
@@ -90,7 +90,7 @@ players:
 </format>
 ```
 
-### More complicated sample pool file
+### More complicated sample format file
 
 ```xml
 <format best-of="1">
