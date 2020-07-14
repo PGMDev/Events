@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import rip.bolt.ingame.api.APIManager;
+import rip.bolt.ingame.commands.RankedAdminCommands;
 import rip.bolt.ingame.commands.TournamentAdminCommands;
 import rip.bolt.ingame.commands.TournamentUserCommands;
 import rip.bolt.ingame.commands.providers.TournamentProvider;
@@ -63,6 +64,7 @@ public class Tournament extends JavaPlugin {
         DispatcherNode node = g.getRootDispatcherNode();
         node.registerCommands(new TournamentUserCommands());
         node.registerCommands(readyCommands);
+        node.registerCommands(new RankedAdminCommands());
         node = node.registerNode("tourney", "tournament", "tm");
         node.registerCommands(new TournamentAdminCommands());
 
@@ -82,6 +84,10 @@ public class Tournament extends JavaPlugin {
 
     public APIManager getApiManager() {
         return apiManager;
+    }
+
+    public RankedManager getRankedManager() {
+        return rankedManager;
     }
 
     public TournamentTeamManager getTeamManager() {

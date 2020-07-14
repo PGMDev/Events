@@ -128,4 +128,8 @@ public class RankedManager implements Listener {
         }
     }
 
+    public void poll() {
+        pollTask.run();
+    }
+
 }
