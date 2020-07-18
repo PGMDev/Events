@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import net.md_5.bungee.api.ChatColor;
+import rip.bolt.ingame.config.AppData;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.api.party.Party;
 import tc.oc.pgm.api.player.MatchPlayer;
@@ -83,6 +84,11 @@ public class ReadyCommands {
     private boolean canReady(CommandSender sender, MatchPlayer player) {
         if (!readySystem.canReadyAction()) {
             sender.sendMessage(ChatColor.RED + "You are not able to ready at this time!");
+            return false;
+        }
+
+        if (!AppData.observersMustReady() && player.getParty() instanceof ObservingParty) {
+            sender.sendMessage(ChatColor.RED + "Observers are not allowed to ready!");
             return false;
         }
 

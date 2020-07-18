@@ -35,6 +35,8 @@ public class SingleRound extends AbstractRound<SingleRoundOptions> {
         this.scoreMap = new HashMap<>();
 
         MapInfo mapInfo = PGM.get().getMapLibrary().getMap(options.map());
+        if (mapInfo == null)
+            throw new IllegalArgumentException("Map " + options.map() + " wasn't found in PGM's map library. Make sure it is listed in /maps and restart the server!");
         fullMapName = mapInfo.getName();
 
         this.roundDescription = new SingleRoundDescription(fullMapName, this, format);

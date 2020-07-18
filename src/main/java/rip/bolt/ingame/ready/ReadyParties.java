@@ -39,4 +39,5 @@ public class ReadyParties {
         int extraParties = AppData.observersMustReady() ? 1 : 2;
         return currentReadyParties.size() == match.getParties().size() - extraParties;
     }
+
 }
