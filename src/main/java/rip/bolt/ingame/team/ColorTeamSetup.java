@@ -51,10 +51,9 @@ public class ColorTeamSetup implements TeamSetup {
 
         for (Team team : teams) {
             TournamentTeam colourTeam = colorTeams.get(team.getColor());
-            if (colourTeam != null) {
+            if (colourTeam != null && !this.assigned.containsKey(colourTeam)) {
                 //team with that colour, lets assign the
                 assignTeam(team, colourTeam);
-                //colorTeams.remove(team.getColor());
                 continue;
             }
 
@@ -76,20 +75,25 @@ public class ColorTeamSetup implements TeamSetup {
                 .filter(Objects::nonNull)
                 .filter(x -> !assigned.containsKey(x))
                 .forEach(unassigned::add);
-
-        //colorTeams.clear();
     }
 
     private void assignLeftovers(List<Team> leftoverTeams) {
+        Iterator<TournamentTeam> teamIterator = unassigned.iterator();
         for (Team leftover : leftoverTeams) {
             if (unassigned.isEmpty()) {
                 return;
             }
 
-            TournamentTeam selected = unassigned.iterator().next();
-            unassigned.remove(selected);
-            assignTeam(leftover, selected);
+            while (teamIterator.hasNext()) {
+                TournamentTeam selected = teamIterator.next();
+                if (!assigned.containsKey(selected)) {
+                    assignTeam(leftover, selected);
+                    break;
+                }
+            }
         }
+
+        assigned.keySet().forEach(unassigned::remove);
     }
 
     private void reset() {
@@ -98,7 +102,7 @@ public class ColorTeamSetup implements TeamSetup {
             TournamentTeam deleted = colorTeams.put(team.getColor(), tournamentTeam);
 
             //there should never be a duplicate but just in case remove it here
-            if (deleted != null && !deleted.getName().equals(tournamentTeam.getName())) {
+            if (deleted != null && !deleted.equals(tournamentTeam)) {
                 //team used to have this colour, doesn't anymore
                 unassigned.add(deleted);
             }
