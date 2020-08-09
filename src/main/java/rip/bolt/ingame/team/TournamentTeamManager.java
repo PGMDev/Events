@@ -12,6 +12,8 @@ public interface TournamentTeamManager {
 
     void addTeam(TournamentTeam team);
 
+    void removePlayerFromTeams(UUID uuid);
+
     void clear();
 
     void setupTeams(Collection<Team> teams);

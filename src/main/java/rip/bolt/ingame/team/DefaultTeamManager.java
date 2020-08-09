@@ -49,6 +49,12 @@ public class DefaultTeamManager implements TournamentTeamManager {
         this.teamSetup = new ColorTeamSetup(teams);
     }
 
+    public void removePlayerFromTeams(UUID uuid){
+        teams.forEach(t -> {
+            t.getPlayers().removeIf(p -> p.getUUID().equals(uuid));
+        });
+    }
+
     @Override
     public Optional<TournamentTeam> tournamentTeamPlayer(UUID player) {
         for (TournamentTeam team : teamMap.keySet())

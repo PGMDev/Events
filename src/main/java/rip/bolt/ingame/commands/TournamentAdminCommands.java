@@ -59,6 +59,8 @@ public class TournamentAdminCommands {
             sender.sendMessage(ChatColor.RED + "No player with name: '" + userName + "' found!");
             return;
         }
+        //need to prevent a player being part of multiple teams
+        teamManager.removePlayerFromTeams(uuid);
 
         team.addPlayer(TournamentPlayer.create(uuid, true));
         sender.sendMessage(ChatColor.YELLOW + "Added player: " + userName + "!");
