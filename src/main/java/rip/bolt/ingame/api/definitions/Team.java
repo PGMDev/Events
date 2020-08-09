@@ -1,6 +1,7 @@
 package rip.bolt.ingame.api.definitions;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -38,6 +39,14 @@ public class Team implements TournamentTeam {
     @Override
     public List<TournamentPlayer> getPlayers() {
         return this.participants;
+    }
+
+    public void addPlayer(TournamentPlayer player) {
+        this.participants.add(player);
+    }
+
+    public void removePlayer(UUID uuid) {
+        getPlayers().removeIf(p -> p.getUUID().equals(uuid));
     }
 
     @Override

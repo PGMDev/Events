@@ -50,6 +50,10 @@ public interface TournamentTeam {
         return true;
     }
 
+    public void addPlayer(TournamentPlayer player);
+
+    public void removePlayer(UUID uuid);
+
     public static TournamentTeam create(String name, List<TournamentPlayer> players) {
         return new Team(name, players);
     }
