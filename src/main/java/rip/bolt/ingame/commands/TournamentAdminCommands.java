@@ -6,6 +6,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
 import rip.bolt.ingame.TournamentManager;
+import rip.bolt.ingame.format.TournamentFormat;
 import rip.bolt.ingame.team.ConfigTeamParser;
 import rip.bolt.ingame.team.TournamentPlayer;
 import rip.bolt.ingame.team.TournamentTeam;
@@ -19,7 +20,13 @@ public class TournamentAdminCommands {
 
     @Command(aliases = "create", desc = "Creates a tournament", usage = "<format>", perms = "ingame.staff")
     public void tourney(CommandSender sender, TournamentManager manager, Match match, @Text String pool) {
-        manager.createTournament(match, MapFormatXMLParser.parse(pool));
+        TournamentFormat tournamentFormat = MapFormatXMLParser.parse(pool);
+        if(tournamentFormat == null){
+            sender.sendMessage(ChatColor.RED + "Tournament format not found!");
+            return;
+        }
+
+        manager.createTournament(match, tournamentFormat);
         sender.sendMessage(ChatColor.GOLD + "Starting tournament.");
     }
 
