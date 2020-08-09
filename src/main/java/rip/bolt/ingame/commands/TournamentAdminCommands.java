@@ -43,6 +43,14 @@ public class TournamentAdminCommands {
         sender.sendMessage(ChatColor.YELLOW + "Run /tourney info <team> to see player roster!");
     }
 
+    @Command(aliases = "reload", desc = "reload all teams", perms = "ingame.staff")
+    public void reload(CommandSender sender) {
+        int amountOfTeams = ConfigTeamParser.getInstance().reloadTeams();
+
+        sender.sendMessage(ChatColor.YELLOW + "Loaded " + amountOfTeams + " teams!");
+        sender.sendMessage(ChatColor.YELLOW + "Run /tourney listto see all teams!");
+    }
+
     @Command(aliases = "info", desc = "View information about a team", usage = "<team", perms = "ingame.staff")
     public void info(CommandSender sender, @Text String name) {
         TournamentTeam team = ConfigTeamParser.getInstance().getTeam(name);

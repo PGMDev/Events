@@ -49,6 +49,11 @@ public class ConfigTeamParser {
         return teams;
     }
 
+    public int reloadTeams(){
+        teams = parseTournamentTeams(new File(Tournament.get().getDataFolder(), "teams"));
+        return teams.size();
+    }
+
     public static ConfigTeamParser getInstance() {
         if (instance == null)
             instance = new ConfigTeamParser();
