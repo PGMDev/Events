@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
+import rip.bolt.ingame.Tournament;
 import rip.bolt.ingame.TournamentManager;
 import rip.bolt.ingame.format.TournamentFormat;
 import rip.bolt.ingame.team.ConfigTeamParser;
@@ -54,16 +55,21 @@ public class TournamentAdminCommands {
             return;
         }
 
-        UUID uuid = UUIDFetcher.getUUID(userName);
-        if(uuid == null){
-            sender.sendMessage(ChatColor.RED + "No player with name: '" + userName + "' found!");
-            return;
-        }
-        //need to prevent a player being part of multiple teams
-        teamManager.removePlayerFromTeams(uuid);
+        Bukkit.getScheduler().runTaskAsynchronously(Tournament.get(), new Runnable() {
+            @Override
+            public void run() {
+                UUID uuid = UUIDFetcher.getUUID(userName);
+                if(uuid == null){
+                    sender.sendMessage(ChatColor.RED + "No player with name: '" + userName + "' found!");
+                    return;
+                }
+                //need to prevent a player being part of multiple teams
+                teamManager.removePlayerFromTeams(uuid);
 
-        team.addPlayer(TournamentPlayer.create(uuid, true));
-        sender.sendMessage(ChatColor.YELLOW + "Added player: " + userName + "!");
+                team.addPlayer(TournamentPlayer.create(uuid, true));
+                sender.sendMessage(ChatColor.YELLOW + "Added player: " + userName + "!");
+            }
+        });
     }
 
     @Command(aliases = "remove", desc = "Remove a player from a team", usage = "<team> <player>", perms = "ingame.staff")
@@ -75,15 +81,20 @@ public class TournamentAdminCommands {
             return;
         }
 
-        UUID uuid = UUIDFetcher.getUUID(userName);
+        Bukkit.getScheduler().runTaskAsynchronously(Tournament.get(), new Runnable() {
+            @Override
+            public void run() {
+                UUID uuid = UUIDFetcher.getUUID(userName);
 
-        if(uuid == null){
-            sender.sendMessage(ChatColor.RED + "No player with name: '" + userName + "' found!");
-            return;
-        }
+                if(uuid == null){
+                    sender.sendMessage(ChatColor.RED + "No player with name: '" + userName + "' found!");
+                    return;
+                }
 
-        team.removePlayer(uuid);
-        sender.sendMessage(ChatColor.YELLOW + "Removed player: " + userName + "!");
+                team.removePlayer(uuid);
+                sender.sendMessage(ChatColor.YELLOW + "Removed player: " + userName + "!");
+            }
+        });
     }
 
     @Command(aliases = "list", desc = "List all loaded teams", perms = "ingame.staff")
