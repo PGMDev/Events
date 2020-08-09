@@ -126,6 +126,8 @@
 								</includes>
 								<excludes>
 									<exclude>app.ashcon:sportpaper</exclude>
+									<exclude>tc.oc.pgm:core</exclude>
+									<exclude>tc.oc.pgm:util</exclude>
 								</excludes>
 							</artifactSet>
 						</configuration>
