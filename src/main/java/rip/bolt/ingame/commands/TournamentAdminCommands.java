@@ -55,20 +55,16 @@ public class TournamentAdminCommands {
             return;
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(Tournament.get(), new Runnable() {
-            @Override
-            public void run() {
-                UUID uuid = UUIDFetcher.getUUID(userName);
-                if(uuid == null){
-                    sender.sendMessage(ChatColor.RED + "No player with name: '" + userName + "' found!");
-                    return;
-                }
-                //need to prevent a player being part of multiple teams
-                teamManager.removePlayerFromTeams(uuid);
-
-                team.addPlayer(TournamentPlayer.create(uuid, true));
-                sender.sendMessage(ChatColor.YELLOW + "Added player: " + userName + "!");
+        UUIDFetcher.getUUID(userName, uuid -> {
+            if(uuid == null){
+                sender.sendMessage(ChatColor.RED + "No player with name: '" + userName + "' found!");
+                return;
             }
+            //need to prevent a player being part of multiple teams
+            teamManager.removePlayerFromTeams(uuid);
+
+            team.addPlayer(TournamentPlayer.create(uuid, true));
+            sender.sendMessage(ChatColor.YELLOW + "Added player: " + userName + "!");
         });
     }
 
@@ -81,19 +77,14 @@ public class TournamentAdminCommands {
             return;
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(Tournament.get(), new Runnable() {
-            @Override
-            public void run() {
-                UUID uuid = UUIDFetcher.getUUID(userName);
-
-                if(uuid == null){
-                    sender.sendMessage(ChatColor.RED + "No player with name: '" + userName + "' found!");
-                    return;
-                }
-
-                team.removePlayer(uuid);
-                sender.sendMessage(ChatColor.YELLOW + "Removed player: " + userName + "!");
+        UUIDFetcher.getUUID(userName, uuid -> {
+            if(uuid == null){
+                sender.sendMessage(ChatColor.RED + "No player with name: '" + userName + "' found!");
+                return;
             }
+
+            team.removePlayer(uuid);
+            sender.sendMessage(ChatColor.YELLOW + "Removed player: " + userName + "!");
         });
     }
 
