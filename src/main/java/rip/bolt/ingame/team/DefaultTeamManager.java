@@ -50,9 +50,7 @@ public class DefaultTeamManager implements TournamentTeamManager {
     }
 
     public void removePlayerFromTeams(UUID uuid){
-        teams.forEach(t -> {
-            t.getPlayers().removeIf(p -> p.getUUID().equals(uuid));
-        });
+        teams.forEach(t -> t.removePlayer(uuid));
     }
 
     @Override

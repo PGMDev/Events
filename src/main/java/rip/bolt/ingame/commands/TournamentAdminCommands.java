@@ -46,8 +46,8 @@ public class TournamentAdminCommands {
         sender.sendMessage(ChatColor.YELLOW + "Added team " + team.getName() + "!");
     }
 
-    @Command(aliases = "add", desc = "Add a player to a team", usage = "<team> <player>", perms = "ingame.staff")
-    public void add(CommandSender sender, TournamentTeamManager teamManager, String teamName, @Text String userName) {
+    @Command(aliases = "add", desc = "Add a player to a team", usage = "<player> <team>", perms = "ingame.staff")
+    public void add(CommandSender sender, TournamentTeamManager teamManager, String userName, @Text String teamName) {
         TournamentTeam team = ConfigTeamParser.getInstance().getTeam(teamName);
 
         if (team == null) { // TODO move to provider
@@ -64,12 +64,12 @@ public class TournamentAdminCommands {
             teamManager.removePlayerFromTeams(uuid);
 
             team.addPlayer(TournamentPlayer.create(uuid, true));
-            sender.sendMessage(ChatColor.YELLOW + "Added player: " + userName + "!");
+            sender.sendMessage(ChatColor.YELLOW + "Added player: " + userName + " to team: " + teamName + "!");
         });
     }
 
-    @Command(aliases = "remove", desc = "Remove a player from a team", usage = "<team> <player>", perms = "ingame.staff")
-    public void remove(CommandSender sender, TournamentTeamManager teamManager, String teamName, @Text String userName) {
+    @Command(aliases = "remove", desc = "Remove a player from a team", usage = "<player> <team>", perms = "ingame.staff")
+    public void remove(CommandSender sender, String userName, @Text String teamName) {
         TournamentTeam team = ConfigTeamParser.getInstance().getTeam(teamName);
 
         if (team == null) { // TODO move to provider
@@ -84,7 +84,7 @@ public class TournamentAdminCommands {
             }
 
             team.removePlayer(uuid);
-            sender.sendMessage(ChatColor.YELLOW + "Removed player: " + userName + "!");
+            sender.sendMessage(ChatColor.YELLOW + "Removed player: " + userName + " from team: " + teamName + "!");
         });
     }
 
