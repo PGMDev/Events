@@ -6,8 +6,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import tc.oc.pgm.api.match.event.MatchLoadEvent;
-import tc.oc.pgm.events.CancelMatchStartCountdownEvent;
-import tc.oc.pgm.events.InitiateMatchStartCountdownEvent;
+import tc.oc.pgm.events.CountdownCancelEvent;
+import tc.oc.pgm.events.CountdownStartEvent;
+import tc.oc.pgm.start.StartCountdown;
 import tc.oc.pgm.start.StartMatchModule;
 
 public class ReadyListener implements Listener {
@@ -21,12 +22,16 @@ public class ReadyListener implements Listener {
     }
 
     @EventHandler
-    public void onQueueStart(InitiateMatchStartCountdownEvent event) {
-        system.onStart(event.duration(), parties.allReady(event.getMatch()));
+    public void onQueueStart(CountdownStartEvent event) {
+        if (event.getCountdown() instanceof StartCountdown)
+            system.onStart(((StartCountdown) event.getCountdown()).getRemaining(), parties.allReady(event.getMatch()));
     }
 
     @EventHandler
-    public void onCancel(CancelMatchStartCountdownEvent event) {
+    public void onCancel(CountdownCancelEvent event) {
+        if (!(event.getCountdown() instanceof StartCountdown))
+            return;
+
         Duration remaining = system.onCancel(parties.allReady(event.getMatch()));
         if (remaining != null)
             event.getMatch().needModule(StartMatchModule.class).forceStartCountdown(remaining, Duration.ZERO);

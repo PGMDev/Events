@@ -41,12 +41,12 @@
 		<dependency>
 			<groupId>tc.oc.pgm</groupId>
 			<artifactId>core</artifactId>
-			<version>0.9-bolt-SNAPSHOT</version>
+			<version>0.9-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>tc.oc.pgm</groupId>
 			<artifactId>util</artifactId>
-			<version>0.9-bolt-SNAPSHOT</version>
+			<version>0.9-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.core</groupId>
