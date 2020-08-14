@@ -3,7 +3,12 @@ package rip.bolt.ingame.xml;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -15,6 +20,8 @@ import rip.bolt.ingame.format.TournamentFormat;
 import rip.bolt.ingame.format.TournamentFormatImpl;
 import rip.bolt.ingame.format.TournamentRoundOptions;
 import rip.bolt.ingame.format.winner.BestOfCalculation;
+import rip.bolt.ingame.team.TournamentPlayer;
+import rip.bolt.ingame.team.TournamentTeam;
 
 public class MapFormatXMLParser {
 
@@ -48,6 +55,20 @@ public class MapFormatXMLParser {
         }
 
         return null;
+    }
+
+    public static List<String> parseAll() {
+        File formatsFolder =  new File(Tournament.get().getDataFolder(), "formats");
+        if (!formatsFolder.exists())
+            formatsFolder.mkdirs();
+
+        List<String> formatsList = new ArrayList<>();
+
+        for (File child : formatsFolder.listFiles((file) -> file.getName().toLowerCase().endsWith(".xml"))) {
+            formatsList.add(child.getName());
+        }
+
+        return formatsList;
     }
 
 }

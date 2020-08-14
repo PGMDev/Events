@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
+import org.jvnet.hk2.annotations.Optional;
 import rip.bolt.ingame.Tournament;
 import rip.bolt.ingame.TournamentManager;
 import rip.bolt.ingame.format.TournamentFormat;
@@ -18,12 +19,21 @@ import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.lib.app.ashcon.intake.Command;
 import tc.oc.pgm.lib.app.ashcon.intake.parametric.annotation.Text;
 
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.UUID;
 
 public class TournamentAdminCommands {
 
     @Command(aliases = "create", desc = "Creates a tournament", usage = "<format>", perms = "ingame.staff")
-    public void tourney(CommandSender sender, TournamentManager manager, Match match, @Text String pool) {
+    public void tourney(CommandSender sender, TournamentManager manager, Match match, @Nullable String pool) {
+        if(pool == null){
+            sender.sendMessage(ChatColor.GOLD + "------- " + ChatColor.AQUA + "Loaded formats" + ChatColor.GOLD + " -------");
+            for (String format : MapFormatXMLParser.parseAll())
+                sender.sendMessage(ChatColor.AQUA + "- " + format);
+            return;
+        }
+
         TournamentFormat tournamentFormat = MapFormatXMLParser.parse(pool);
         if(tournamentFormat == null){
             sender.sendMessage(ChatColor.RED + "Tournament format not found!");
