@@ -57,14 +57,14 @@ public class MapFormatXMLParser {
         return null;
     }
 
-    public static List<String> parseAll() {
-        File formatsFolder =  new File(Tournament.get().getDataFolder(), "formats");
+    public static List<String> getFilesFromFolder(String foldername, String extension) {
+        File formatsFolder =  new File(Tournament.get().getDataFolder(), foldername);
         if (!formatsFolder.exists())
             formatsFolder.mkdirs();
 
         List<String> formatsList = new ArrayList<>();
 
-        for (File child : formatsFolder.listFiles((file) -> file.getName().toLowerCase().endsWith(".xml"))) {
+        for (File child : formatsFolder.listFiles((file) -> file.getName().toLowerCase().endsWith(extension))) {
             formatsList.add(child.getName());
         }
 
