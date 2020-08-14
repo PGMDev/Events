@@ -41,10 +41,12 @@ public class Team implements TournamentTeam {
         return this.participants;
     }
 
+    @Override
     public void addPlayer(TournamentPlayer player) {
         this.participants.add(player);
     }
 
+    @Override
     public void removePlayer(UUID uuid) {
         getPlayers().removeIf(p -> p.getUUID().equals(uuid));
     }
