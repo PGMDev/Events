@@ -22,7 +22,12 @@ public class ConfigTeamParser {
         teams = parseTournamentTeams(new File(Tournament.get().getDataFolder(), "teams"), new File(Tournament.get().getDataFolder(), "teams.yml"));
     }
 
-    private static List<TournamentTeam> parseTournamentTeams(File teamsFolder, File teamsFile) {
+    private static List<TournamentTeam> parseTournamentTeams(File teamsFolder) {
+        return parseTournamentTeams(teamsFolder,null);
+    }
+
+
+        private static List<TournamentTeam> parseTournamentTeams(File teamsFolder, File teamsFile) {
         if (!teamsFolder.exists())
             teamsFolder.mkdirs();
 
