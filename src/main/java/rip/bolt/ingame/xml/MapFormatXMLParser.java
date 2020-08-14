@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -58,17 +59,13 @@ public class MapFormatXMLParser {
     }
 
     public static List<String> getFilesFromFolder() {
-        File formatsFolder =  new File(Tournament.get().getDataFolder(), "formats");
-        if (!formatsFolder.exists())
-            formatsFolder.mkdirs();
-
+        File formatsFolder = new File(Tournament.get().getDataFolder(), "formats");
         List<String> formatsList = new ArrayList<>();
-
-        for (File child : formatsFolder.listFiles((file) -> file.getName().toLowerCase().endsWith(".xml"))) {
-            formatsList.add(child.getName());
+        if (formatsFolder.exists()) {
+            for (File child : formatsFolder.listFiles((file) -> file.getName().toLowerCase().endsWith(".xml"))) {
+                formatsList.add(child.getName().split(Pattern.quote("."))[0]);
+            }
         }
-
         return formatsList;
     }
-
 }

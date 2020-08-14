@@ -26,17 +26,14 @@ import java.util.UUID;
 public class TournamentAdminCommands {
 
     @Command(aliases = "create", desc = "Creates a tournament", usage = "<format>", perms = "ingame.staff")
-    public void tourney(CommandSender sender, TournamentManager manager, Match match, @Nullable String pool) {
-        if(pool == null){
-            sender.sendMessage(ChatColor.GOLD + "------- " + ChatColor.AQUA + "Loaded formats" + ChatColor.GOLD + " -------");
-            for (String format : MapFormatXMLParser.getFilesFromFolder())
-                sender.sendMessage(ChatColor.AQUA + "- " + format);
-            return;
-        }
-
-        TournamentFormat tournamentFormat = MapFormatXMLParser.parse(pool);
+    public void create(CommandSender sender, TournamentManager manager, Match match, @Nullable TournamentFormat tournamentFormat) {
         if(tournamentFormat == null){
             sender.sendMessage(ChatColor.RED + "Tournament format not found!");
+
+            List<String> formats = MapFormatXMLParser.getFilesFromFolder();
+            sender.sendMessage(ChatColor.GOLD + "------- " + ChatColor.AQUA + "Loaded formats (" + ChatColor.YELLOW + formats.size() + ChatColor.AQUA  + ")" + ChatColor.GOLD + " -------");
+            for (String format : MapFormatXMLParser.getFilesFromFolder())
+                sender.sendMessage(ChatColor.AQUA + "- " + format);
             return;
         }
 
