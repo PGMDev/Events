@@ -23,11 +23,11 @@ public class ConfigTeamParser {
     }
 
     private static List<TournamentTeam> parseTournamentTeams(File teamsFolder) {
-        return parseTournamentTeams(teamsFolder,new File(""));
+        return parseTournamentTeams(teamsFolder, null);
     }
 
 
-        private static List<TournamentTeam> parseTournamentTeams(File teamsFolder, File teamsFile) {
+    private static List<TournamentTeam> parseTournamentTeams(File teamsFolder, File teamsFile) {
         if (!teamsFolder.exists())
             teamsFolder.mkdirs();
 
@@ -40,7 +40,7 @@ public class ConfigTeamParser {
             teamList.add(TournamentTeam.create(teamName, players));
         }
 
-        if (teamsFile.exists()) {
+        if (teamsFile != null && teamsFile.exists()) {
             YamlConfiguration teamsConfig = YamlConfiguration.loadConfiguration(teamsFile);
             for (Object object : teamsConfig.getList("teams")) {
                 if (!(object instanceof Map<?, ?>)) {
@@ -71,7 +71,7 @@ public class ConfigTeamParser {
         return teams;
     }
 
-    public int reloadTeams(){
+    public int reloadTeams() {
         teams = parseTournamentTeams(new File(Tournament.get().getDataFolder(), "teams"));
         return teams.size();
     }

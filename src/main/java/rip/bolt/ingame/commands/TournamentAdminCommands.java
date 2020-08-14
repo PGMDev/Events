@@ -29,7 +29,7 @@ public class TournamentAdminCommands {
     public void tourney(CommandSender sender, TournamentManager manager, Match match, @Nullable String pool) {
         if(pool == null){
             sender.sendMessage(ChatColor.GOLD + "------- " + ChatColor.AQUA + "Loaded formats" + ChatColor.GOLD + " -------");
-            for (String format : MapFormatXMLParser.getFilesFromFolder("formats", ".xml"))
+            for (String format : MapFormatXMLParser.getFilesFromFolder())
                 sender.sendMessage(ChatColor.AQUA + "- " + format);
             return;
         }

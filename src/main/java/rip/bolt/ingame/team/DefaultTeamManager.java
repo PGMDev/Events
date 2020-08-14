@@ -49,7 +49,7 @@ public class DefaultTeamManager implements TournamentTeamManager {
         this.teamSetup = new ColorTeamSetup(teams);
     }
 
-    public void removePlayerFromTeams(UUID uuid){
+    public void removePlayerFromTeams(UUID uuid) {
         teams.forEach(t -> t.removePlayer(uuid));
     }
 
