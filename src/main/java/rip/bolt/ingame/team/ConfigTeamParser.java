@@ -23,7 +23,7 @@ public class ConfigTeamParser {
     }
 
     private static List<TournamentTeam> parseTournamentTeams(File teamsFolder) {
-        return parseTournamentTeams(teamsFolder,null);
+        return parseTournamentTeams(teamsFolder,new File(""));
     }
 
 
