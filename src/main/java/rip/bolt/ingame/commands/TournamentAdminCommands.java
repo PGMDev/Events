@@ -32,7 +32,7 @@ public class TournamentAdminCommands {
 
             List<String> formats = MapFormatXMLParser.getFilesFromFolder();
             sender.sendMessage(ChatColor.GOLD + "------- " + ChatColor.AQUA + "Loaded formats (" + ChatColor.YELLOW + formats.size() + ChatColor.AQUA  + ")" + ChatColor.GOLD + " -------");
-            for (String format : MapFormatXMLParser.getFilesFromFolder())
+            for (String format : formats)
                 sender.sendMessage(ChatColor.AQUA + "- " + format);
             return;
         }
