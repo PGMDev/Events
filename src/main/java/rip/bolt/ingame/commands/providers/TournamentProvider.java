@@ -33,12 +33,34 @@ public class TournamentProvider implements BukkitProvider<TournamentFormat> {
 
     @Override
     public TournamentFormat get(CommandSender commandSender, CommandArgs commandArgs, List<? extends Annotation> list) throws ArgumentException, ProvisionException {
-        TournamentFormat tournamentFormat = MapFormatXMLParser.parse(commandArgs.next());
-        if(tournamentFormat != null){
-            return tournamentFormat;
-        }
+        String input = commandArgs.next();
+        if(input.length()> 0){
+            TournamentFormat tournamentFormat = MapFormatXMLParser.parse(input);
+            if(tournamentFormat != null){
+                return tournamentFormat;
+            }
 
-        throw new ArgumentException("No format found with name " + commandArgs.next() + "!");
+            throw new ArgumentException("No format found with name " + input + "!");
+        }
+        else {
+            Optional<TournamentFormat> tournamentFormat = tournamentManager.currentTournament();
+
+            if (tournamentFormat.isPresent()) {
+                TournamentFormat format = tournamentFormat.get();
+                if (format.currentRound() == null)
+                    return format;
+
+                if (format.currentRound() instanceof FormatRound)
+                    format = ((FormatRound) format.currentRound()).formatTournament();
+
+                if (format == null)
+                    format = tournamentFormat.get(); // FormatTournamentImpl = null after round ends
+
+                return format;
+            }
+
+            throw new ArgumentException("No tournament is currently running!");
+        }
     }
 
     @Override
