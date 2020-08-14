@@ -22,7 +22,7 @@ public class SingleRoundDescription implements RoundDescription {
         this.mapName = mapName;
         this.singleRound = singleRound;
         this.format = format;
-        this.defString = ChatColor.GRAY + "Match on " + ChatColor.GOLD + mapName + ChatColor.AQUA;
+        this.defString = ChatColor.GRAY + "Match on " + ChatColor.GOLD + this.mapName + ChatColor.AQUA;
     }
 
     @Override
