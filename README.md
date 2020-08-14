@@ -1,6 +1,6 @@
 # Ingame
 
-Plugin to used to manage competitive matches on bolt.rip. Upon joining or cycling, all players on the match's registered teams will be forced onto their respective teams. Ingame also manages cycling & starting matches as well as readying teams. Maps played in a match can be customised using a format file. Customisable vetos are also supported.
+Plugin used to manage tournament-level matches. Upon joining or cycling, all players on the match's registered teams will be forced onto their respective teams. Ingame also manages cycling & starting matches as well as readying teams. Maps played in a match can be customised using a format file. Customisable vetos are also supported.
 
 ## Setup
 
@@ -31,7 +31,6 @@ players:
 * Ensure that `plugins/Ingame/teams/` contains all the teams playing in this tournament and `plugins/Ingame/formats/` contains the formats for this tournament.
 * Register each team playing with `/tm register <team>`
 * Start the format with `/tm create <format>` where `<format>.xml` is a valid file in `plugins/Ingame/formats`
-* Ingame, at the moment, only runs with [Bolt's fork of PGM](https://github.com/bolt-rip/PGM). This will definitely change in the future, as we are looking forward to pushing our changes to upstream. In the meantime, you can get it compiled [here](https://cdn.discordapp.com/attachments/564897116749692948/731025211876704319/PGM.jar).
 
 ### Permissions
 
