@@ -1,12 +1,12 @@
-# Ingame
+# Events
 
-Plugin used to manage tournament-level matches. Upon joining or cycling, all players on the match's registered teams will be forced onto their respective teams. Ingame also manages cycling & starting matches as well as readying teams. Maps played in a match can be customised using a format file. Customisable vetos are also supported.
+Plugin used to manage tournament-level matches. Upon joining or cycling, all players on the match's registered teams will be forced onto their respective teams. Events also manages cycling & starting matches as well as readying teams. Maps played in a match can be customised using a format file. Customisable vetos are also supported.
 
 ## Setup
 
 * For an offline tournament, make sure `api.enabled` is set to `false` in `config.yml`.
-* Put each team that is playing in its own yml file in `plugins/Ingame/teams`.
-* Put each format in its own file in `plugins/Ingame/format`.
+* Put each team that is playing in its own yml file in `plugins/Events/teams`.
+* Put each format in its own file in `plugins/Events/format`.
 
 ### Sample Team file
 
@@ -27,9 +27,9 @@ players:
 
 ## Running
 
-* Ensure that `plugins/Ingame/teams/` contains all the teams playing in this tournament and `plugins/Ingame/formats/` contains the formats for this tournament.
+* Ensure that `plugins/Events/teams/` contains all the teams playing in this tournament and `plugins/Events/formats/` contains the formats for this tournament.
 * Register each team playing with `/tm register <team>`
-* Start the format with `/tm create <format>` where `<format>.xml` is a valid file in `plugins/Ingame/formats`
+* Start the format with `/tm create <format>` where `<format>.xml` is a valid file in `plugins/Events/formats`
 
 ### Permissions
 
