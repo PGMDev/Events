@@ -1,13 +1,16 @@
 package dev.pgm.events.listeners;
 
-import dev.pgm.events.team.TournamentTeamManager;
 import java.util.Optional;
-import net.md_5.bungee.api.ChatColor;
+
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+
+import dev.pgm.events.team.TournamentTeamManager;
+import net.md_5.bungee.api.ChatColor;
 import tc.oc.pgm.api.PGM;
 import tc.oc.pgm.api.player.event.MatchPlayerAddEvent;
 import tc.oc.pgm.blitz.BlitzMatchModule;
@@ -59,11 +62,20 @@ public class PlayerJoinListen implements Listener {
       return;
     }
 
-    if (event.getPlayer().hasPermission("ingame.spectate")) return;
+    if (event.getPlayer().hasPermission("ingame.spectate")
+        || event.getPlayer().hasPermission("ingame.spectate.vanish")) return;
 
     // not on a team and no spectate permission
     event.setResult(PlayerLoginEvent.Result.KICK_WHITELIST);
     event.setKickMessage("You're not allowed to spectate this match!");
+  }
+
+  @EventHandler(priority = EventPriority.HIGH)
+  public void vanish(PlayerJoinEvent event) {
+    if (event.getPlayer().hasPermission("ingame.spectate.vanish"))
+      PGM.get()
+          .getVanishManager()
+          .setVanished(PGM.get().getMatchManager().getPlayer(event.getPlayer()), true, true);
   }
 
   @EventHandler
