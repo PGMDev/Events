@@ -117,7 +117,11 @@ public class RoundParser {
         String insert = element.getAttributeValue("insert", "back");
         if (insert.equalsIgnoreCase("back")) type = VetoSettings.VetoType.CHOOSE_LAST;
         else if (insert.equalsIgnoreCase("front")) type = VetoSettings.VetoType.CHOOSE_FIRST;
-        else throw new IllegalArgumentException("Invalid insert position " + insert);
+        else
+          throw new IllegalArgumentException(
+              "Invalid insert position "
+                  + insert
+                  + ". Valid positions are back (default) or front.");
       }
 
       if (type == null)
