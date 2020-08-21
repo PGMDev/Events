@@ -93,6 +93,6 @@ public class ReadyCommands {
       return false;
     }
 
-    return !(player.getParty() instanceof ObservingParty) || sender.hasPermission("ingame.staff");
+    return !(player.getParty() instanceof ObservingParty) || sender.hasPermission("events.staff");
   }
 }

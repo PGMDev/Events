@@ -11,7 +11,7 @@ import tc.oc.pgm.lib.app.ashcon.intake.CommandException;
 
 public class RankedAdminCommands {
 
-  @Command(aliases = "poll", desc = "Poll the API for a new game", perms = "ingame.staff")
+  @Command(aliases = "poll", desc = "Poll the API for a new game", perms = "events.staff")
   public void poll(CommandSender sender, Match match) throws CommandException {
     if (match.getPhase() == MatchPhase.RUNNING)
       throw new CommandException(
