@@ -76,14 +76,11 @@ public class Tournament extends JavaPlugin {
     Bukkit.getPluginManager().registerEvents(new PlayerJoinListen(teamManager), this);
     Bukkit.getPluginManager().registerEvents(readyListener, this);
     new CommandExecutor(this, g).register();
-
-    System.out.println("[Ingame] Ingame is now enabled!");
   }
 
   @Override
   public void onDisable() {
     plugin = null;
-    System.out.println("[Ingame] Ingame is now disabled!");
   }
 
   public APIManager getApiManager() {

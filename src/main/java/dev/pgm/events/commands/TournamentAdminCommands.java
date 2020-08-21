@@ -20,14 +20,14 @@ public class TournamentAdminCommands {
       aliases = "create",
       desc = "Creates a tournament",
       usage = "<format>",
-      perms = "ingame.staff")
+      perms = "events.staff")
   public void tourney(
       CommandSender sender, TournamentManager manager, Match match, @Text String pool) {
     manager.createTournament(match, MapFormatXMLParser.parse(pool));
     sender.sendMessage(ChatColor.GOLD + "Starting tournament.");
   }
 
-  @Command(aliases = "register", desc = "Register a team", usage = "<team>", perms = "ingame.staff")
+  @Command(aliases = "register", desc = "Register a team", usage = "<team>", perms = "events.staff")
   public void register(CommandSender sender, TournamentTeamManager teamManager, @Text String name) {
     TournamentTeam team = ConfigTeamParser.getInstance().getTeam(name);
     if (team == null) { // TODO move to provider
@@ -39,7 +39,7 @@ public class TournamentAdminCommands {
     sender.sendMessage(ChatColor.YELLOW + "Added team " + team.getName() + "!");
   }
 
-  @Command(aliases = "list", desc = "List all loaded teams", perms = "ingame.staff")
+  @Command(aliases = "list", desc = "List all loaded teams", perms = "events.staff")
   public void list(CommandSender sender) {
     sender.sendMessage(
         ChatColor.GOLD
@@ -57,7 +57,7 @@ public class TournamentAdminCommands {
       aliases = "info",
       desc = "View information about a team",
       usage = "<team",
-      perms = "ingame.staff")
+      perms = "events.staff")
   public void info(CommandSender sender, @Text String name) {
     TournamentTeam team = ConfigTeamParser.getInstance().getTeam(name);
     if (team == null) {
@@ -82,7 +82,7 @@ public class TournamentAdminCommands {
     }
   }
 
-  @Command(aliases = "unregisterall", desc = "Clear all registered teams", perms = "ingame.staff")
+  @Command(aliases = "unregisterall", desc = "Clear all registered teams", perms = "events.staff")
   public void clear(CommandSender sender, TournamentTeamManager teamManager) {
     teamManager.clear();
     sender.sendMessage(ChatColor.YELLOW + "Unregistered all teams!");

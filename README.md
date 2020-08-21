@@ -33,9 +33,9 @@ players:
 
 ### Permissions
 
-* `ingame.staff` - allows users to run `/tm`
-* `ingame.spectate` - allows users to watch the match
-* `ingame.spectate.vanish` - allows users to watch the match, but they will be vanished and therefore cannot interact with the game
+* `events.staff` - allows users to run `/tm`
+* `events.spectate` - allows users to watch the match
+* `events.spectate.vanish` - allows users to watch the match, but they will be vanished and therefore cannot interact with the game
 
 ## Implementing your own API
 
