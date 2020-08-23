@@ -8,7 +8,10 @@ import dev.pgm.events.team.TournamentTeam;
 import java.util.ArrayList;
 import java.util.List;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.*;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class VetoDescription implements RoundDescription {
 

@@ -1,11 +1,8 @@
 package dev.pgm.events;
 
-import dev.pgm.events.api.APIManager;
-import dev.pgm.events.commands.RankedAdminCommands;
 import dev.pgm.events.commands.TournamentAdminCommands;
 import dev.pgm.events.commands.TournamentUserCommands;
 import dev.pgm.events.commands.providers.TournamentProvider;
-import dev.pgm.events.config.AppData;
 import dev.pgm.events.format.TournamentFormat;
 import dev.pgm.events.listeners.MatchLoadListener;
 import dev.pgm.events.listeners.PlayerJoinListen;
@@ -33,9 +30,6 @@ public class Tournament extends JavaPlugin {
   private TournamentTeamManager teamManager;
   private TournamentManager tournamentManager;
 
-  private RankedManager rankedManager;
-  private APIManager apiManager;
-
   private static Tournament plugin;
 
   @Override
@@ -45,18 +39,7 @@ public class Tournament extends JavaPlugin {
 
     teamManager = DefaultTeamManager.manager();
     tournamentManager = new TournamentManager();
-
-    if (AppData.API.isEnabled()) {
-      apiManager =
-          new APIManager(
-              AppData.API.getURL(),
-              AppData.API.getGetMatchPath(),
-              AppData.API.getMatchResultsPath());
-      rankedManager = new RankedManager();
-      Bukkit.getPluginManager().registerEvents(rankedManager, this);
-    } else {
-      ConfigTeamParser.getInstance(); // load teams now
-    }
+    ConfigTeamParser.getInstance(); // load teams now
 
     ReadySystem system = new ReadySystem();
     ReadyParties parties = new ReadyParties();
@@ -66,10 +49,9 @@ public class Tournament extends JavaPlugin {
     BasicBukkitCommandGraph g =
         new BasicBukkitCommandGraph(new CommandModule(tournamentManager, teamManager));
     DispatcherNode node = g.getRootDispatcherNode();
+    node = node.registerNode("tourney", "tournament", "tm", "events");
     node.registerCommands(new TournamentUserCommands());
     node.registerCommands(readyCommands);
-    node.registerCommands(new RankedAdminCommands());
-    node = node.registerNode("tourney", "tournament", "tm");
     node.registerCommands(new TournamentAdminCommands());
 
     Bukkit.getPluginManager().registerEvents(new MatchLoadListener(teamManager), this);
@@ -81,14 +63,6 @@ public class Tournament extends JavaPlugin {
   @Override
   public void onDisable() {
     plugin = null;
-  }
-
-  public APIManager getApiManager() {
-    return apiManager;
-  }
-
-  public RankedManager getRankedManager() {
-    return rankedManager;
   }
 
   public TournamentTeamManager getTeamManager() {

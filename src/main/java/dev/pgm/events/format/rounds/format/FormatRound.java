@@ -1,11 +1,7 @@
 package dev.pgm.events.format.rounds.format;
 
 import dev.pgm.events.format.TournamentFormat;
-import dev.pgm.events.format.rounds.AbstractRound;
-import dev.pgm.events.format.rounds.RoundDescription;
-import dev.pgm.events.format.rounds.RoundPhase;
-import dev.pgm.events.format.rounds.RoundSettings;
-import dev.pgm.events.format.rounds.TournamentRound;
+import dev.pgm.events.format.rounds.*;
 import dev.pgm.events.format.rounds.veto.VetoRound;
 import dev.pgm.events.format.score.FormattedScore;
 import dev.pgm.events.team.TournamentTeam;

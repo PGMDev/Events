@@ -1,6 +1,6 @@
 package dev.pgm.events.format;
 
-import dev.pgm.events.context.Context;
+import dev.pgm.events.config.Context;
 import dev.pgm.events.format.rounds.RoundDescription;
 import dev.pgm.events.format.rounds.TournamentRound;
 import dev.pgm.events.format.score.Scores;

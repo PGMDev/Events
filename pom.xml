@@ -18,47 +18,19 @@
 			<groupId>app.ashcon</groupId>
 			<artifactId>sportpaper</artifactId>
 			<version>1.8.8-R0.1-SNAPSHOT</version>
-			<scope>compile</scope> <!-- Remember to exclude in shading -->
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>tc.oc.pgm</groupId>
 			<artifactId>core</artifactId>
 			<version>0.9-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>tc.oc.pgm</groupId>
 			<artifactId>util</artifactId>
 			<version>0.9-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.core</groupId>
-			<artifactId>jersey-client</artifactId>
-			<version>2.31</version>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.inject</groupId>
-			<artifactId>jersey-hk2</artifactId>
-			<version>2.31</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.jaxrs</groupId>
-			<artifactId>jackson-jaxrs-json-provider</artifactId>
-			<version>2.9.6</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-annotations</artifactId>
-			<version>2.9.6</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>2.9.6</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.9.6</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jdom</groupId>

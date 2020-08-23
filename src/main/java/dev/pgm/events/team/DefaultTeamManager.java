@@ -1,12 +1,6 @@
 package dev.pgm.events.team;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import org.bukkit.ChatColor;
 import tc.oc.pgm.api.party.Competitor;
 import tc.oc.pgm.teams.Team;
