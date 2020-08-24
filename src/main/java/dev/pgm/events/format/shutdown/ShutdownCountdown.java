@@ -2,12 +2,12 @@ package dev.pgm.events.format.shutdown;
 
 import dev.pgm.events.utils.TimeFormatter;
 import java.time.Duration;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.countdowns.MatchCountdown;
 import tc.oc.pgm.lib.net.kyori.text.Component;
 import tc.oc.pgm.lib.net.kyori.text.TextComponent;
+import tc.oc.pgm.lib.net.kyori.text.format.TextColor;
 import tc.oc.pgm.util.chat.Sound;
 
 public class ShutdownCountdown extends MatchCountdown {
@@ -32,8 +32,7 @@ public class ShutdownCountdown extends MatchCountdown {
 
   @Override
   protected Component formatText() {
-    return TextComponent.of(
-        ChatColor.AQUA + "Server will shut down in " + TimeFormatter.seconds(remaining));
+    return TextComponent.of("Server will shut down in " + TimeFormatter.seconds(remaining), TextColor.AQUA);
   }
 
   @Override
