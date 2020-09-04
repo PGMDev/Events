@@ -5,3 +5,10 @@ repos:
         -   id: check-yaml
         -   id: end-of-file-fixer
         -   id: trailing-whitespace
+  -   repo: local
+      hooks:
+        -   id: google-format2
+            name: google format stuff
+            entry: mvn com.coveo:fmt-maven-plugin:format
+            language: system
+            pass_filenames: false

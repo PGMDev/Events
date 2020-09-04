@@ -1,13 +1,17 @@
 package dev.pgm.events.format;
 
-import dev.pgm.events.context.Context;
+import dev.pgm.events.config.Context;
 import dev.pgm.events.format.rounds.RoundDescription;
 import dev.pgm.events.format.rounds.TournamentRound;
 import dev.pgm.events.format.score.Scores;
 import dev.pgm.events.format.winner.TournamentWinnerCalculation;
 import dev.pgm.events.team.TournamentTeam;
 import dev.pgm.events.team.TournamentTeamManager;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import tc.oc.pgm.api.match.Match;
 
