@@ -1,4 +1,4 @@
-package dev.pgm.events.context;
+package dev.pgm.events.config;
 
 public enum Context {
   NORMAL,

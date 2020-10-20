@@ -1,22 +1,20 @@
 package dev.pgm.events.listeners;
 
+import dev.pgm.events.team.TournamentTeamManager;
 import java.util.Optional;
-
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
-
-import dev.pgm.events.team.TournamentTeamManager;
-import net.md_5.bungee.api.ChatColor;
 import tc.oc.pgm.api.PGM;
 import tc.oc.pgm.api.player.event.MatchPlayerAddEvent;
 import tc.oc.pgm.blitz.BlitzMatchModule;
 import tc.oc.pgm.events.PlayerParticipationStartEvent;
 import tc.oc.pgm.events.PlayerParticipationStopEvent;
 import tc.oc.pgm.lib.net.kyori.text.TextComponent;
+import tc.oc.pgm.lib.net.kyori.text.format.TextColor;
 import tc.oc.pgm.teams.Team;
 
 public class PlayerJoinListen implements Listener {
@@ -62,8 +60,8 @@ public class PlayerJoinListen implements Listener {
       return;
     }
 
-    if (event.getPlayer().hasPermission("ingame.spectate")
-        || event.getPlayer().hasPermission("ingame.spectate.vanish")) return;
+    if (event.getPlayer().hasPermission("events.spectate")
+        || event.getPlayer().hasPermission("events.spectate.vanish")) return;
 
     // not on a team and no spectate permission
     event.setResult(PlayerLoginEvent.Result.KICK_WHITELIST);
@@ -72,7 +70,8 @@ public class PlayerJoinListen implements Listener {
 
   @EventHandler(priority = EventPriority.HIGH)
   public void vanish(PlayerJoinEvent event) {
-    if (event.getPlayer().hasPermission("ingame.spectate.vanish"))
+    if (event.getPlayer().hasPermission("events.spectate.vanish")
+        && !manager.playerTeam(event.getPlayer().getUniqueId()).isPresent())
       PGM.get()
           .getVanishManager()
           .setVanished(PGM.get().getMatchManager().getPlayer(event.getPlayer()), true, true);
@@ -87,8 +86,7 @@ public class PlayerJoinListen implements Listener {
       if (!isFull(team)) return;
     }
 
-    event.cancel(TextComponent.of(ChatColor.RED + "You may not join in a tournament setting!"));
-    // event.setCancelled(true);
+    event.cancel(TextComponent.of("You may not join in a tournament setting!", TextColor.RED));
   }
 
   @EventHandler
@@ -96,7 +94,7 @@ public class PlayerJoinListen implements Listener {
     Optional<Team> playerTeam = manager.playerTeam(event.getPlayer().getId());
     // check if the player is on one of the teams
     if (playerTeam.isPresent())
-      event.cancel(TextComponent.of(ChatColor.RED + "You may not leave in a tournament setting!"));
+      event.cancel(TextComponent.of("You may not leave in a tournament setting!", TextColor.RED));
 
     BlitzMatchModule blitz = event.getMatch().getModule(BlitzMatchModule.class);
     if (blitz != null) {

@@ -95,15 +95,3 @@ application.linux64
 application.windows32
 application.windows64
 application.macosx
-
-### Some others ###
-
-MANIFEST.MF
-dependency-reduced-pom.xml
-
-Thumbs.db
-src/main/resources/rebel.xml
-
-src/main/java/me/hfox/morphix/Testing.java
-
-build
