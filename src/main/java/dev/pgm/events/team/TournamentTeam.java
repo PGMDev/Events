@@ -12,7 +12,7 @@ public interface TournamentTeam {
 
   String getName();
 
-  List<TournamentPlayer> getPlayers();
+  List<? extends TournamentPlayer> getPlayers();
 
   default boolean containsPlayer(UUID player) {
     return getPlayers().stream().anyMatch(x -> x.getUUID().equals(player));
