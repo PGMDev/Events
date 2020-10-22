@@ -1,6 +1,6 @@
 package dev.pgm.events.format.rounds.veto;
 
-import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.format.Tournament;
 import dev.pgm.events.format.rounds.RoundDescription;
 import dev.pgm.events.format.rounds.veto.settings.VetoOption;
 import dev.pgm.events.format.rounds.veto.settings.VetoSettings;
@@ -16,11 +16,11 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class VetoDescription implements RoundDescription {
 
   private final VetoRound vetoRound;
-  private final TournamentFormat tournamentFormat;
+  private final Tournament tournament;
 
-  public VetoDescription(TournamentFormat format, VetoRound vetoRound) {
+  public VetoDescription(Tournament format, VetoRound vetoRound) {
     this.vetoRound = vetoRound;
-    this.tournamentFormat = format;
+    this.tournament = format;
   }
 
   @Override
@@ -34,7 +34,7 @@ public class VetoDescription implements RoundDescription {
         waiting.setHoverEvent(
             new HoverEvent(
                 HoverEvent.Action.SHOW_TEXT,
-                new BaseComponent[] {tournamentFormat.currentRound().describe().roundInfo()}));
+                new BaseComponent[] {tournament.currentRound().describe().roundInfo()}));
         return waiting;
       case RUNNING:
         TextComponent running = new TextComponent(ChatColor.GREEN + "Veto process is running now");
@@ -80,7 +80,7 @@ public class VetoDescription implements RoundDescription {
     if (history.team() == null) {
       prefix = ChatColor.GOLD + "RANDOM";
     } else {
-      prefix = tournamentFormat.teamManager().formattedName(history.team());
+      prefix = tournament.teamManager().formattedName(history.team());
     }
     prefix += ChatColor.GRAY + " has ";
 
@@ -94,7 +94,7 @@ public class VetoDescription implements RoundDescription {
   }
 
   public String countdown(TournamentTeam picking, VetoSettings.VetoType type) {
-    return tournamentFormat.teamManager().formattedName(picking)
+    return tournament.teamManager().formattedName(picking)
         + ChatColor.GRAY
         + " choose an option to "
         + actionWord(type);

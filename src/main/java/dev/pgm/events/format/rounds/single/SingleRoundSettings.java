@@ -1,11 +1,11 @@
 package dev.pgm.events.format.rounds.single;
 
-import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.format.Tournament;
 import dev.pgm.events.format.rounds.RoundSettings;
 import dev.pgm.events.format.rounds.TournamentRound;
 import java.time.Duration;
 
-public class SingleRoundOptions extends RoundSettings {
+public class SingleRoundSettings extends RoundSettings {
 
   private final Duration cycleCountdown;
   private final Duration startCountdown;
@@ -13,7 +13,7 @@ public class SingleRoundOptions extends RoundSettings {
   private final String map;
   private final int score;
 
-  public SingleRoundOptions(
+  public SingleRoundSettings(
       String id,
       Duration cycleCountdown,
       Duration startCountdown,
@@ -29,13 +29,13 @@ public class SingleRoundOptions extends RoundSettings {
   }
 
   @Override
-  public TournamentRound newRound(TournamentFormat format) {
+  public TournamentRound newRound(Tournament format) {
     return new SingleRound(format, this);
   }
 
   @Override
-  public TournamentRound newRound(TournamentFormat format, String id) {
-    return new SingleRoundOptions(
+  public TournamentRound newRound(Tournament format, String id) {
+    return new SingleRoundSettings(
             id, cycleCountdown, startCountdown, map, score(), scoring(), showInHistory())
         .newRound(format);
   }

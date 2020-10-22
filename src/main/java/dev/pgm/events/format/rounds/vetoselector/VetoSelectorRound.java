@@ -1,6 +1,6 @@
 package dev.pgm.events.format.rounds.vetoselector;
 
-import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.format.Tournament;
 import dev.pgm.events.format.rounds.AbstractRound;
 import dev.pgm.events.format.rounds.RoundDescription;
 import dev.pgm.events.format.rounds.RoundPhase;
@@ -13,7 +13,7 @@ public class VetoSelectorRound extends AbstractRound<VetoSelectorSettings> {
 
   private TournamentTeam selectingTeam;
 
-  public VetoSelectorRound(TournamentFormat format, VetoSelectorSettings settings) {
+  public VetoSelectorRound(Tournament format, VetoSelectorSettings settings) {
     super(format, settings);
   }
 

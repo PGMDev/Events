@@ -1,6 +1,6 @@
 package dev.pgm.events.format.rounds.replay;
 
-import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.format.Tournament;
 import dev.pgm.events.format.rounds.RoundSettings;
 import dev.pgm.events.format.rounds.TournamentRound;
 import dev.pgm.events.format.rounds.reference.ReferenceRoundSettings;
@@ -27,12 +27,12 @@ public class ReplaySettings extends RoundSettings {
   }
 
   @Override
-  public TournamentRound newRound(TournamentFormat format) {
+  public TournamentRound newRound(Tournament format) {
     return new ReplayRound(format, this);
   }
 
   @Override
-  public TournamentRound newRound(TournamentFormat format, String id) {
+  public TournamentRound newRound(Tournament format, String id) {
     return new ReplaySettings(id, referenceSettings).newRound(format);
   }
 }

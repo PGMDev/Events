@@ -44,7 +44,7 @@ public class TournamentAdminCommands {
     for (TournamentPlayer player : team.getPlayers())
       if (vanishManager.isVanished(player.getUUID()))
         vanishManager.setVanished(
-            matchManager.getPlayer(Bukkit.getPlayer(player.getUUID())), false, false);
+            matchManager.getPlayer(player.getUUID()), false, false);
 
     teamManager.addTeam(team);
     sender.sendMessage(ChatColor.YELLOW + "Added team " + team.getName() + "!");

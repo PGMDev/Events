@@ -6,6 +6,7 @@ import dev.pgm.events.utils.Pair;
 import java.util.Collection;
 import org.bukkit.ChatColor;
 
+/** Formats a score overview for two scores tied to teams */
 public class TwoTeamFormattedScore implements FormattedScore {
 
   private final TournamentTeamManager teamManager;

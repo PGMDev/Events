@@ -8,10 +8,21 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+/** Represents a single participating team composed of {@link TournamentPlayer}s */
 public interface TournamentTeam {
 
+  /**
+   * Get the name of this team
+   *
+   * @return the name of this team
+   */
   String getName();
 
+  /**
+   * Get a list of all players on this team
+   *
+   */
+   * @return a list of the players on this team
   List<? extends TournamentPlayer> getPlayers();
 
   default boolean containsPlayer(UUID player) {
@@ -46,6 +57,13 @@ public interface TournamentTeam {
     return canVeto(player.getUniqueId());
   }
 
+  /**
+   * Create a new {@link TournamentTeam}, returns a {@link DefaultTournamentTeam} by default
+   *
+   * @param name the team name
+   * @param players all team members
+   * @return An instance of this, {@link DefaultTournamentTeam} by default.
+   */
   static TournamentTeam create(String name, List<TournamentPlayer> players) {
     return new DefaultTournamentTeam(name, players);
   }

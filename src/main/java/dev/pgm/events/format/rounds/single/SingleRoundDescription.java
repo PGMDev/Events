@@ -1,6 +1,6 @@
 package dev.pgm.events.format.rounds.single;
 
-import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.format.Tournament;
 import dev.pgm.events.format.rounds.RoundDescription;
 import dev.pgm.events.team.TournamentTeam;
 import java.util.Collection;
@@ -13,11 +13,11 @@ public class SingleRoundDescription implements RoundDescription {
 
   private final String mapName;
   private final SingleRound singleRound;
-  private final TournamentFormat format;
+  private final Tournament format;
 
   private final String defString;
 
-  public SingleRoundDescription(String mapName, SingleRound singleRound, TournamentFormat format) {
+  public SingleRoundDescription(String mapName, SingleRound singleRound, Tournament format) {
     this.mapName = mapName;
     this.singleRound = singleRound;
     this.format = format;

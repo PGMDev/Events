@@ -1,12 +1,12 @@
 package dev.pgm.events.format.events;
 
-import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.format.Tournament;
 import org.bukkit.event.HandlerList;
 
 public class TournamentStartEvent extends TournamentEvent {
 
-  public TournamentStartEvent(TournamentFormat tournamentFormat) {
-    super(tournamentFormat);
+  public TournamentStartEvent(Tournament tournament) {
+    super(tournament);
   }
 
   private static final HandlerList handlers = new HandlerList();

@@ -1,6 +1,6 @@
 package dev.pgm.events.format.rounds.format;
 
-import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.format.Tournament;
 import dev.pgm.events.format.rounds.AbstractRound;
 import dev.pgm.events.format.rounds.RoundDescription;
 import dev.pgm.events.format.rounds.RoundPhase;
@@ -20,7 +20,7 @@ public class FormatRound extends AbstractRound<FormatRoundSettings> {
 
   private TournamentTeam selectingTeam;
 
-  public FormatRound(TournamentFormat format, FormatRoundSettings settings) {
+  public FormatRound(Tournament format, FormatRoundSettings settings) {
     super(format, settings);
   }
 

@@ -1,6 +1,6 @@
 package dev.pgm.events.format.rounds.veto;
 
-import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.format.Tournament;
 import dev.pgm.events.format.TournamentRoundOptions;
 import dev.pgm.events.format.rounds.AbstractRound;
 import dev.pgm.events.format.rounds.RoundPhase;
@@ -23,11 +23,11 @@ public class VetoRound extends AbstractRound<VetoSettings> {
   private final VetoDescription description;
 
   // format used for veto decider (tournament in a tournament?!?!)
-  private TournamentFormat vetoDecider;
+  private Tournament vetoDecider;
   private VetoController controller;
   private TournamentTeam selectingTeam; // the team that chose this veto (if it was vetoed)
 
-  public VetoRound(TournamentFormat format, VetoSettings vetoSettings) {
+  public VetoRound(Tournament format, VetoSettings vetoSettings) {
     super(format, vetoSettings);
     this.description = new VetoDescription(format, this);
   }

@@ -68,14 +68,6 @@ public class DefaultTeamManager implements TournamentTeamManager {
   }
 
   @Override
-  public TournamentTeam tournamentTeam(String name) {
-    for (TournamentTeam tournamentTeam : teamMap.keySet())
-      if (tournamentTeam.getName().equalsIgnoreCase(name)) return tournamentTeam;
-
-    return null;
-  }
-
-  @Override
   public Optional<TournamentTeam> tournamentTeam(Competitor team) {
     return fromTeamID(team.getId());
   }

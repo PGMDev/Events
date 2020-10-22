@@ -15,9 +15,10 @@ public class VetoSelectorDescription implements RoundDescription {
   @Override
   public BaseComponent roundInfo() {
     return new TextComponent(
-        "VetoSelector round -> veto picker: " + vetoSelectorRound.getSelectingTeam() == null
-            ? null
-            : vetoSelectorRound.getSelectingTeam().getName());
+        "VetoSelector round -> veto picker: "
+            + (vetoSelectorRound.getSelectingTeam() == null
+                ? null
+                : vetoSelectorRound.getSelectingTeam().getName()));
   }
 
   @Override

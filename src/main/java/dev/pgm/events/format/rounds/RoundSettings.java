@@ -1,6 +1,6 @@
 package dev.pgm.events.format.rounds;
 
-import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.format.Tournament;
 
 public abstract class RoundSettings {
 
@@ -26,7 +26,7 @@ public abstract class RoundSettings {
     return showInHistory;
   }
 
-  public abstract TournamentRound newRound(TournamentFormat format);
+  public abstract TournamentRound newRound(Tournament format);
 
   /**
    * Use this for duplication of rounds, round specific information is not copied over (such as the
@@ -36,5 +36,5 @@ public abstract class RoundSettings {
    * @param id the id of the new round to be created
    * @return
    */
-  public abstract TournamentRound newRound(TournamentFormat format, String id);
+  public abstract TournamentRound newRound(Tournament format, String id);
 }

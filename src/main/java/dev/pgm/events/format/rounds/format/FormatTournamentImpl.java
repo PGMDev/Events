@@ -1,7 +1,7 @@
 package dev.pgm.events.format.rounds.format;
 
 import dev.pgm.events.format.RoundReferenceHolder;
-import dev.pgm.events.format.TournamentFormatImpl;
+import dev.pgm.events.format.TournamentImpl;
 import dev.pgm.events.format.TournamentRoundOptions;
 import dev.pgm.events.format.winner.BestOfCalculation;
 import dev.pgm.events.team.TournamentTeam;
@@ -10,7 +10,7 @@ import java.time.Duration;
 import java.util.Optional;
 import tc.oc.pgm.api.match.Match;
 
-public class FormatTournamentImpl extends TournamentFormatImpl {
+public class FormatTournamentImpl extends TournamentImpl {
 
   private FormatRound formatRound;
 

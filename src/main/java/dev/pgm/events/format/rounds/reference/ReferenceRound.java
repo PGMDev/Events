@@ -1,6 +1,6 @@
 package dev.pgm.events.format.rounds.reference;
 
-import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.format.Tournament;
 import dev.pgm.events.format.rounds.AbstractRound;
 import dev.pgm.events.format.rounds.RoundPhase;
 import dev.pgm.events.format.rounds.TournamentRound;
@@ -8,11 +8,11 @@ import tc.oc.pgm.api.match.Match;
 
 public class ReferenceRound extends AbstractRound<ReferenceRoundSettings> {
 
-  private final TournamentFormat tournamentFormat;
+  private final Tournament tournament;
 
-  public ReferenceRound(TournamentFormat format, ReferenceRoundSettings settings) {
+  public ReferenceRound(Tournament format, ReferenceRoundSettings settings) {
     super(format, settings);
-    this.tournamentFormat = format;
+    this.tournament = format;
   }
 
   @Override
@@ -23,11 +23,11 @@ public class ReferenceRound extends AbstractRound<ReferenceRoundSettings> {
   @Override
   public void start(Match match) {
     setPhase(RoundPhase.RUNNING);
-    TournamentRound round = tournamentFormat.references().needRound(settings().targetID());
+    TournamentRound round = tournament.references().needRound(settings().targetID());
     // add a copy after this round
-    tournamentFormat.addRoundAfterCurrent(round.settings(), settings().futureID());
+    tournament.addRoundAfterCurrent(round.settings(), settings().futureID());
     // move to the next round (the one we just added)
     setPhase(RoundPhase.FINISHED);
-    tournamentFormat.nextRound(match);
+    tournament.nextRound(match);
   }
 }

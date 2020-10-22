@@ -1,13 +1,15 @@
 package dev.pgm.events.team;
 
+import tc.oc.pgm.match.MatchPlayerImpl;
+
 import java.util.UUID;
 
-public class DefaultTournamentPlayer implements TournamentPlayer {
+public class TournamentPlayerImpl implements TournamentPlayer {
 
   private final UUID uuid;
   private final boolean canVeto;
 
-  public DefaultTournamentPlayer(UUID uuid, boolean canVeto) {
+  public TournamentPlayerImpl(UUID uuid, boolean canVeto) {
     this.uuid = uuid;
     this.canVeto = canVeto;
   }

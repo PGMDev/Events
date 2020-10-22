@@ -1,17 +1,17 @@
 package dev.pgm.events.format.events;
 
-import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.format.Tournament;
 import org.bukkit.event.Event;
 
 public class TournamentEvent extends Event {
 
-  private final TournamentFormat tournamentFormat;
+  private final Tournament tournament;
 
-  public TournamentEvent(TournamentFormat tournamentFormat) {
-    this.tournamentFormat = tournamentFormat;
+  public TournamentEvent(Tournament tournament) {
+    this.tournament = tournament;
   }
 
-  public TournamentFormat format() {
-    return tournamentFormat;
+  public Tournament format() {
+    return tournament;
   }
 }

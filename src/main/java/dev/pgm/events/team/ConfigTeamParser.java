@@ -1,6 +1,6 @@
 package dev.pgm.events.team;
 
-import dev.pgm.events.Tournament;
+import dev.pgm.events.Events;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,23 +10,25 @@ import java.util.stream.Collectors;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+/** Fetches teams from config files TODO: elaborate on how this fetches the files*/
 public class ConfigTeamParser {
 
-  private List<TournamentTeam> teams;
+  private final List<TournamentTeam> teams;
 
   private static ConfigTeamParser instance;
 
   private ConfigTeamParser() {
     teams =
         parseTournamentTeams(
-            new File(Tournament.get().getDataFolder(), "teams"),
-            new File(Tournament.get().getDataFolder(), "teams.yml"));
+            new File(Events.get().getDataFolder(), "teams"),
+            new File(Events.get().getDataFolder(), "teams.yml"));
   }
 
+  //TODO: async?
   private static List<TournamentTeam> parseTournamentTeams(File teamsFolder, File teamsFile) {
     if (!teamsFolder.exists()) teamsFolder.mkdirs();
 
-    List<TournamentTeam> teamList = new ArrayList<TournamentTeam>();
+    List<TournamentTeam> teamList = new ArrayList<>();
     for (File child :
         teamsFolder.listFiles((file) -> file.getName().toLowerCase().endsWith(".yml"))) {
       FileConfiguration config = YamlConfiguration.loadConfiguration(child);

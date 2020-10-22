@@ -1,6 +1,6 @@
 package dev.pgm.events.xml;
 
-import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.format.Tournament;
 import dev.pgm.events.format.rounds.RoundSettings;
 import dev.pgm.events.format.rounds.TournamentRound;
 import dev.pgm.events.format.rounds.format.FormatRound;
@@ -8,7 +8,7 @@ import dev.pgm.events.format.rounds.format.FormatRoundSettings;
 import dev.pgm.events.format.rounds.resultfrom.ResultFromRound;
 import dev.pgm.events.format.rounds.resultfrom.ResultFromSettings;
 import dev.pgm.events.format.rounds.single.SingleRound;
-import dev.pgm.events.format.rounds.single.SingleRoundOptions;
+import dev.pgm.events.format.rounds.single.SingleRoundSettings;
 import dev.pgm.events.format.rounds.veto.VetoRound;
 import dev.pgm.events.format.rounds.veto.settings.VetoOption;
 import dev.pgm.events.format.rounds.veto.settings.VetoSettings;
@@ -22,7 +22,7 @@ import org.jdom2.Element;
 
 public class RoundParser {
 
-  public static TournamentRound parse(TournamentFormat format, Element round) {
+  public static TournamentRound parse(Tournament format, Element round) {
     switch (round.getName().toLowerCase()) {
       case "match":
         return SingleParser.parse(format, round);
@@ -41,7 +41,7 @@ public class RoundParser {
 
   public static class SingleParser {
 
-    public static SingleRound parse(TournamentFormat format, Element element) {
+    public static SingleRound parse(Tournament format, Element element) {
       String id =
           element.getAttributeValue("id", element.getValue().toLowerCase().replace(" ", "_"));
       String map = element.getValue();
@@ -49,15 +49,15 @@ public class RoundParser {
       Duration cycleCountdown = Duration.ofSeconds(20);
       Duration startCountdown = Duration.ofSeconds(300);
 
-      SingleRoundOptions options =
-          new SingleRoundOptions(id, cycleCountdown, startCountdown, map, 1, true, true);
+      SingleRoundSettings options =
+          new SingleRoundSettings(id, cycleCountdown, startCountdown, map, 1, true, true);
       return new SingleRound(format, options);
     }
   }
 
   public static class VetoParser {
 
-    public static VetoRound parse(TournamentFormat format, Element element) {
+    public static VetoRound parse(Tournament format, Element element) {
       String id = element.getAttributeValue("id", "veto");
       Element order = element.getChild("order");
       if (order == null) throw new IllegalArgumentException("Order element is missing from veto!");
@@ -131,13 +131,13 @@ public class RoundParser {
       return new VetoSettings.Veto(type, team, null, true);
     }
 
-    private static List<VetoOption> constructVetoOptions(TournamentFormat format, Element element) {
+    private static List<VetoOption> constructVetoOptions(Tournament format, Element element) {
       ArrayList<VetoOption> options = new ArrayList<VetoOption>();
 
       for (Element child : element.getChildren()) {
         RoundSettings round = RoundParser.parse(format, child).settings();
         String defaultName = "Name not defined in XML!";
-        if (round instanceof SingleRoundOptions) defaultName = ((SingleRoundOptions) round).map();
+        if (round instanceof SingleRoundSettings) defaultName = ((SingleRoundSettings) round).map();
 
         options.add(
             new VetoOption(Arrays.asList(round), child.getAttributeValue("name", defaultName)));
@@ -149,7 +149,7 @@ public class RoundParser {
 
   public static class ResultFromParser {
 
-    public static ResultFromRound parse(TournamentFormat format, Element element) {
+    public static ResultFromRound parse(Tournament format, Element element) {
       String target = element.getAttributeValue("id");
 
       ResultFromSettings options = new ResultFromSettings(target);
@@ -159,7 +159,7 @@ public class RoundParser {
 
   public static class FormatParser {
 
-    public static FormatRound parse(TournamentFormat format, Element element) {
+    public static FormatRound parse(Tournament format, Element element) {
       String name = element.getAttributeValue("name", "Format");
       String id = element.getAttributeValue("id", name.toLowerCase());
 

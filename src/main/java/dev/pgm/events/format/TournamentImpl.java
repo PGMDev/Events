@@ -1,6 +1,6 @@
 package dev.pgm.events.format;
 
-import dev.pgm.events.Tournament;
+import dev.pgm.events.Events;
 import dev.pgm.events.config.Context;
 import dev.pgm.events.format.events.TournamentFinishedEvent;
 import dev.pgm.events.format.rounds.RoundDescription;
@@ -20,9 +20,8 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import tc.oc.pgm.api.PGM;
 import tc.oc.pgm.api.match.Match;
-import tc.oc.pgm.util.bukkit.Events;
 
-public class TournamentFormatImpl implements TournamentFormat {
+public class TournamentImpl implements Tournament {
 
   private final List<Listener> permanentListeners = new ArrayList<>();
   private final List<Listener> roundListeners = new ArrayList<>();
@@ -33,7 +32,7 @@ public class TournamentFormatImpl implements TournamentFormat {
 
   private TournamentState state = TournamentState.WAITING;
 
-  public TournamentFormatImpl(
+  public TournamentImpl(
       TournamentTeamManager teamManager,
       TournamentRoundOptions options,
       RoundReferenceHolder references) {
@@ -92,7 +91,8 @@ public class TournamentFormatImpl implements TournamentFormat {
       state = TournamentState.FINISHED;
       // if this doesn't call it just call it all normal like
       onEnd(match, winner);
-      Events.callEvent(new TournamentFinishedEvent(this, winner), EventPriority.NORMAL);
+      tc.oc.pgm.util.bukkit.Events.callEvent(
+          new TournamentFinishedEvent(this, winner), EventPriority.NORMAL);
       return;
     }
 
@@ -155,7 +155,7 @@ public class TournamentFormatImpl implements TournamentFormat {
     // roundHolder.currentRound().describe().roundStatus(), 5);
     Bukkit.getScheduler()
         .scheduleSyncDelayedTask(
-            Tournament.get(),
+            Events.get(),
             new Runnable() {
 
               @Override
@@ -178,24 +178,9 @@ public class TournamentFormatImpl implements TournamentFormat {
 
     if (tournamentRoundOptions.shouldAnnounceWinner()) {
       if (winner.isPresent()) {
-        // new GlobalAudience().sendMessage("tournament.announcement.winner",
-        // winner.get().teamName());
-        // System.out.println(winner.get().teamName());
-        // StratusAPI.get().newChain().delay(8, TimeUnit.SECONDS).syncLast((x) -> {
-        // GlobalAudience glob = new GlobalAudience();
-        // removed the team from the title, add in with scores.topLine() (needs re-naming)
-        // glob.sendTitle("", teamManager.formattedName(winner.get()) + ChatColor.GOLD + " wins this
-        // round!", 4);
-        // }).execute();
         Bukkit.broadcastMessage(
             teamManager.formattedName(winner.get()) + ChatColor.GOLD + " wins this round!");
       } else {
-        // new GlobalAudience().sendMessage("tournament.announcement.draw");
-        // StratusAPI.get().newChain().delay(8, TimeUnit.SECONDS).syncLast((x) -> {
-        // GlobalAudience glob = new GlobalAudience();
-        // removed the team from the title, add in with scores.topLine() (needs re-naming)
-        // glob.sendTitle("", ChatColor.GRAY + "This round has ended in a draw!", 4);
-        // }).execute();
         Bukkit.broadcastMessage(ChatColor.GRAY + "This round has ended in a draw!");
       }
     }

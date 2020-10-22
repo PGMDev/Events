@@ -1,7 +1,7 @@
 package dev.pgm.events.format.rounds.veto;
 
 import dev.pgm.events.format.RoundReferenceHolder;
-import dev.pgm.events.format.TournamentFormatImpl;
+import dev.pgm.events.format.TournamentImpl;
 import dev.pgm.events.format.TournamentRoundOptions;
 import dev.pgm.events.format.score.Score;
 import dev.pgm.events.team.TournamentTeam;
@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import tc.oc.pgm.api.match.Match;
 
-public class VetoTournamentImpl extends TournamentFormatImpl {
+public class VetoTournamentImpl extends TournamentImpl {
 
   // private final Consumer<List<TournamentTeam>> func;
   private final VetoRound vetoRound;

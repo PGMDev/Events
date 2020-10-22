@@ -1,6 +1,6 @@
 package dev.pgm.events.format.rounds.replay;
 
-import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.format.Tournament;
 import dev.pgm.events.format.rounds.AbstractRound;
 import dev.pgm.events.format.rounds.RoundPhase;
 import dev.pgm.events.format.rounds.TournamentRound;
@@ -16,8 +16,8 @@ public class ReplayRound extends AbstractRound<ReplaySettings> {
   private final ReplayDescription replayDescription;
   private boolean isReplaying = false;
 
-  public ReplayRound(TournamentFormat tournamentFormat, ReplaySettings settings) {
-    super(tournamentFormat, settings);
+  public ReplayRound(Tournament tournament, ReplaySettings settings) {
+    super(tournament, settings);
     this.replayDescription = new ReplayDescription(this);
   }
 

@@ -1,7 +1,7 @@
 package dev.pgm.events.commands;
 
-import dev.pgm.events.Tournament;
-import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.Events;
+import dev.pgm.events.format.Tournament;
 import dev.pgm.events.format.rounds.RoundDescription;
 import dev.pgm.events.format.rounds.format.FormatTournamentImpl;
 import dev.pgm.events.format.rounds.veto.VetoRound;
@@ -19,14 +19,13 @@ import tc.oc.pgm.lib.app.ashcon.intake.parametric.annotation.Text;
 public class TournamentUserCommands {
 
   @Command(aliases = "score", desc = "Shows the current score in the tournament")
-  public void currentScore(CommandSender sender, TournamentFormat format) {
+  public void currentScore(CommandSender sender, Tournament format) {
     if (format instanceof FormatTournamentImpl) {
       String formatName = ((FormatTournamentImpl) format).getFormatRound().settings().name();
       sender.sendMessage(ChatColor.YELLOW + "For " + formatName + ":");
       sender.sendMessage(format.currentScore().condensed());
 
-      Optional<TournamentFormat> parentOptional =
-          Tournament.get().getTournamentManager().currentTournament();
+      Optional<Tournament> parentOptional = Events.get().getTournamentManager().currentTournament();
       if (parentOptional.isPresent()) {
         sender.sendMessage(ChatColor.YELLOW + "Overall score (excluding " + formatName + "):");
         sender.sendMessage(parentOptional.get().currentScore().condensed());
@@ -41,7 +40,7 @@ public class TournamentUserCommands {
       CommandSender sender,
       Match match,
       TournamentTeamManager teamManager,
-      TournamentFormat format,
+      Tournament format,
       @Text String option) {
     if (format.currentRound() == null || !(format.currentRound() instanceof VetoRound)) {
       sender.sendMessage(ChatColor.RED + "Veto round is not currently running!");
@@ -85,7 +84,7 @@ public class TournamentUserCommands {
   }
 
   @Command(aliases = "rounds", desc = "Shows the rounds from this event")
-  public void rounds(CommandSender sender, TournamentFormat format) {
+  public void rounds(CommandSender sender, Tournament format) {
     String header = "Event Rounds";
     if (format instanceof FormatTournamentImpl)
       header += " (" + ((FormatTournamentImpl) format).getFormatRound().settings().name() + ")";

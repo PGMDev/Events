@@ -1,6 +1,6 @@
 package dev.pgm.events.format.rounds.resultfrom;
 
-import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.format.Tournament;
 import dev.pgm.events.format.rounds.RoundSettings;
 import dev.pgm.events.format.rounds.TournamentRound;
 import java.util.UUID;
@@ -29,12 +29,12 @@ public class ResultFromSettings extends RoundSettings {
   }
 
   @Override
-  public TournamentRound newRound(TournamentFormat format) {
+  public TournamentRound newRound(Tournament format) {
     return new ResultFromRound(format, this);
   }
 
   @Override
-  public TournamentRound newRound(TournamentFormat format, String id) {
+  public TournamentRound newRound(Tournament format, String id) {
     return new ResultFromSettings(id, targetID).newRound(format);
   }
 }

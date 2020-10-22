@@ -1,6 +1,6 @@
 package dev.pgm.events.format.rounds;
 
-import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.format.Tournament;
 import dev.pgm.events.team.TournamentTeam;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,11 +9,11 @@ import tc.oc.pgm.api.match.Match;
 public abstract class AbstractRound<T extends RoundSettings> implements TournamentRound {
 
   private final T settings;
-  private final TournamentFormat tournamentFormat;
+  private final Tournament tournament;
   private RoundPhase roundPhase = RoundPhase.UNLOADED;
 
-  public AbstractRound(TournamentFormat tournamentFormat, T settings) {
-    this.tournamentFormat = tournamentFormat;
+  public AbstractRound(Tournament tournament, T settings) {
+    this.tournament = tournament;
     this.settings = settings;
   }
 
@@ -22,8 +22,8 @@ public abstract class AbstractRound<T extends RoundSettings> implements Tourname
     return settings.id();
   }
 
-  public TournamentFormat tournament() {
-    return tournamentFormat;
+  public Tournament tournament() {
+    return tournament;
   }
 
   @Override

@@ -1,6 +1,6 @@
 package dev.pgm.events.ready;
 
-import dev.pgm.events.config.AppData;
+import dev.pgm.events.config.EventsConfig;
 import java.time.Duration;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -88,7 +88,7 @@ public class ReadyCommands {
       return false;
     }
 
-    if (!AppData.observersMustReady() && player.getParty() instanceof ObserverParty) {
+    if (!EventsConfig.observersMustReady() && player.getParty() instanceof ObservingParty) {
       sender.sendMessage(ChatColor.RED + "Observers are not allowed to ready!");
       return false;
     }

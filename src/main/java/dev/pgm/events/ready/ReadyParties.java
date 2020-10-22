@@ -1,6 +1,6 @@
 package dev.pgm.events.ready;
 
-import dev.pgm.events.config.AppData;
+import dev.pgm.events.config.EventsConfig;
 import java.util.HashSet;
 import java.util.Set;
 import tc.oc.pgm.api.match.Match;
@@ -34,7 +34,7 @@ public class ReadyParties {
     // 1 due to the queue party always present
     // and 2 for queue party + observers
 
-    int extraParties = AppData.observersMustReady() ? 1 : 2;
+    int extraParties = EventsConfig.observersMustReady() ? 1 : 2;
     return currentReadyParties.size() == match.getParties().size() - extraParties;
   }
 }

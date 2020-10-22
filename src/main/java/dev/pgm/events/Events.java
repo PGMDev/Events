@@ -3,7 +3,7 @@ package dev.pgm.events;
 import dev.pgm.events.commands.TournamentAdminCommands;
 import dev.pgm.events.commands.TournamentUserCommands;
 import dev.pgm.events.commands.providers.TournamentProvider;
-import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.format.Tournament;
 import dev.pgm.events.listeners.MatchLoadListener;
 import dev.pgm.events.listeners.PlayerJoinListen;
 import dev.pgm.events.ready.ReadyCommands;
@@ -25,12 +25,12 @@ import tc.oc.pgm.lib.app.ashcon.intake.bukkit.graph.BasicBukkitCommandGraph;
 import tc.oc.pgm.lib.app.ashcon.intake.fluent.DispatcherNode;
 import tc.oc.pgm.lib.app.ashcon.intake.parametric.AbstractModule;
 
-public class Tournament extends JavaPlugin {
+public class Events extends JavaPlugin {
 
   private TournamentTeamManager teamManager;
   private TournamentManager tournamentManager;
 
-  private static Tournament plugin;
+  private static Events plugin;
 
   @Override
   public void onEnable() {
@@ -73,7 +73,7 @@ public class Tournament extends JavaPlugin {
     return tournamentManager;
   }
 
-  public static Tournament get() {
+  public static Events get() {
     return plugin;
   }
 
@@ -102,7 +102,7 @@ public class Tournament extends JavaPlugin {
       bind(Match.class).toProvider(new MatchProvider());
       bind(TournamentManager.class).toInstance(tournamentManager);
       bind(TournamentTeamManager.class).toInstance(teamManager);
-      bind(TournamentFormat.class).toProvider(new TournamentProvider(tournamentManager));
+      bind(Tournament.class).toProvider(new TournamentProvider(tournamentManager));
     }
   }
 }

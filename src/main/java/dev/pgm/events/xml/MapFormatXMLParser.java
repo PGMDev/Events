@@ -1,9 +1,9 @@
 package dev.pgm.events.xml;
 
-import dev.pgm.events.Tournament;
+import dev.pgm.events.Events;
 import dev.pgm.events.format.RoundReferenceHolder;
-import dev.pgm.events.format.TournamentFormat;
-import dev.pgm.events.format.TournamentFormatImpl;
+import dev.pgm.events.format.Tournament;
+import dev.pgm.events.format.TournamentImpl;
 import dev.pgm.events.format.TournamentRoundOptions;
 import dev.pgm.events.format.winner.BestOfCalculation;
 import java.io.File;
@@ -16,8 +16,8 @@ import org.jdom2.input.SAXBuilder;
 
 public class MapFormatXMLParser {
 
-  public static TournamentFormat parse(String name) {
-    File poolsFolder = new File(Tournament.get().getDataFolder(), "formats");
+  public static Tournament parse(String name) {
+    File poolsFolder = new File(Events.get().getDataFolder(), "formats");
     File xmlFile = new File(poolsFolder, name + ".xml");
 
     try {
@@ -37,9 +37,8 @@ public class MapFormatXMLParser {
               Duration.ofSeconds(30),
               Duration.ofSeconds(40),
               new BestOfCalculation<>(bestOf));
-      TournamentFormat format =
-          new TournamentFormatImpl(
-              Tournament.get().getTeamManager(), options, new RoundReferenceHolder());
+      Tournament format =
+          new TournamentImpl(Events.get().getTeamManager(), options, new RoundReferenceHolder());
 
       if (!root.getName().toLowerCase().equals("format"))
         System.out.println(

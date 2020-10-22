@@ -1,7 +1,7 @@
 package dev.pgm.events.commands.providers;
 
 import dev.pgm.events.TournamentManager;
-import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.format.Tournament;
 import dev.pgm.events.format.rounds.format.FormatRound;
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -12,7 +12,7 @@ import tc.oc.pgm.lib.app.ashcon.intake.argument.CommandArgs;
 import tc.oc.pgm.lib.app.ashcon.intake.bukkit.parametric.provider.BukkitProvider;
 import tc.oc.pgm.lib.app.ashcon.intake.parametric.ProvisionException;
 
-public class TournamentProvider implements BukkitProvider<TournamentFormat> {
+public class TournamentProvider implements BukkitProvider<Tournament> {
 
   private final TournamentManager tournamentManager;
 
@@ -26,12 +26,12 @@ public class TournamentProvider implements BukkitProvider<TournamentFormat> {
   }
 
   @Override
-  public TournamentFormat get(
+  public Tournament get(
       CommandSender commandSender, CommandArgs commandArgs, List<? extends Annotation> list)
       throws ArgumentException, ProvisionException {
-    Optional<TournamentFormat> tournamentFormat = tournamentManager.currentTournament();
+    Optional<Tournament> tournamentFormat = tournamentManager.currentTournament();
     if (tournamentFormat.isPresent()) {
-      TournamentFormat format = tournamentFormat.get();
+      Tournament format = tournamentFormat.get();
       if (format.currentRound() == null) return format;
 
       if (format.currentRound() instanceof FormatRound)

@@ -1,6 +1,6 @@
 package dev.pgm.events.format.rounds.veto;
 
-import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.format.Tournament;
 import dev.pgm.events.format.rounds.RoundSettings;
 import dev.pgm.events.format.rounds.TournamentRound;
 import dev.pgm.events.format.rounds.format.FormatRound;
@@ -14,9 +14,10 @@ import java.util.Optional;
 import java.util.Random;
 import javax.annotation.Nullable;
 
+/** Master class which handles the veto process in a {@link VetoRound} */
 public class VetoController {
 
-  private final TournamentFormat format;
+  private final Tournament format;
   private final List<VetoOption> options;
   private final List<TournamentRound> toPlay;
   private final VetoSettings settings;
@@ -25,9 +26,13 @@ public class VetoController {
   private final List<VetoHistory> history;
   private int vetoIndex = 0;
 
-  public VetoController(
-      TournamentFormat format, VetoSettings settings, List<TournamentTeam> ranked) {
-    this.format = format;
+  /**
+   * @param tournament the tournament this veto round is part of
+   * @param settings the settings for the veto round this is controlling
+   * @param ranked the teams that are participating in this vote //TODO wtf ranked?
+   */
+  public VetoController(Tournament tournament, VetoSettings settings, List<TournamentTeam> ranked) {
+    this.format = tournament;
     this.options = new ArrayList<>(settings.options());
     this.settings = settings;
     this.toPlay = new ArrayList<>();
@@ -141,7 +146,7 @@ public class VetoController {
 
   /**
    * Returns the team that is picking for the current veto, in the case of an automatic veto NULL is
-   * returned instead
+   * returned instead //TODO actually return null instead of empty optional
    *
    * @return the current picking team or NULL if no team is picking
    */

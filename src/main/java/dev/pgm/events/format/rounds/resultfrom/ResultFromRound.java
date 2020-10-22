@@ -1,6 +1,6 @@
 package dev.pgm.events.format.rounds.resultfrom;
 
-import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.format.Tournament;
 import dev.pgm.events.format.rounds.AbstractRound;
 import dev.pgm.events.format.rounds.RoundDescription;
 import dev.pgm.events.format.rounds.RoundPhase;
@@ -10,9 +10,9 @@ import tc.oc.pgm.api.match.Match;
 
 public class ResultFromRound extends AbstractRound<ResultFromSettings> {
 
-  private TournamentFormat format;
+  private Tournament format;
 
-  public ResultFromRound(TournamentFormat format, ResultFromSettings settings) {
+  public ResultFromRound(Tournament format, ResultFromSettings settings) {
     super(format, settings);
     this.format = format;
   }

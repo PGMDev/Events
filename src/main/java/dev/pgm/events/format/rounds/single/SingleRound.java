@@ -1,6 +1,6 @@
 package dev.pgm.events.format.rounds.single;
 
-import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.format.Tournament;
 import dev.pgm.events.format.rounds.AbstractRound;
 import dev.pgm.events.format.rounds.RoundDescription;
 import dev.pgm.events.format.rounds.RoundPhase;
@@ -21,14 +21,14 @@ import tc.oc.pgm.api.match.event.MatchStartEvent;
 import tc.oc.pgm.cycle.CycleMatchModule;
 import tc.oc.pgm.start.StartMatchModule;
 
-public class SingleRound extends AbstractRound<SingleRoundOptions> {
+public class SingleRound extends AbstractRound<SingleRoundSettings> {
 
   private final Map<TournamentTeam, Integer> scoreMap;
   private String fullMapName = "";
   private RoundDescription roundDescription;
   private RoundPhase roundPhase;
 
-  public SingleRound(TournamentFormat format, SingleRoundOptions options) {
+  public SingleRound(Tournament format, SingleRoundSettings options) {
     super(format, options);
     this.scoreMap = new HashMap<>();
 
