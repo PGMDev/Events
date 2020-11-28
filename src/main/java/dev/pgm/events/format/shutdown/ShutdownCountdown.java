@@ -32,7 +32,8 @@ public class ShutdownCountdown extends MatchCountdown {
 
   @Override
   protected Component formatText() {
-    return TextComponent.of("Server will shut down in " + TimeFormatter.seconds(remaining), TextColor.AQUA);
+    return TextComponent.of(
+        "Server will shut down in " + TimeFormatter.seconds(remaining), TextColor.AQUA);
   }
 
   @Override

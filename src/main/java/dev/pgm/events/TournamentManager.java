@@ -1,7 +1,7 @@
 package dev.pgm.events;
 
+import dev.pgm.events.api.events.TournamentStartEvent;
 import dev.pgm.events.format.TournamentFormat;
-import dev.pgm.events.format.events.TournamentStartEvent;
 import java.util.Optional;
 import org.bukkit.event.EventPriority;
 import tc.oc.pgm.api.match.Match;
