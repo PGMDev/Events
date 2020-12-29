@@ -1,24 +1,23 @@
 package dev.pgm.events.ready;
 
 import dev.pgm.events.config.AppData;
-import java.time.Duration;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.api.party.Party;
 import tc.oc.pgm.api.player.MatchPlayer;
 import tc.oc.pgm.lib.app.ashcon.intake.Command;
 import tc.oc.pgm.match.ObserverParty;
-import tc.oc.pgm.start.StartCountdown;
-import tc.oc.pgm.start.StartMatchModule;
 
 public class ReadyCommands {
 
+  private final ReadyManager readyManager;
   private final ReadyParties readyParties;
   private final ReadySystem readySystem;
 
-  public ReadyCommands(ReadySystem readySystem, ReadyParties readyParties) {
+  public ReadyCommands(
+      ReadyManager readyManager, ReadySystem readySystem, ReadyParties readyParties) {
+    this.readyManager = readyManager;
     this.readyParties = readyParties;
     this.readySystem = readySystem;
   }
@@ -26,55 +25,47 @@ public class ReadyCommands {
   @Command(aliases = "ready", desc = "Ready up")
   public void readyCommand(CommandSender sender, Match match, MatchPlayer player) {
     readyParties.preconditionsCheckMatch(match);
+    Party party = player.getParty();
 
     if (!preConditions(match)) return;
 
     if (!canReady(sender, player)) return;
 
-    if (readyParties.isReady(player.getParty())) {
+    if (readyParties.isReady(party)) {
       sender.sendMessage(ChatColor.RED + "You are already ready!");
       return;
     }
 
-    Party party = player.getParty();
-    Bukkit.broadcastMessage(
-        party.getColor() + player.getParty().getNameLegacy() + ChatColor.RESET + " is now ready.");
-    readyParties.ready(party);
+    if (AppData.readyFullTeamRequired() && !readyParties.isFull(party)) {
+      sender.sendMessage(ChatColor.RED + "You can not ready until your team is full!");
+      return;
+    }
 
-    if (readyParties.allReady(match))
-      match
-          .needModule(StartMatchModule.class)
-          .forceStartCountdown(Duration.ofSeconds(20), Duration.ZERO);
+    readyManager.readyTeam(party);
   }
 
   @Command(aliases = "unready", desc = "Mark your team as no longer being ready")
   public void unreadyCommand(CommandSender sender, Match match, MatchPlayer player) {
     readyParties.preconditionsCheckMatch(match);
+    Party party = player.getParty();
 
     if (!preConditions(match)) return;
 
     if (!canReady(sender, player)) return;
 
-    if (!readyParties.isReady(player.getParty())) {
+    if (!readyParties.isReady(party)) {
       sender.sendMessage(ChatColor.RED + "You are already unready!");
       return;
     }
 
-    Party party = player.getParty();
-    Bukkit.broadcastMessage(
-        party.getColor()
-            + player.getParty().getNameLegacy()
-            + ChatColor.RESET
-            + " is now unready.");
-
     if (readyParties.allReady(match)) {
-      readyParties.unReady(party);
+      readyManager.unreadyTeam(party);
       if (readySystem.unreadyShouldCancel()) {
         // check if unready should cancel
-        match.getCountdown().cancelAll(StartCountdown.class);
+        readyManager.cancelMatchStart(match);
       }
     } else {
-      readyParties.unReady(party);
+      readyManager.readyTeam(party);
     }
   }
 

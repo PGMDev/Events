@@ -8,6 +8,7 @@ import dev.pgm.events.listeners.MatchLoadListener;
 import dev.pgm.events.listeners.PlayerJoinListen;
 import dev.pgm.events.ready.ReadyCommands;
 import dev.pgm.events.ready.ReadyListener;
+import dev.pgm.events.ready.ReadyManager;
 import dev.pgm.events.ready.ReadyParties;
 import dev.pgm.events.ready.ReadySystem;
 import dev.pgm.events.team.ConfigTeamParser;
@@ -43,8 +44,9 @@ public class Tournament extends JavaPlugin {
 
     ReadySystem system = new ReadySystem();
     ReadyParties parties = new ReadyParties();
-    ReadyListener readyListener = new ReadyListener(system, parties);
-    ReadyCommands readyCommands = new ReadyCommands(system, parties);
+    ReadyManager readyManager = new ReadyManager(system, parties);
+    ReadyListener readyListener = new ReadyListener(readyManager, system, parties);
+    ReadyCommands readyCommands = new ReadyCommands(readyManager, system, parties);
 
     BasicBukkitCommandGraph g =
         new BasicBukkitCommandGraph(new CommandModule(tournamentManager, teamManager));
