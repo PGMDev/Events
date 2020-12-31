@@ -9,7 +9,7 @@ import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.api.party.Party;
 import tc.oc.pgm.api.player.MatchPlayer;
 import tc.oc.pgm.lib.app.ashcon.intake.Command;
-import tc.oc.pgm.match.ObserverParty;
+import tc.oc.pgm.match.ObservingParty;
 import tc.oc.pgm.start.StartCountdown;
 import tc.oc.pgm.start.StartMatchModule;
 
@@ -93,6 +93,6 @@ public class ReadyCommands {
       return false;
     }
 
-    return !(player.getParty() instanceof ObserverParty) || sender.hasPermission("events.staff");
+    return !(player.getParty() instanceof ObservingParty) || sender.hasPermission("events.staff");
   }
 }

@@ -21,8 +21,8 @@ public interface TournamentTeam {
   /**
    * Get a list of all players on this team
    *
-   */
    * @return a list of the players on this team
+   */
   List<? extends TournamentPlayer> getPlayers();
 
   default boolean containsPlayer(UUID player) {
