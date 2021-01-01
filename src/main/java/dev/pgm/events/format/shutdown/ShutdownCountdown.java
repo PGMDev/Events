@@ -1,18 +1,21 @@
 package dev.pgm.events.format.shutdown;
 
+import static tc.oc.pgm.lib.net.kyori.adventure.key.Key.key;
+import static tc.oc.pgm.lib.net.kyori.adventure.text.Component.text;
+
 import dev.pgm.events.utils.TimeFormatter;
 import java.time.Duration;
 import org.bukkit.Bukkit;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.countdowns.MatchCountdown;
-import tc.oc.pgm.lib.net.kyori.text.Component;
-import tc.oc.pgm.lib.net.kyori.text.TextComponent;
-import tc.oc.pgm.lib.net.kyori.text.format.TextColor;
-import tc.oc.pgm.util.chat.Sound;
+import tc.oc.pgm.lib.net.kyori.adventure.sound.Sound;
+import tc.oc.pgm.lib.net.kyori.adventure.text.Component;
+import tc.oc.pgm.lib.net.kyori.adventure.text.format.NamedTextColor;
 
 public class ShutdownCountdown extends MatchCountdown {
 
-  protected static final Sound COUNT_SOUND = new Sound("note.pling", 1f, 1.19f);
+  protected static final Sound COUNT_SOUND =
+      Sound.sound(key("note.pling"), Sound.Source.MASTER, 1f, 1.19f);
 
   public ShutdownCountdown(Match match) {
     super(match);
@@ -32,8 +35,8 @@ public class ShutdownCountdown extends MatchCountdown {
 
   @Override
   protected Component formatText() {
-    return TextComponent.of(
-        "Server will shut down in " + TimeFormatter.seconds(remaining), TextColor.AQUA);
+    return text(
+        "Server will shut down in " + TimeFormatter.seconds(remaining), NamedTextColor.AQUA);
   }
 
   @Override

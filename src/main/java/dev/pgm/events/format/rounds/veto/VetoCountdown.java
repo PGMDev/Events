@@ -1,13 +1,14 @@
 package dev.pgm.events.format.rounds.veto;
 
+import static tc.oc.pgm.lib.net.kyori.adventure.text.Component.text;
+
 import dev.pgm.events.team.TournamentTeam;
 import java.time.Duration;
 import java.util.Optional;
 import net.md_5.bungee.api.chat.BaseComponent;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.countdowns.MatchCountdown;
-import tc.oc.pgm.lib.net.kyori.text.Component;
-import tc.oc.pgm.lib.net.kyori.text.TextComponent;
+import tc.oc.pgm.lib.net.kyori.adventure.text.Component;
 
 public class VetoCountdown extends MatchCountdown {
 
@@ -25,7 +26,7 @@ public class VetoCountdown extends MatchCountdown {
 
   @Override
   protected Component formatText() {
-    return TextComponent.of(message);
+    return text(message);
   }
 
   @Override
