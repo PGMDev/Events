@@ -9,7 +9,6 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.countdowns.MatchCountdown;
 import tc.oc.pgm.lib.net.kyori.adventure.text.Component;
-import tc.oc.pgm.lib.net.kyori.adventure.text.TextComponent;
 
 public class VetoCountdown extends MatchCountdown {
 
