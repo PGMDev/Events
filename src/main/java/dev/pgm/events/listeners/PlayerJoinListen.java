@@ -1,7 +1,10 @@
 package dev.pgm.events.listeners;
 
+import static tc.oc.pgm.lib.net.kyori.adventure.text.Component.text;
+
 import dev.pgm.events.team.TournamentTeamManager;
 import java.util.Optional;
+import tc.oc.pgm.lib.net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,8 +16,8 @@ import tc.oc.pgm.api.player.event.MatchPlayerAddEvent;
 import tc.oc.pgm.blitz.BlitzMatchModule;
 import tc.oc.pgm.events.PlayerParticipationStartEvent;
 import tc.oc.pgm.events.PlayerParticipationStopEvent;
-import tc.oc.pgm.lib.net.kyori.text.TextComponent;
-import tc.oc.pgm.lib.net.kyori.text.format.TextColor;
+import tc.oc.pgm.lib.net.kyori.adventure.text.TextComponent;
+import tc.oc.pgm.lib.net.kyori.adventure.text.format.TextColor;
 import tc.oc.pgm.teams.Team;
 
 public class PlayerJoinListen implements Listener {
@@ -86,7 +89,7 @@ public class PlayerJoinListen implements Listener {
       if (!isFull(team)) return;
     }
 
-    event.cancel(TextComponent.of("You may not join in a tournament setting!", TextColor.RED));
+    event.cancel(text("You may not join in a tournament setting!", NamedTextColor.RED));
   }
 
   @EventHandler
@@ -94,7 +97,7 @@ public class PlayerJoinListen implements Listener {
     Optional<Team> playerTeam = manager.playerTeam(event.getPlayer().getId());
     // check if the player is on one of the teams
     if (playerTeam.isPresent())
-      event.cancel(TextComponent.of("You may not leave in a tournament setting!", TextColor.RED));
+      event.cancel(text("You may not leave in a tournament setting!", NamedTextColor.RED));
 
     BlitzMatchModule blitz = event.getMatch().getModule(BlitzMatchModule.class);
     if (blitz != null) {
