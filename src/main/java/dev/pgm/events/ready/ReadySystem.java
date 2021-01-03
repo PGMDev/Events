@@ -18,7 +18,7 @@ public class ReadySystem {
     runningSmallerCountdown = false;
   }
 
-  public boolean canReadyAction() {
+  public boolean canReady() {
     if (timestamp == null || countdownLength == null) return true;
 
     return remaining().compareTo(Duration.ofSeconds(21)) > 0;

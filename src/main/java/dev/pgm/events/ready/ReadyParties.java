@@ -18,7 +18,7 @@ public class ReadyParties {
     currentReadyParties.add(party.getDefaultName());
   }
 
-  public void unReady(Party party) {
+  public void unready(Party party) {
     currentReadyParties.remove(party.getDefaultName());
   }
 

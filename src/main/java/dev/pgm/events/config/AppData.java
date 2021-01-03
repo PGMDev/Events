@@ -5,7 +5,7 @@ import dev.pgm.events.Tournament;
 /**
  * Config options used around the plugin.
  *
- * <p>Values are are stored in the `resources/config.yml`.</p>
+ * <p>Values are are stored in the <code>`resources/config.yml`</code> file.
  */
 public class AppData {
 

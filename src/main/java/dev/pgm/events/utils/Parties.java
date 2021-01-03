@@ -5,13 +5,13 @@ import tc.oc.pgm.teams.Team;
 
 public class Parties {
 
-    public static boolean isFull(Party party) {
-        if (party instanceof Team) {
-            Team team = (Team) party;
+  public static boolean isFull(Party party) {
+    if (party instanceof Team) {
+      Team team = (Team) party;
 
-            return team.getSize(false) >= team.getMaxPlayers();
-        }
-
-        return false;
+      return team.getSize(false) >= team.getMaxPlayers();
     }
+
+    return false;
+  }
 }

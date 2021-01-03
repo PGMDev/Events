@@ -1,36 +1,29 @@
 package dev.pgm.events.ready;
 
+import dev.pgm.events.utils.Response;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.api.party.Party;
-import tc.oc.pgm.teams.Team;
-
-import java.time.Duration;
+import tc.oc.pgm.api.player.MatchPlayer;
+import tc.oc.pgm.events.CountdownCancelEvent;
+import tc.oc.pgm.events.CountdownStartEvent;
 
 public interface ReadyManager {
 
-    default void createMatchStart(Match match) {
-        createMatchStart(match, Duration.ofSeconds(20));
-    }
+  void ready(Party party);
 
-    void createMatchStart(Match match, Duration duration);
+  void unready(Party party);
 
-    void cancelMatchStart(Match match);
+  boolean isReady(Party party);
 
-    void readyTeam(Party party);
+  boolean allReady(Match match);
 
-    void unreadyTeam(Party party);
+  Response canReady(MatchPlayer player);
 
-    boolean isReady(Party party);
+  Response canUnready(MatchPlayer player);
 
-    boolean allReady(Match match);
+  void handleCountdownStart(CountdownStartEvent event);
 
-    boolean unreadyShouldCancel();
+  void handleCountdownCancel(CountdownCancelEvent event);
 
-    boolean canReadyAction();
-
-    void reset();
-
-    Duration cancelDuration(Match match);
-
-    void onStart(Match match, Duration duration);
+  void reset();
 }

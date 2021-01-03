@@ -2,10 +2,8 @@ package dev.pgm.events.ready;
 
 import dev.pgm.events.Tournament;
 import dev.pgm.events.config.AppData;
-import java.time.Duration;
-import java.util.Optional;
-
 import dev.pgm.events.utils.Parties;
+import java.util.Optional;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,7 +20,6 @@ import tc.oc.pgm.lib.net.kyori.adventure.text.Component;
 import tc.oc.pgm.lib.net.kyori.adventure.text.format.NamedTextColor;
 import tc.oc.pgm.match.ObserverParty;
 import tc.oc.pgm.start.StartCountdown;
-import tc.oc.pgm.start.StartMatchModule;
 import tc.oc.pgm.teams.Team;
 
 public class ReadyListener implements Listener {
@@ -35,20 +32,12 @@ public class ReadyListener implements Listener {
 
   @EventHandler
   public void onQueueStart(CountdownStartEvent event) {
-    if (event.getCountdown() instanceof StartCountdown)
-      manager.onStart(event.getMatch(), ((StartCountdown) event.getCountdown()).getRemaining());
+    if (event.getCountdown() instanceof StartCountdown) manager.handleCountdownStart(event);
   }
 
   @EventHandler
   public void onCancel(CountdownCancelEvent event) {
-    if (!(event.getCountdown() instanceof StartCountdown)) return;
-
-    Duration remaining = manager.cancelDuration(event.getMatch());
-    if (remaining != null)
-      event
-          .getMatch()
-          .needModule(StartMatchModule.class)
-          .forceStartCountdown(remaining, Duration.ZERO);
+    if (event.getCountdown() instanceof StartCountdown) manager.handleCountdownCancel(event);
   }
 
   @EventHandler
@@ -69,7 +58,7 @@ public class ReadyListener implements Listener {
 
     // if match starting and team was ready unready them
     if (event.getMatch().getPhase() == MatchPhase.STARTING && manager.isReady(party)) {
-      manager.unreadyTeam(party);
+      manager.unready(party);
     }
   }
 
