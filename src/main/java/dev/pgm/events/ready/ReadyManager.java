@@ -1,70 +1,36 @@
 package dev.pgm.events.ready;
 
-import java.time.Duration;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.api.party.Party;
-import tc.oc.pgm.start.StartCountdown;
-import tc.oc.pgm.start.StartMatchModule;
+import tc.oc.pgm.teams.Team;
 
-public class ReadyManager {
+import java.time.Duration;
 
-  private final ReadyParties readyParties;
-  private final ReadySystem readySystem;
+public interface ReadyManager {
 
-  public ReadyManager(ReadySystem readySystem, ReadyParties readyParties) {
-    this.readySystem = readySystem;
-    this.readyParties = readyParties;
-  }
-
-  public void createMatchStart(Match match) {
-    createMatchStart(match, Duration.ofSeconds(20));
-  }
-
-  public void createMatchStart(Match match, Duration duration) {
-    match.needModule(StartMatchModule.class).forceStartCountdown(duration, Duration.ZERO);
-  }
-
-  public void cancelMatchStart(Match match) {
-    match.getCountdown().cancelAll(StartCountdown.class);
-  }
-
-  public void readyTeam(Party party) {
-    if (party.isNamePlural()) {
-      Bukkit.broadcastMessage(
-          party.getColor() + party.getNameLegacy() + ChatColor.RESET + " are now ready.");
-    } else {
-      Bukkit.broadcastMessage(
-          party.getColor() + party.getNameLegacy() + ChatColor.RESET + " is now ready.");
+    default void createMatchStart(Match match) {
+        createMatchStart(match, Duration.ofSeconds(20));
     }
 
-    readyParties.ready(party);
+    void createMatchStart(Match match, Duration duration);
 
-    Match match = party.getMatch();
-    if (readyParties.allReady(match)) {
-      createMatchStart(match);
-    }
-  }
+    void cancelMatchStart(Match match);
 
-  public void unreadyTeam(Party party) {
-    if (party.isNamePlural()) {
-      Bukkit.broadcastMessage(
-          party.getColor() + party.getNameLegacy() + ChatColor.RESET + " are now unready.");
-    } else {
-      Bukkit.broadcastMessage(
-          party.getColor() + party.getNameLegacy() + ChatColor.RESET + " is now unready.");
-    }
+    void readyTeam(Party party);
 
-    Match match = party.getMatch();
-    if (readyParties.allReady(match)) {
-      readyParties.unReady(party);
-      if (readySystem.unreadyShouldCancel()) {
-        // check if unready should cancel
-        cancelMatchStart(party.getMatch());
-      }
-    } else {
-      readyParties.unReady(party);
-    }
-  }
+    void unreadyTeam(Party party);
+
+    boolean isReady(Party party);
+
+    boolean allReady(Match match);
+
+    boolean unreadyShouldCancel();
+
+    boolean canReadyAction();
+
+    void reset();
+
+    Duration cancelDuration(Match match);
+
+    void onStart(Match match, Duration duration);
 }

@@ -4,6 +4,8 @@ import dev.pgm.events.Tournament;
 import dev.pgm.events.config.AppData;
 import java.time.Duration;
 import java.util.Optional;
+
+import dev.pgm.events.utils.Parties;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,28 +28,22 @@ import tc.oc.pgm.teams.Team;
 public class ReadyListener implements Listener {
 
   private final ReadyManager manager;
-  private final ReadySystem system;
-  private final ReadyParties parties;
 
-  public ReadyListener(ReadyManager manager, ReadySystem system, ReadyParties parties) {
+  public ReadyListener(ReadyManager manager) {
     this.manager = manager;
-    this.system = system;
-    this.parties = parties;
   }
 
   @EventHandler
   public void onQueueStart(CountdownStartEvent event) {
     if (event.getCountdown() instanceof StartCountdown)
-      system.onStart(
-          ((StartCountdown) event.getCountdown()).getRemaining(),
-          parties.allReady(event.getMatch()));
+      manager.onStart(event.getMatch(), ((StartCountdown) event.getCountdown()).getRemaining());
   }
 
   @EventHandler
   public void onCancel(CountdownCancelEvent event) {
     if (!(event.getCountdown() instanceof StartCountdown)) return;
 
-    Duration remaining = system.onCancel(parties.allReady(event.getMatch()));
+    Duration remaining = manager.cancelDuration(event.getMatch());
     if (remaining != null)
       event
           .getMatch()
@@ -57,7 +53,7 @@ public class ReadyListener implements Listener {
 
   @EventHandler
   public void onStart(MatchLoadEvent event) {
-    system.reset();
+    manager.reset();
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
@@ -72,7 +68,7 @@ public class ReadyListener implements Listener {
     }
 
     // if match starting and team was ready unready them
-    if (event.getMatch().getPhase() == MatchPhase.STARTING && parties.isReady(party)) {
+    if (event.getMatch().getPhase() == MatchPhase.STARTING && manager.isReady(party)) {
       manager.unreadyTeam(party);
     }
   }
@@ -89,7 +85,7 @@ public class ReadyListener implements Listener {
     // Add hint to ready up once all players joined
     if (playerTeam.isPresent()
         && !event.getMatch().isRunning()
-        && parties.isFull(player.getParty())) {
+        && Parties.isFull(player.getParty())) {
       Bukkit.getScheduler()
           .scheduleSyncDelayedTask(
               Tournament.get(),
