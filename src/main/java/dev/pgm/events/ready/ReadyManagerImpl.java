@@ -11,7 +11,6 @@ import org.bukkit.ChatColor;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.api.party.Party;
 import tc.oc.pgm.api.player.MatchPlayer;
-import tc.oc.pgm.events.CountdownCancelEvent;
 import tc.oc.pgm.events.CountdownStartEvent;
 import tc.oc.pgm.match.ObserverParty;
 import tc.oc.pgm.start.StartCountdown;
@@ -33,10 +32,6 @@ public class ReadyManagerImpl implements ReadyManager {
 
   public void createMatchStart(Match match, Duration duration) {
     match.needModule(StartMatchModule.class).forceStartCountdown(duration, Duration.ZERO);
-  }
-
-  public void cancelMatchStart(Match match) {
-    match.getCountdown().cancelAll(StartCountdown.class);
   }
 
   @Override
@@ -69,12 +64,11 @@ public class ReadyManagerImpl implements ReadyManager {
           party.getColor() + party.getNameLegacy() + ChatColor.RESET + " is now unready.");
     }
 
-    if (allReady(match)) {
-      if (system.unreadyShouldCancel()) {
-        // check if unready should cancel
-        cancelMatchStart(match);
-      }
+    if (allReady(match) && system.unreadyShouldCancel()) {
+      // check if unready should cancel
+      createMatchStart(match, system.getResetDuration());
     }
+
     parties.unready(party);
   }
 
@@ -140,13 +134,7 @@ public class ReadyManagerImpl implements ReadyManager {
   @Override
   public void handleCountdownStart(CountdownStartEvent event) {
     Match match = event.getMatch();
-    system.onStart(((StartCountdown) event.getCountdown()).getRemaining(), this.allReady(match));
-  }
-
-  @Override
-  public void handleCountdownCancel(CountdownCancelEvent event) {
-    Match match = event.getMatch();
-    Duration remaining = system.onCancel(this.allReady(match));
-    if (remaining != null) createMatchStart(match, remaining);
+    Duration remaining = ((StartCountdown) event.getCountdown()).getRemaining();
+    system.onStart(remaining, allReady(match));
   }
 }

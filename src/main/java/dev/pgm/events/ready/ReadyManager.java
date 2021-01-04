@@ -4,7 +4,6 @@ import dev.pgm.events.utils.Response;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.api.party.Party;
 import tc.oc.pgm.api.player.MatchPlayer;
-import tc.oc.pgm.events.CountdownCancelEvent;
 import tc.oc.pgm.events.CountdownStartEvent;
 
 public interface ReadyManager {
@@ -22,8 +21,6 @@ public interface ReadyManager {
   Response canUnready(MatchPlayer player);
 
   void handleCountdownStart(CountdownStartEvent event);
-
-  void handleCountdownCancel(CountdownCancelEvent event);
 
   void reset();
 }

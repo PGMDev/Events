@@ -12,7 +12,6 @@ import tc.oc.pgm.api.match.MatchPhase;
 import tc.oc.pgm.api.match.event.MatchLoadEvent;
 import tc.oc.pgm.api.party.Party;
 import tc.oc.pgm.api.player.MatchPlayer;
-import tc.oc.pgm.events.CountdownCancelEvent;
 import tc.oc.pgm.events.CountdownStartEvent;
 import tc.oc.pgm.events.PlayerLeaveMatchEvent;
 import tc.oc.pgm.events.PlayerPartyChangeEvent;
@@ -33,11 +32,6 @@ public class ReadyListener implements Listener {
   @EventHandler
   public void onQueueStart(CountdownStartEvent event) {
     if (event.getCountdown() instanceof StartCountdown) manager.handleCountdownStart(event);
-  }
-
-  @EventHandler
-  public void onCancel(CountdownCancelEvent event) {
-    if (event.getCountdown() instanceof StartCountdown) manager.handleCountdownCancel(event);
   }
 
   @EventHandler
