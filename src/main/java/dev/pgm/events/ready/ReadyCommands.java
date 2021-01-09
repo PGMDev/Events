@@ -2,6 +2,7 @@ package dev.pgm.events.ready;
 
 import dev.pgm.events.config.AppData;
 import java.time.Duration;
+import java.util.stream.Stream;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -76,6 +77,25 @@ public class ReadyCommands {
     } else {
       readyParties.unReady(party);
     }
+  }
+
+  @Command(aliases = "status", desc = "Display if teams are ready")
+  public void status(CommandSender sender, Match match) {
+    Stream<? extends Party> parties = match.getCompetitors().stream();
+    if (AppData.observersMustReady())
+      parties = Stream.concat(Stream.of(match.getDefaultParty()), parties);
+
+    parties
+        .map(
+            p ->
+                p.getColor()
+                    + p.getNameLegacy()
+                    + ChatColor.RESET
+                    + " is "
+                    + (readyParties.isReady(p)
+                        ? ChatColor.GREEN + "ready"
+                        : ChatColor.RED + "not ready"))
+        .forEach(sender::sendMessage);
   }
 
   private boolean preConditions(Match match) {
