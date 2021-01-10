@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 
 public class ReadySystem {
 
-  int cancelCounter = 0;
   private Timestamp timestamp;
   private Duration countdownLength;
   private boolean runningSmallerCountdown = false;
@@ -18,7 +17,7 @@ public class ReadySystem {
     runningSmallerCountdown = false;
   }
 
-  public boolean canReadyAction() {
+  public boolean canReady() {
     if (timestamp == null || countdownLength == null) return true;
 
     return remaining().compareTo(Duration.ofSeconds(21)) > 0;
@@ -40,7 +39,6 @@ public class ReadySystem {
     this.timestamp = Timestamp.from(Instant.now());
     this.countdownLength = countdownDuration;
     runningSmallerCountdown = false;
-    cancelCounter = 0;
   }
 
   public boolean unreadyShouldCancel() {
@@ -48,29 +46,10 @@ public class ReadySystem {
     return runningSmallerCountdown;
   }
 
-  public @Nullable Duration onCancel(boolean allReady) {
-    if (allReady && cancelCounter == 1) {
-      // all are ready and still cancel means a manual cancel -- lets just stop everything
-      // counter == 1 means real cancel
-      runningSmallerCountdown = false;
-      timestamp = null;
-      countdownLength = null;
-      cancelCounter = 0;
-      return null;
-    }
-
-    if (allReady && cancelCounter == 0) {
-      cancelCounter = 1;
-      return null;
-    }
-
+  public @Nullable Duration getResetDuration() {
     if (runningSmallerCountdown && timestamp != null) {
       Duration remaining = remaining();
-
-      if (remaining.compareTo(Duration.ZERO) < 1) {
-        // if less than 5 seconds remaining cancel this
-        return Duration.ZERO;
-      }
+      runningSmallerCountdown = false;
 
       return remaining;
     }

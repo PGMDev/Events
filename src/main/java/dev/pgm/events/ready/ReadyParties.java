@@ -9,20 +9,16 @@ import tc.oc.pgm.api.party.Party;
 public class ReadyParties {
 
   private final Set<String> currentReadyParties = new HashSet<>();
-  private String currentMatchID;
 
-  public void preconditionsCheckMatch(Match match) {
-    if (!match.getId().equals(currentMatchID)) {
-      currentMatchID = match.getId();
-      currentReadyParties.clear();
-    }
+  public void reset() {
+    currentReadyParties.clear();
   }
 
   public void ready(Party party) {
     currentReadyParties.add(party.getDefaultName());
   }
 
-  public void unReady(Party party) {
+  public void unready(Party party) {
     currentReadyParties.remove(party.getDefaultName());
   }
 
