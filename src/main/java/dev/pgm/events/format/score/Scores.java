@@ -44,16 +44,9 @@ public class Scores {
       // size == 2, therefore display two way score
       Pair<Score, Score> topTwo = topTwoOrdered();
       return new TwoTeamFormattedScore(teamManager, topTwo, updated);
-      // return teamManager.teamColour(topTwo.first.team()) + topTwo.first.team().teamName() + " " +
-      // topTwo.first.score() + ChatColor.GRAY + " - " +
-      // teamManager.teamColour(topTwo.second.team()) + topTwo.second.score() + " " +
-      // topTwo.second.team().teamName();
     }
 
-    // size != 2, therefore return just the top score
-    // Score highest = highestScore();
-    // return ChatColor.GRAY + "Leader: " + teamManager.formattedName(highest.team()) + " (" +
-    // highest.score() + ")";
+    // TODO: when size != 2, return just the top score
     return null;
   }
 

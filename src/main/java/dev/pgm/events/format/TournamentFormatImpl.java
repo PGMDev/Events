@@ -151,8 +151,6 @@ public class TournamentFormatImpl implements TournamentFormat {
     }
 
     FormattedScore scores = roundHolder.scores(teamManager).formattedScore(teamManager);
-    // new GlobalAudience().sendTitle(roundHolder.scores(teamManager).formattedScore(teamManager),
-    // roundHolder.currentRound().describe().roundStatus(), 5);
     Bukkit.getScheduler()
         .scheduleSyncDelayedTask(
             Tournament.get(),
@@ -160,42 +158,20 @@ public class TournamentFormatImpl implements TournamentFormat {
 
               @Override
               public void run() {
-                // GlobalAudience glob = new GlobalAudience();
-                // removed the team from the title, add in with scores.topLine() (needs re-naming)
-                // glob.sendTitle(scores.bottomLine(), "", 4);
-                // glob.sendMessageRaw(scores.condensed());
-
                 Bukkit.broadcastMessage(scores.condensed());
               }
             },
             3 * 20);
-    // new GlobalAudience().sendTitle(scores.topLine(), scores.bottomLine(), 5);
   }
 
   public void onEnd(Match match, Optional<TournamentTeam> winner) {
-    // System.out.println(winner);
     winner.ifPresent(x -> Bukkit.broadcastMessage(x.getName()));
 
     if (tournamentRoundOptions.shouldAnnounceWinner()) {
       if (winner.isPresent()) {
-        // new GlobalAudience().sendMessage("tournament.announcement.winner",
-        // winner.get().teamName());
-        // System.out.println(winner.get().teamName());
-        // StratusAPI.get().newChain().delay(8, TimeUnit.SECONDS).syncLast((x) -> {
-        // GlobalAudience glob = new GlobalAudience();
-        // removed the team from the title, add in with scores.topLine() (needs re-naming)
-        // glob.sendTitle("", teamManager.formattedName(winner.get()) + ChatColor.GOLD + " wins this
-        // round!", 4);
-        // }).execute();
         Bukkit.broadcastMessage(
             teamManager.formattedName(winner.get()) + ChatColor.GOLD + " wins this round!");
       } else {
-        // new GlobalAudience().sendMessage("tournament.announcement.draw");
-        // StratusAPI.get().newChain().delay(8, TimeUnit.SECONDS).syncLast((x) -> {
-        // GlobalAudience glob = new GlobalAudience();
-        // removed the team from the title, add in with scores.topLine() (needs re-naming)
-        // glob.sendTitle("", ChatColor.GRAY + "This round has ended in a draw!", 4);
-        // }).execute();
         Bukkit.broadcastMessage(ChatColor.GRAY + "This round has ended in a draw!");
       }
     }

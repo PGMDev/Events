@@ -71,9 +71,6 @@ public class VetoController {
     if (!hasMoreVetoing()) // maybe throw an exception?
     return null;
 
-    // do this check elsewhere
-    // if (!team.equals(picking())) { return null; }
-
     VetoSettings.Veto veto = settings.vetoList().get(vetoIndex);
     VetoOption vetoOption = options.remove(choice);
 

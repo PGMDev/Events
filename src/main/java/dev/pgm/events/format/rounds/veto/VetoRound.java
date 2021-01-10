@@ -84,7 +84,6 @@ public class VetoRound extends AbstractRound<VetoSettings> {
 
   private void endVeto(Match match) {
     setPhase(RoundPhase.FINISHED);
-    // controller.forRemaining(settings().defType());
     controller.completeVetos();
     tournament().addRoundAfterCurrent(controller.toPlay());
 
@@ -101,11 +100,6 @@ public class VetoRound extends AbstractRound<VetoSettings> {
 
   private void cycleVeto(Match match) {
     // cycle to next veto
-    // TournamentTeam team = controller.picking();
-    // team.sendMessage(description.optionsHeader(controller.currentType())); for (BaseComponent[]
-    // comp : description.formatOptions(controller.remainingOptions(), controller.currentType())) {
-    // team.sendMessage(comp); }
-
     Optional<TournamentTeam> picking = picking();
     if (!picking.isPresent()) {
       tryAutoVeto(match);
