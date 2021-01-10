@@ -57,7 +57,6 @@ public class VetoCountdown extends MatchCountdown {
       team.sendMessage(comp);
 
     team.sendMessage(vetoRound.describe().commandPrompt(controller.currentType()));
-    // team.sendMessage(ChatColor.GOLD + "Veto with: " + ChatColor.GRAY + "/events veto <number>");
   }
 
   @Override

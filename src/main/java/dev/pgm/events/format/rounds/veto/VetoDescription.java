@@ -118,7 +118,6 @@ public class VetoDescription implements RoundDescription {
   public BaseComponent commandPrompt(VetoSettings.VetoType type) {
     return new TextComponent(
         actionWord(type) + ChatColor.GRAY + " with: " + ChatColor.GOLD + "/veto <number>");
-    // team.sendMessage(ChatColor.GOLD + "Veto with: " + ChatColor.GRAY + "/events veto <number>");
   }
 
   public List<BaseComponent[]> formatOptions(List<VetoOption> options, VetoSettings.VetoType type) {

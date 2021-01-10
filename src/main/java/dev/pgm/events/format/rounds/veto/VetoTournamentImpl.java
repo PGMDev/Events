@@ -14,7 +14,6 @@ import tc.oc.pgm.api.match.Match;
 
 public class VetoTournamentImpl extends TournamentFormatImpl {
 
-  // private final Consumer<List<TournamentTeam>> func;
   private final VetoRound vetoRound;
 
   public VetoTournamentImpl(
