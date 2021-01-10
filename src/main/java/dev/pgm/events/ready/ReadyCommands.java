@@ -39,7 +39,12 @@ public class ReadyCommands {
 
     Party party = player.getParty();
     Bukkit.broadcastMessage(
-        party.getColor() + player.getParty().getNameLegacy() + ChatColor.RESET + " is now ready.");
+        party.getColor()
+            + player.getParty().getNameLegacy()
+            + ChatColor.RESET
+            + " is "
+            + ChatColor.GREEN
+            + "now ready");
     readyParties.ready(party);
 
     if (readyParties.allReady(match))
@@ -66,7 +71,9 @@ public class ReadyCommands {
         party.getColor()
             + player.getParty().getNameLegacy()
             + ChatColor.RESET
-            + " is now unready.");
+            + " is "
+            + ChatColor.RED
+            + "no longer ready");
 
     if (readyParties.allReady(match)) {
       readyParties.unReady(party);
