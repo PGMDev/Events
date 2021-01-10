@@ -2,6 +2,7 @@ package dev.pgm.events;
 
 import dev.pgm.events.commands.TournamentAdminCommands;
 import dev.pgm.events.commands.TournamentUserCommands;
+import dev.pgm.events.commands.VetoCommands;
 import dev.pgm.events.commands.providers.TournamentProvider;
 import dev.pgm.events.format.TournamentFormat;
 import dev.pgm.events.listeners.MatchLoadListener;
@@ -47,18 +48,21 @@ public class Tournament extends JavaPlugin {
     ReadyListener readyListener = new ReadyListener(readyManager);
     ReadyCommands readyCommands = new ReadyCommands(readyManager);
 
-    BasicBukkitCommandGraph g =
+    BasicBukkitCommandGraph graph =
         new BasicBukkitCommandGraph(new CommandModule(tournamentManager, teamManager));
-    DispatcherNode node = g.getRootDispatcherNode();
-    node = node.registerNode("tourney", "tournament", "tm", "events");
-    node.registerCommands(new TournamentUserCommands());
+
+    DispatcherNode node = graph.getRootDispatcherNode();
+    node.registerCommands(new VetoCommands());
     node.registerCommands(readyCommands);
-    node.registerCommands(new TournamentAdminCommands());
+
+    DispatcherNode subNode = node.registerNode("tourney", "tournament", "tm", "events");
+    subNode.registerCommands(new TournamentUserCommands());
+    subNode.registerCommands(new TournamentAdminCommands());
 
     Bukkit.getPluginManager().registerEvents(new MatchLoadListener(teamManager), this);
     Bukkit.getPluginManager().registerEvents(new PlayerJoinListen(teamManager), this);
     Bukkit.getPluginManager().registerEvents(readyListener, this);
-    new CommandExecutor(this, g).register();
+    new CommandExecutor(this, graph).register();
   }
 
   @Override
