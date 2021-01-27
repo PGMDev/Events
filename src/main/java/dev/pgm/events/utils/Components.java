@@ -7,12 +7,20 @@ import tc.oc.pgm.lib.net.kyori.adventure.text.format.Style;
 
 public class Components {
 
-  public static Component command(Style style, String command, String... args) {
+  /**
+   * Creates a formatted and clickable command component.
+   *
+   * @param style   formatting of command
+   * @param command command with or without `/`
+   * @param cmdArgs command arguments
+   * @return        text component
+   */
+  public static Component command(Style style, String command, String... cmdArgs) {
     StringBuilder builder = new StringBuilder();
     if (!command.startsWith("/")) builder.append("/");
     builder.append(command);
 
-    for (String arg : args) builder.append(" ").append(Components.toArgument(arg));
+    for (String arg : cmdArgs) builder.append(" ").append(Components.toArgument(arg));
     command = builder.toString();
 
     return Component.text(command, style)
@@ -22,7 +30,7 @@ public class Components {
                 .append(Component.text(command, style)));
   }
 
-  static String toArgument(String input) {
+  private static String toArgument(String input) {
     if (input == null) return null;
     return input.replace(" ", "┈");
   }
