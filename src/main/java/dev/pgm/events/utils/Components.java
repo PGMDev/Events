@@ -10,10 +10,10 @@ public class Components {
   /**
    * Creates a formatted and clickable command component.
    *
-   * @param style   formatting of command
+   * @param style formatting of command
    * @param command command with or without `/`
    * @param cmdArgs command arguments
-   * @return        text component
+   * @return text component
    */
   public static Component command(Style style, String command, String... cmdArgs) {
     StringBuilder builder = new StringBuilder();

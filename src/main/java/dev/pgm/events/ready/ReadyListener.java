@@ -5,7 +5,6 @@ import static tc.oc.pgm.lib.net.kyori.adventure.text.Component.text;
 
 import dev.pgm.events.Tournament;
 import dev.pgm.events.config.AppData;
-import dev.pgm.events.utils.Parties;
 import java.util.Optional;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -18,6 +17,7 @@ import tc.oc.pgm.api.player.MatchPlayer;
 import tc.oc.pgm.events.CountdownStartEvent;
 import tc.oc.pgm.events.PlayerLeaveMatchEvent;
 import tc.oc.pgm.events.PlayerPartyChangeEvent;
+import tc.oc.pgm.lib.net.kyori.adventure.text.TextComponent;
 import tc.oc.pgm.lib.net.kyori.adventure.text.format.NamedTextColor;
 import tc.oc.pgm.lib.net.kyori.adventure.text.format.Style;
 import tc.oc.pgm.lib.net.kyori.adventure.text.format.TextDecoration;
@@ -60,10 +60,9 @@ public class ReadyListener implements Listener {
     }
   }
 
-  @EventHandler(priority = EventPriority.MONITOR)
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPartyChange(PlayerPartyChangeEvent event) {
-    if (!AppData.readyReminders()
-        || !event.getMatch().getPhase().canTransitionTo(MatchPhase.RUNNING)) {
+    if (!AppData.readyReminders()) {
       return;
     }
 
@@ -71,21 +70,21 @@ public class ReadyListener implements Listener {
     Optional<Team> playerTeam = Tournament.get().getTeamManager().playerTeam(player.getId());
 
     // Add hint to ready up once all players joined
-    if (playerTeam.isPresent() && Parties.isFull(player.getParty())) {
+    if (playerTeam.isPresent()
+        && manager.canReady(event.getMatch()).isAllowed()
+        && manager.canReady(player.getParty()).isAllowed()) {
+
+      TextComponent readyHint =
+          text("Mark your team as ready using ", NamedTextColor.GREEN)
+              .append(
+                  command(Style.style(NamedTextColor.YELLOW, TextDecoration.UNDERLINED), "ready"));
+
       Bukkit.getScheduler()
           .scheduleSyncDelayedTask(
               Tournament.get(),
               () -> {
                 // Delay message sending to ensure after motd message
-                event
-                    .getPlayer()
-                    .getParty()
-                    .sendMessage(
-                        text("Mark your team as ready using ", NamedTextColor.GREEN)
-                            .append(
-                                command(
-                                    Style.style(NamedTextColor.YELLOW, TextDecoration.UNDERLINED),
-                                    "ready")));
+                player.getParty().sendMessage(readyHint);
               },
               20);
     }
