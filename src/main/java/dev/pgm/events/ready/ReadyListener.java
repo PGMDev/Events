@@ -72,7 +72,7 @@ public class ReadyListener implements Listener {
     // Add hint to ready up once all players joined
     if (playerTeam.isPresent()
         && manager.canReady(event.getMatch()).isAllowed()
-        && manager.canReady(player.getParty()).isAllowed()) {
+        && manager.canReady(playerTeam.get()).isAllowed()) {
 
       TextComponent readyHint =
           text("Mark your team as ready using ", NamedTextColor.GREEN)
@@ -84,7 +84,7 @@ public class ReadyListener implements Listener {
               Tournament.get(),
               () -> {
                 // Delay message sending to ensure after motd message
-                player.getParty().sendMessage(readyHint);
+                playerTeam.get().sendMessage(readyHint);
               },
               20);
     }
