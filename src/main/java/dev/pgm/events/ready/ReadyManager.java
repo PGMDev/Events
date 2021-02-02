@@ -16,6 +16,12 @@ public interface ReadyManager {
 
   boolean allReady(Match match);
 
+  Response canReady(Match match);
+
+  Response canReady(Party party);
+
+  Response canUnready(Party party);
+
   Response canReady(MatchPlayer player);
 
   Response canUnready(MatchPlayer player);

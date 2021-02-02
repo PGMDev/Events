@@ -9,6 +9,7 @@ import java.time.Duration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import tc.oc.pgm.api.match.Match;
+import tc.oc.pgm.api.match.MatchPhase;
 import tc.oc.pgm.api.party.Party;
 import tc.oc.pgm.api.player.MatchPlayer;
 import tc.oc.pgm.events.CountdownStartEvent;
@@ -83,6 +84,41 @@ public class ReadyManagerImpl implements ReadyManager {
   }
 
   @Override
+  public Response canReady(Match match) {
+    if (!match.getPhase().canTransitionTo(MatchPhase.RUNNING)) {
+      return Response.deny(text("You are not able use this command during a match!"));
+    }
+
+    if (!system.canReady()) {
+      return Response.deny(text("You are not able to ready at this time!"));
+    }
+
+    return Response.allow();
+  }
+
+  @Override
+  public Response canReady(Party party) {
+    return canReady(party, true);
+  }
+
+  @Override
+  public Response canUnready(Party party) {
+    return canReady(party, false);
+  }
+
+  public Response canReady(Party party, boolean state) {
+    if (isReady(party) == state) {
+      return Response.deny(text("You are already " + (state ? "ready" : "unready") + "!"));
+    }
+
+    if (state && AppData.readyFullTeamRequired() && !Parties.isFull(party)) {
+      return Response.deny(text("You can not ready until your team is full!"));
+    }
+
+    return Response.allow();
+  }
+
+  @Override
   public Response canReady(MatchPlayer player) {
     return canReady(player, true);
   }
@@ -96,14 +132,6 @@ public class ReadyManagerImpl implements ReadyManager {
     Match match = player.getMatch();
     Party party = player.getParty();
 
-    if (match.isRunning() || match.isFinished()) {
-      return Response.deny(text("You are not able use this command during a match!"));
-    }
-
-    if (!system.canReady()) {
-      return Response.deny(text("You are not able to ready at this time!"));
-    }
-
     if (party instanceof ObserverParty) {
       if (!AppData.observersMustReady()) {
         return Response.deny(text("Observers are not allowed to use this command!"));
@@ -114,12 +142,14 @@ public class ReadyManagerImpl implements ReadyManager {
       }
     }
 
-    if (isReady(party) == state) {
-      return Response.deny(text("You are already " + (state ? "ready" : "unready") + "!"));
+    Response matchResponse = canReady(match);
+    if (matchResponse.isDenied()) {
+      return matchResponse;
     }
 
-    if (state && AppData.readyFullTeamRequired() && !Parties.isFull(party)) {
-      return Response.deny(text("You can not ready until your team is full!"));
+    Response teamResponse = canReady(party, state);
+    if (teamResponse.isDenied()) {
+      return teamResponse;
     }
 
     return Response.allow();
