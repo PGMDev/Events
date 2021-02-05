@@ -26,7 +26,7 @@ public class PlayerJoinListen implements Listener {
     this.manager = manager;
   }
 
-  @EventHandler(priority = EventPriority.MONITOR)
+  @EventHandler
   public void onJoin(MatchPlayerAddEvent event) {
     Optional<Team> playerTeam = manager.playerTeam(event.getPlayer().getId());
     if (playerTeam.isPresent()) {

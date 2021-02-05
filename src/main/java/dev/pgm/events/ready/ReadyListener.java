@@ -60,7 +60,7 @@ public class ReadyListener implements Listener {
     }
   }
 
-  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  @EventHandler(priority = EventPriority.MONITOR)
   public void onPartyChange(PlayerPartyChangeEvent event) {
     if (!AppData.readyReminders()) {
       return;
