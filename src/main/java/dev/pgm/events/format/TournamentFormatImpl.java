@@ -1,8 +1,8 @@
 package dev.pgm.events.format;
 
-import dev.pgm.events.Tournament;
+import dev.pgm.events.EventsPlugin;
+import dev.pgm.events.api.events.TournamentFinishedEvent;
 import dev.pgm.events.config.Context;
-import dev.pgm.events.format.events.TournamentFinishedEvent;
 import dev.pgm.events.format.rounds.RoundDescription;
 import dev.pgm.events.format.rounds.TournamentRound;
 import dev.pgm.events.format.score.FormattedScore;
@@ -153,7 +153,7 @@ public class TournamentFormatImpl implements TournamentFormat {
     FormattedScore scores = roundHolder.scores(teamManager).formattedScore(teamManager);
     Bukkit.getScheduler()
         .scheduleSyncDelayedTask(
-            Tournament.get(),
+            EventsPlugin.get(),
             new Runnable() {
 
               @Override

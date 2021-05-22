@@ -1,6 +1,6 @@
 package dev.pgm.events.config;
 
-import dev.pgm.events.Tournament;
+import dev.pgm.events.EventsPlugin;
 
 /**
  * Config options used around the plugin.
@@ -10,18 +10,18 @@ import dev.pgm.events.Tournament;
 public class AppData {
 
   public static boolean observersMustReady() {
-    return Tournament.get().getConfig().getBoolean("observers-must-ready", true);
+    return EventsPlugin.get().getConfig().getBoolean("observers-must-ready", true);
   }
 
   public static boolean readyFullTeamRequired() {
-    return Tournament.get().getConfig().getBoolean("ready-full-team-required", false);
+    return EventsPlugin.get().getConfig().getBoolean("ready-full-team-required", false);
   }
 
   public static boolean readyReminders() {
-    return Tournament.get().getConfig().getBoolean("ready-reminders", true);
+    return EventsPlugin.get().getConfig().getBoolean("ready-reminders", true);
   }
 
   public static boolean autoUnready() {
-    return Tournament.get().getConfig().getBoolean("auto-unready", false);
+    return EventsPlugin.get().getConfig().getBoolean("auto-unready", false);
   }
 }

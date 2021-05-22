@@ -7,8 +7,8 @@ repos:
         -   id: trailing-whitespace
   -   repo: local
       hooks:
-        -   id: google-format2
-            name: google format stuff
+        -   id: google-format
+            name: apply google-format
             entry: mvn com.coveo:fmt-maven-plugin:format
             language: system
             pass_filenames: false

@@ -1,5 +1,8 @@
 package dev.pgm.events;
 
+import dev.pgm.events.api.teams.ConfigTeams;
+import dev.pgm.events.api.teams.DefaultTeamRegistry;
+import dev.pgm.events.api.teams.TournamentTeamRegistry;
 import dev.pgm.events.commands.TournamentAdminCommands;
 import dev.pgm.events.commands.TournamentUserCommands;
 import dev.pgm.events.commands.VetoCommands;
@@ -13,7 +16,6 @@ import dev.pgm.events.ready.ReadyManager;
 import dev.pgm.events.ready.ReadyManagerImpl;
 import dev.pgm.events.ready.ReadyParties;
 import dev.pgm.events.ready.ReadySystem;
-import dev.pgm.events.team.ConfigTeamParser;
 import dev.pgm.events.team.DefaultTeamManager;
 import dev.pgm.events.team.TournamentTeamManager;
 import org.bukkit.Bukkit;
@@ -28,12 +30,13 @@ import tc.oc.pgm.lib.app.ashcon.intake.bukkit.graph.BasicBukkitCommandGraph;
 import tc.oc.pgm.lib.app.ashcon.intake.fluent.DispatcherNode;
 import tc.oc.pgm.lib.app.ashcon.intake.parametric.AbstractModule;
 
-public class Tournament extends JavaPlugin {
+public class EventsPlugin extends JavaPlugin {
 
   private TournamentTeamManager teamManager;
   private TournamentManager tournamentManager;
+  private TournamentTeamRegistry teamRegistry;
 
-  private static Tournament plugin;
+  private static EventsPlugin plugin;
 
   @Override
   public void onEnable() {
@@ -42,14 +45,15 @@ public class Tournament extends JavaPlugin {
 
     teamManager = DefaultTeamManager.manager();
     tournamentManager = new TournamentManager();
-    ConfigTeamParser.getInstance(); // load teams now
+    TournamentTeamRegistry teamRegistry = DefaultTeamRegistry.createRegistry(new ConfigTeams());
 
     ReadyManager readyManager = new ReadyManagerImpl(new ReadySystem(), new ReadyParties());
     ReadyListener readyListener = new ReadyListener(readyManager);
     ReadyCommands readyCommands = new ReadyCommands(readyManager);
 
     BasicBukkitCommandGraph graph =
-        new BasicBukkitCommandGraph(new CommandModule(tournamentManager, teamManager));
+        new BasicBukkitCommandGraph(
+            new CommandModule(tournamentManager, teamManager, teamRegistry));
 
     DispatcherNode node = graph.getRootDispatcherNode();
     node.registerCommands(new VetoCommands());
@@ -78,7 +82,15 @@ public class Tournament extends JavaPlugin {
     return tournamentManager;
   }
 
-  public static Tournament get() {
+  public TournamentTeamRegistry getTeamRegistry() {
+    return teamRegistry;
+  }
+
+  public void setTeamRegistry(TournamentTeamRegistry teamRegistry) {
+    this.teamRegistry = teamRegistry;
+  }
+
+  public static EventsPlugin get() {
     return plugin;
   }
 
@@ -86,10 +98,15 @@ public class Tournament extends JavaPlugin {
 
     private final TournamentManager tournamentManager;
     private final TournamentTeamManager teamManager;
+    private final TournamentTeamRegistry teamRegistry;
 
-    public CommandModule(TournamentManager tournamentManager, TournamentTeamManager teamManager) {
+    public CommandModule(
+        TournamentManager tournamentManager,
+        TournamentTeamManager teamManager,
+        TournamentTeamRegistry teamRegistry) {
       this.tournamentManager = tournamentManager;
       this.teamManager = teamManager;
+      this.teamRegistry = teamRegistry;
     }
 
     @Override
@@ -106,6 +123,7 @@ public class Tournament extends JavaPlugin {
       bind(MatchPlayer.class).toProvider(new MatchPlayerProvider());
       bind(Match.class).toProvider(new MatchProvider());
       bind(TournamentManager.class).toInstance(tournamentManager);
+      bind(TournamentTeamRegistry.class).toInstance(teamRegistry);
       bind(TournamentTeamManager.class).toInstance(teamManager);
       bind(TournamentFormat.class).toProvider(new TournamentProvider(tournamentManager));
     }
