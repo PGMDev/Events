@@ -1,6 +1,6 @@
 package dev.pgm.events.commands;
 
-import dev.pgm.events.Tournament;
+import dev.pgm.events.EventsPlugin;
 import dev.pgm.events.format.TournamentFormat;
 import dev.pgm.events.format.rounds.RoundDescription;
 import dev.pgm.events.format.rounds.format.FormatTournamentImpl;
@@ -20,7 +20,7 @@ public class TournamentUserCommands {
       sender.sendMessage(format.currentScore().condensed());
 
       Optional<TournamentFormat> parentOptional =
-          Tournament.get().getTournamentManager().currentTournament();
+          EventsPlugin.get().getTournamentManager().currentTournament();
       if (parentOptional.isPresent()) {
         sender.sendMessage(ChatColor.YELLOW + "Overall score (excluding " + formatName + "):");
         sender.sendMessage(parentOptional.get().currentScore().condensed());

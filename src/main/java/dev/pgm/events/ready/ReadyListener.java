@@ -3,7 +3,7 @@ package dev.pgm.events.ready;
 import static dev.pgm.events.utils.Components.command;
 import static net.kyori.adventure.text.Component.text;
 
-import dev.pgm.events.Tournament;
+import dev.pgm.events.EventsPlugin;
 import dev.pgm.events.config.AppData;
 import java.util.Optional;
 import net.kyori.adventure.text.TextComponent;
@@ -67,7 +67,7 @@ public class ReadyListener implements Listener {
     }
 
     MatchPlayer player = event.getPlayer();
-    Optional<Team> playerTeam = Tournament.get().getTeamManager().playerTeam(player.getId());
+    Optional<Team> playerTeam = EventsPlugin.get().getTeamManager().playerTeam(player.getId());
 
     // Add hint to ready up once all players joined
     if (playerTeam.isPresent()
@@ -81,7 +81,7 @@ public class ReadyListener implements Listener {
 
       Bukkit.getScheduler()
           .scheduleSyncDelayedTask(
-              Tournament.get(),
+              EventsPlugin.get(),
               () -> {
                 // Delay message sending to ensure after motd message
                 playerTeam.get().sendMessage(readyHint);

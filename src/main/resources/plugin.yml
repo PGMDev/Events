@@ -1,4 +1,4 @@
 name: Events
-main: dev.pgm.events.Tournament
+main: dev.pgm.events.EventsPlugin
 version: 1.0.0-SNAPSHOT
 depend: [PGM]

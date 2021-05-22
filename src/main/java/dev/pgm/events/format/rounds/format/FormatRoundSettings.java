@@ -8,9 +8,9 @@ import java.util.List;
 
 public class FormatRoundSettings extends RoundSettings {
 
-  private String name;
-  private List<RoundSettings> rounds;
-  private int bestOf;
+  private final String name;
+  private final List<RoundSettings> rounds;
+  private final int bestOf;
 
   public FormatRoundSettings(String id, String name, List<RoundSettings> rounds, int bestOf) {
     super(id, true, false);
