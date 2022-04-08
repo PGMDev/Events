@@ -23,7 +23,7 @@ public class ReadyCommands {
       return;
     }
 
-    manager.ready(player.getParty());
+    manager.ready(player.getParty(), player);
   }
 
   @Command(aliases = "unready", desc = "Mark your team as no longer being ready")
@@ -35,6 +35,6 @@ public class ReadyCommands {
       return;
     }
 
-    manager.unready(player.getParty());
+    manager.unready(player.getParty(), player);
   }
 }

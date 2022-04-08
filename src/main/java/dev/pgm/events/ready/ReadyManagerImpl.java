@@ -6,16 +6,18 @@ import dev.pgm.events.config.AppData;
 import dev.pgm.events.utils.Parties;
 import dev.pgm.events.utils.Response;
 import java.time.Duration;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import javax.annotation.Nullable;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.api.match.MatchPhase;
 import tc.oc.pgm.api.party.Party;
 import tc.oc.pgm.api.player.MatchPlayer;
 import tc.oc.pgm.events.CountdownStartEvent;
+import tc.oc.pgm.lib.net.kyori.adventure.text.TextComponent;
+import tc.oc.pgm.lib.net.kyori.adventure.text.format.NamedTextColor;
 import tc.oc.pgm.match.ObserverParty;
 import tc.oc.pgm.start.StartCountdown;
 import tc.oc.pgm.start.StartMatchModule;
+import tc.oc.pgm.util.named.NameStyle;
 
 public class ReadyManagerImpl implements ReadyManager {
 
@@ -36,16 +38,16 @@ public class ReadyManagerImpl implements ReadyManager {
   }
 
   @Override
-  public void ready(Party party) {
+  public void ready(Party party, @Nullable MatchPlayer player) {
     Match match = party.getMatch();
 
-    if (party.isNamePlural()) {
-      Bukkit.broadcastMessage(
-          party.getColor() + party.getNameLegacy() + ChatColor.RESET + " are now ready.");
-    } else {
-      Bukkit.broadcastMessage(
-          party.getColor() + party.getNameLegacy() + ChatColor.RESET + " is now ready.");
-    }
+    TextComponent.Builder message =
+        text()
+            .append(party.getName())
+            .append(text(" marked as ").append(text("ready", NamedTextColor.GREEN)));
+    if (player != null) message.append(text(" by ").append(player.getName(NameStyle.COLOR)));
+
+    match.sendMessage(message);
 
     parties.ready(party);
     if (allReady(match)) {
@@ -54,16 +56,16 @@ public class ReadyManagerImpl implements ReadyManager {
   }
 
   @Override
-  public void unready(Party party) {
+  public void unready(Party party, @Nullable MatchPlayer player) {
     Match match = party.getMatch();
 
-    if (party.isNamePlural()) {
-      Bukkit.broadcastMessage(
-          party.getColor() + party.getNameLegacy() + ChatColor.RESET + " are now unready.");
-    } else {
-      Bukkit.broadcastMessage(
-          party.getColor() + party.getNameLegacy() + ChatColor.RESET + " is now unready.");
-    }
+    TextComponent.Builder message =
+        text()
+            .append(party.getName())
+            .append(text(" marked as ").append(text("unready", NamedTextColor.RED)));
+    if (player != null) message.append(text(" by ").append(player.getName(NameStyle.COLOR)));
+
+    match.sendMessage(message);
 
     if (allReady(match) && system.unreadyShouldCancel()) {
       // check if unready should cancel

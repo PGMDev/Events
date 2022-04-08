@@ -56,7 +56,7 @@ public class ReadyListener implements Listener {
 
     // if match starting and team was ready unready them
     if (event.getMatch().getPhase() == MatchPhase.STARTING && manager.isReady(party)) {
-      manager.unready(party);
+      manager.unready(party, null);
     }
   }
 
