@@ -1,19 +1,19 @@
 package dev.pgm.events.ready;
 
-import static tc.oc.pgm.lib.net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.text;
 
 import dev.pgm.events.config.AppData;
 import dev.pgm.events.utils.Parties;
 import dev.pgm.events.utils.Response;
 import java.time.Duration;
 import javax.annotation.Nullable;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.api.match.MatchPhase;
 import tc.oc.pgm.api.party.Party;
 import tc.oc.pgm.api.player.MatchPlayer;
 import tc.oc.pgm.events.CountdownStartEvent;
-import tc.oc.pgm.lib.net.kyori.adventure.text.TextComponent;
-import tc.oc.pgm.lib.net.kyori.adventure.text.format.NamedTextColor;
 import tc.oc.pgm.match.ObserverParty;
 import tc.oc.pgm.start.StartCountdown;
 import tc.oc.pgm.start.StartMatchModule;

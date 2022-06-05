@@ -1,11 +1,15 @@
 package dev.pgm.events.ready;
 
 import static dev.pgm.events.utils.Components.command;
-import static tc.oc.pgm.lib.net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.text;
 
 import dev.pgm.events.Tournament;
 import dev.pgm.events.config.AppData;
 import java.util.Optional;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,10 +21,6 @@ import tc.oc.pgm.api.player.MatchPlayer;
 import tc.oc.pgm.events.CountdownStartEvent;
 import tc.oc.pgm.events.PlayerLeaveMatchEvent;
 import tc.oc.pgm.events.PlayerPartyChangeEvent;
-import tc.oc.pgm.lib.net.kyori.adventure.text.TextComponent;
-import tc.oc.pgm.lib.net.kyori.adventure.text.format.NamedTextColor;
-import tc.oc.pgm.lib.net.kyori.adventure.text.format.Style;
-import tc.oc.pgm.lib.net.kyori.adventure.text.format.TextDecoration;
 import tc.oc.pgm.match.ObserverParty;
 import tc.oc.pgm.start.StartCountdown;
 import tc.oc.pgm.teams.Team;
