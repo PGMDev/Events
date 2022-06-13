@@ -1,13 +1,14 @@
 package dev.pgm.events;
 
-import dev.pgm.events.commands.TournamentAdminCommands;
-import dev.pgm.events.commands.TournamentUserCommands;
+import co.aikar.commands.BukkitCommandManager;
+import co.aikar.commands.InvalidCommandArgument;
+import dev.pgm.events.commands.ReadyCommands;
+import dev.pgm.events.commands.TournamentCommands;
 import dev.pgm.events.commands.VetoCommands;
-import dev.pgm.events.commands.providers.TournamentProvider;
 import dev.pgm.events.format.TournamentFormat;
+import dev.pgm.events.format.rounds.format.FormatRound;
 import dev.pgm.events.listeners.MatchLoadListener;
 import dev.pgm.events.listeners.PlayerJoinListen;
-import dev.pgm.events.ready.ReadyCommands;
 import dev.pgm.events.ready.ReadyListener;
 import dev.pgm.events.ready.ReadyManager;
 import dev.pgm.events.ready.ReadyManagerImpl;
@@ -16,22 +17,19 @@ import dev.pgm.events.ready.ReadySystem;
 import dev.pgm.events.team.ConfigTeamParser;
 import dev.pgm.events.team.DefaultTeamManager;
 import dev.pgm.events.team.TournamentTeamManager;
+import java.util.Optional;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import tc.oc.pgm.api.PGM;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.api.player.MatchPlayer;
-import tc.oc.pgm.command.graph.CommandExecutor;
-import tc.oc.pgm.command.graph.MatchPlayerProvider;
-import tc.oc.pgm.command.graph.MatchProvider;
-import tc.oc.pgm.lib.app.ashcon.intake.bukkit.graph.BasicBukkitCommandGraph;
-import tc.oc.pgm.lib.app.ashcon.intake.fluent.DispatcherNode;
-import tc.oc.pgm.lib.app.ashcon.intake.parametric.AbstractModule;
 
 public class Tournament extends JavaPlugin {
 
+  private BukkitCommandManager commands;
   private TournamentTeamManager teamManager;
   private TournamentManager tournamentManager;
+  private ReadyManager readyManager;
 
   private static Tournament plugin;
 
@@ -40,29 +38,19 @@ public class Tournament extends JavaPlugin {
     plugin = this;
     saveDefaultConfig();
 
+    commands = new BukkitCommandManager(this);
     teamManager = DefaultTeamManager.manager();
     tournamentManager = new TournamentManager();
     ConfigTeamParser.getInstance(); // load teams now
 
-    ReadyManager readyManager = new ReadyManagerImpl(new ReadySystem(), new ReadyParties());
+    readyManager = new ReadyManagerImpl(new ReadySystem(), new ReadyParties());
     ReadyListener readyListener = new ReadyListener(readyManager);
-    ReadyCommands readyCommands = new ReadyCommands(readyManager);
-
-    BasicBukkitCommandGraph graph =
-        new BasicBukkitCommandGraph(new CommandModule(tournamentManager, teamManager));
-
-    DispatcherNode node = graph.getRootDispatcherNode();
-    node.registerCommands(new VetoCommands());
-    node.registerCommands(readyCommands);
-
-    DispatcherNode subNode = node.registerNode("tourney", "tournament", "tm", "events");
-    subNode.registerCommands(new TournamentUserCommands());
-    subNode.registerCommands(new TournamentAdminCommands());
 
     Bukkit.getPluginManager().registerEvents(new MatchLoadListener(teamManager), this);
     Bukkit.getPluginManager().registerEvents(new PlayerJoinListen(teamManager), this);
     Bukkit.getPluginManager().registerEvents(readyListener, this);
-    new CommandExecutor(this, graph).register();
+
+    registerCommands();
   }
 
   @Override
@@ -82,32 +70,55 @@ public class Tournament extends JavaPlugin {
     return plugin;
   }
 
-  private static class CommandModule extends AbstractModule {
+  private void registerCommands() {
+    commands.registerDependency(TournamentManager.class, tournamentManager);
+    commands.registerDependency(TournamentTeamManager.class, teamManager);
+    commands.registerDependency(ReadyManager.class, readyManager);
 
-    private final TournamentManager tournamentManager;
-    private final TournamentTeamManager teamManager;
+    commands
+        .getCommandContexts()
+        .registerIssuerOnlyContext(
+            Match.class, c -> PGM.get().getMatchManager().getMatch(c.getSender()));
 
-    public CommandModule(TournamentManager tournamentManager, TournamentTeamManager teamManager) {
-      this.tournamentManager = tournamentManager;
-      this.teamManager = teamManager;
-    }
+    commands
+        .getCommandContexts()
+        .registerIssuerOnlyContext(
+            MatchPlayer.class,
+            c -> {
+              if (!c.getIssuer().isPlayer()) {
+                throw new InvalidCommandArgument("You are unable to run this command", false);
+              }
+              final MatchPlayer player = PGM.get().getMatchManager().getPlayer(c.getPlayer());
+              if (player != null) {
+                return player;
+              }
+              throw new InvalidCommandArgument(
+                  "Sorry, an error occured while resolving your player", false);
+            });
 
-    @Override
-    protected void configure() {
-      configureInstances();
-      configureProviders();
-    }
+    commands
+        .getCommandContexts()
+        .registerIssuerOnlyContext(
+            TournamentFormat.class,
+            c -> {
+              Optional<TournamentFormat> tournamentFormat = tournamentManager.currentTournament();
+              if (tournamentFormat.isPresent()) {
+                TournamentFormat format = tournamentFormat.get();
+                if (format.currentRound() == null) return format;
 
-    private void configureInstances() {
-      bind(PGM.class).toInstance(PGM.get());
-    }
+                if (format.currentRound() instanceof FormatRound)
+                  format = ((FormatRound) format.currentRound()).formatTournament();
 
-    private void configureProviders() {
-      bind(MatchPlayer.class).toProvider(new MatchPlayerProvider());
-      bind(Match.class).toProvider(new MatchProvider());
-      bind(TournamentManager.class).toInstance(tournamentManager);
-      bind(TournamentTeamManager.class).toInstance(teamManager);
-      bind(TournamentFormat.class).toProvider(new TournamentProvider(tournamentManager));
-    }
+                if (format == null)
+                  format = tournamentFormat.get(); // FormatTournamentImpl = null after round ends
+
+                return format;
+              }
+              throw new InvalidCommandArgument("No tournament is currently running!", false);
+            });
+
+    commands.registerCommand(new VetoCommands());
+    commands.registerCommand(new ReadyCommands());
+    commands.registerCommand(new TournamentCommands());
   }
 }

@@ -1,20 +1,21 @@
-package dev.pgm.events.ready;
+package dev.pgm.events.commands;
 
+import co.aikar.commands.BaseCommand;
+import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.Dependency;
+import co.aikar.commands.annotation.Description;
+import dev.pgm.events.ready.ReadyManager;
 import dev.pgm.events.utils.Response;
 import org.bukkit.command.CommandSender;
 import tc.oc.pgm.api.player.MatchPlayer;
-import tc.oc.pgm.lib.app.ashcon.intake.Command;
 import tc.oc.pgm.util.Audience;
 
-public class ReadyCommands {
+public class ReadyCommands extends BaseCommand {
 
-  private final ReadyManager manager;
+  @Dependency private ReadyManager manager;
 
-  public ReadyCommands(ReadyManager readyManager) {
-    this.manager = readyManager;
-  }
-
-  @Command(aliases = "ready", desc = "Ready up")
+  @CommandAlias("ready")
+  @Description("Ready up")
   public void readyCommand(CommandSender sender, MatchPlayer player) {
     Response response = manager.canReady(player);
 
@@ -26,7 +27,8 @@ public class ReadyCommands {
     manager.ready(player.getParty(), player);
   }
 
-  @Command(aliases = "unready", desc = "Mark your team as no longer being ready")
+  @CommandAlias("unready")
+  @Description("Mark your team as no longer being ready")
   public void unreadyCommand(CommandSender sender, MatchPlayer player) {
     Response response = manager.canUnready(player);
 

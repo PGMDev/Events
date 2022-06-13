@@ -1,5 +1,9 @@
 package dev.pgm.events.commands;
 
+import co.aikar.commands.BaseCommand;
+import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.Dependency;
+import co.aikar.commands.annotation.Description;
 import dev.pgm.events.format.TournamentFormat;
 import dev.pgm.events.format.rounds.veto.VetoRound;
 import dev.pgm.events.team.TournamentTeam;
@@ -9,18 +13,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tc.oc.pgm.api.match.Match;
-import tc.oc.pgm.lib.app.ashcon.intake.Command;
-import tc.oc.pgm.lib.app.ashcon.intake.parametric.annotation.Text;
 
-public class VetoCommands {
+public class VetoCommands extends BaseCommand {
 
-  @Command(aliases = "veto", desc = "Veto a map")
-  public void veto(
-      CommandSender sender,
-      Match match,
-      TournamentTeamManager teamManager,
-      TournamentFormat format,
-      @Text String option) {
+  @Dependency private TournamentTeamManager teamManager;
+
+  @CommandAlias("veto")
+  @Description("Veto a map")
+  public void veto(CommandSender sender, Match match, TournamentFormat format, String option) {
     if (format.currentRound() == null || !(format.currentRound() instanceof VetoRound)) {
       sender.sendMessage(ChatColor.RED + "Veto round is not currently running!");
       return;
