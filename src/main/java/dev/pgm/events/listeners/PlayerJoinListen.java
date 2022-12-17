@@ -54,10 +54,13 @@ public class PlayerJoinListen implements Listener {
     // check if the player is on one of the teams
     if (playerTeam.isPresent()) {
       Team team = playerTeam.get();
-      if (!isFull(team)) return;
 
-      // team is full -- lets kick this mad lad
-      event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "Your team is full!");
+      if (isFull(team)) {
+        // team is full -- lets kick this mad lad
+        event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "Your team is full!");
+      } else {
+        event.allow();
+      }
       return;
     }
 
@@ -71,7 +74,8 @@ public class PlayerJoinListen implements Listener {
 
   @EventHandler(priority = EventPriority.HIGH)
   public void vanish(PlayerJoinEvent event) {
-    if (event.getPlayer().hasPermission("events.spectate.vanish")
+    if (!event.getPlayer().isOp()
+        && event.getPlayer().hasPermission("events.spectate.vanish")
         && !manager.playerTeam(event.getPlayer().getUniqueId()).isPresent())
       PGM.get()
           .getVanishManager()
