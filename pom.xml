@@ -12,6 +12,10 @@
 			<id>ashcon-repo</id>
 			<url>https://repo.ashcon.app/content/repositories/snapshots</url>
 		</repository>
+		<repository> <!-- Working repo for PGM and Sportpaper -->
+			<id>pgm.fyi</id>
+			<url>https://repo.pgm.fyi/snapshots</url>
+		</repository>
 	</repositories>
 	<dependencies>
 		<dependency>
@@ -23,13 +27,7 @@
 		<dependency>
 			<groupId>tc.oc.pgm</groupId>
 			<artifactId>core</artifactId>
-			<version>0.14-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>tc.oc.pgm</groupId>
-			<artifactId>util</artifactId>
-			<version>0.14-SNAPSHOT</version>
+			<version>0.15-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
