@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import tc.oc.pgm.api.PGM;
+import tc.oc.pgm.api.integration.Integration;
 import tc.oc.pgm.api.player.event.MatchPlayerAddEvent;
 import tc.oc.pgm.blitz.BlitzMatchModule;
 import tc.oc.pgm.events.PlayerParticipationStartEvent;
@@ -77,9 +78,7 @@ public class PlayerJoinListen implements Listener {
     if (!event.getPlayer().isOp()
         && event.getPlayer().hasPermission("events.spectate.vanish")
         && !manager.playerTeam(event.getPlayer().getUniqueId()).isPresent())
-      PGM.get()
-          .getVanishManager()
-          .setVanished(PGM.get().getMatchManager().getPlayer(event.getPlayer()), true, true);
+      Integration.setVanished(PGM.get().getMatchManager().getPlayer(event.getPlayer()), true, true);
   }
 
   @EventHandler

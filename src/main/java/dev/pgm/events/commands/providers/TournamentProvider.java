@@ -1,18 +1,19 @@
 package dev.pgm.events.commands.providers;
 
 import dev.pgm.events.TournamentManager;
+import dev.pgm.events.commands.CommandException;
 import dev.pgm.events.format.TournamentFormat;
 import dev.pgm.events.format.rounds.format.FormatRound;
-import java.lang.annotation.Annotation;
-import java.util.List;
 import java.util.Optional;
 import org.bukkit.command.CommandSender;
-import tc.oc.pgm.lib.app.ashcon.intake.argument.ArgumentException;
-import tc.oc.pgm.lib.app.ashcon.intake.argument.CommandArgs;
-import tc.oc.pgm.lib.app.ashcon.intake.bukkit.parametric.provider.BukkitProvider;
-import tc.oc.pgm.lib.app.ashcon.intake.parametric.ProvisionException;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import tc.oc.pgm.lib.cloud.commandframework.annotations.AnnotationAccessor;
+import tc.oc.pgm.lib.cloud.commandframework.annotations.injection.ParameterInjector;
+import tc.oc.pgm.lib.cloud.commandframework.context.CommandContext;
+import tc.oc.pgm.lib.cloud.commandframework.exceptions.CommandExecutionException;
 
-public class TournamentProvider implements BukkitProvider<TournamentFormat> {
+public class TournamentProvider implements ParameterInjector<CommandSender, TournamentFormat> {
 
   private final TournamentManager tournamentManager;
 
@@ -21,14 +22,9 @@ public class TournamentProvider implements BukkitProvider<TournamentFormat> {
   }
 
   @Override
-  public boolean isProvided() {
-    return true;
-  }
-
-  @Override
-  public TournamentFormat get(
-      CommandSender commandSender, CommandArgs commandArgs, List<? extends Annotation> list)
-      throws ArgumentException, ProvisionException {
+  public @Nullable TournamentFormat create(
+      @NonNull CommandContext<CommandSender> context,
+      @NonNull AnnotationAccessor annotationAccessor) {
     Optional<TournamentFormat> tournamentFormat = tournamentManager.currentTournament();
     if (tournamentFormat.isPresent()) {
       TournamentFormat format = tournamentFormat.get();
@@ -43,6 +39,7 @@ public class TournamentProvider implements BukkitProvider<TournamentFormat> {
       return format;
     }
 
-    throw new ArgumentException("No tournament is currently running!");
+    throw new CommandExecutionException(
+        new CommandException("No tournament is currently running!"));
   }
 }

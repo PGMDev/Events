@@ -37,7 +37,7 @@ public class DefaultTeamRegistry implements TournamentTeamRegistry {
   @Override
   public TournamentTeam getTeam(String name) {
     TournamentTeam found = findExact(name);
-    return found != null ? found : StringUtils.bestFuzzyMatch(name, teamMap, 0.9);
+    return found != null ? found : StringUtils.bestFuzzyMatch(name, teamMap);
   }
 
   @Override
