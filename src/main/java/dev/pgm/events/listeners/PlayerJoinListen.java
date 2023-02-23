@@ -3,6 +3,7 @@ package dev.pgm.events.listeners;
 import static net.kyori.adventure.text.Component.text;
 
 import dev.pgm.events.team.TournamentTeamManager;
+import dev.pgm.events.utils.Parties;
 import java.util.Optional;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -32,7 +33,7 @@ public class PlayerJoinListen implements Listener {
     Optional<Team> playerTeam = manager.playerTeam(event.getPlayer().getId());
     if (playerTeam.isPresent()) {
       Team team = playerTeam.get();
-      if (!isFull(team)) {
+      if (!Parties.isFull(team)) {
         if (event.getMatch().isRunning() && event.getMatch().hasModule(BlitzMatchModule.class))
           return;
 
@@ -56,7 +57,7 @@ public class PlayerJoinListen implements Listener {
     if (playerTeam.isPresent()) {
       Team team = playerTeam.get();
 
-      if (isFull(team)) {
+      if (Parties.isFull(team)) {
         // team is full -- lets kick this mad lad
         event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "Your team is full!");
       } else {
@@ -87,7 +88,7 @@ public class PlayerJoinListen implements Listener {
     // check if the player is on one of the teams
     if (playerTeam.isPresent()) {
       Team team = playerTeam.get();
-      if (!isFull(team)) return;
+      if (!Parties.isFull(team)) return;
     }
 
     event.cancel(text("You may not join in a tournament setting!", NamedTextColor.RED));
@@ -102,15 +103,8 @@ public class PlayerJoinListen implements Listener {
       event.cancel(text("You may not leave in a tournament setting!", NamedTextColor.RED));
 
     BlitzMatchModule blitz = event.getMatch().getModule(BlitzMatchModule.class);
-    if (blitz != null) {
-      if (blitz.getNumOfLives(event.getPlayer().getId()) <= 0) {
-        event.setCancelled(false);
-        return;
-      }
+    if (blitz != null && blitz.getNumOfLives(event.getPlayer().getId()) <= 0) {
+      event.setCancelled(false);
     }
-  }
-
-  private boolean isFull(Team team) {
-    return team.getSizeAfterJoin(null, team, false) >= team.getMaxPlayers();
   }
 }

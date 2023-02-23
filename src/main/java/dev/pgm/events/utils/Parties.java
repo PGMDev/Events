@@ -9,7 +9,7 @@ public class Parties {
     if (party instanceof Team) {
       Team team = (Team) party;
 
-      return team.getSize(false) >= team.getMaxPlayers();
+      return team.getSize() >= team.getMaxPlayers();
     }
 
     return false;
