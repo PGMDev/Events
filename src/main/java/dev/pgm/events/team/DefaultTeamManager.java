@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import javax.annotation.Nullable;
 import org.bukkit.ChatColor;
 import tc.oc.pgm.api.party.Competitor;
 import tc.oc.pgm.api.player.MatchPlayer;
@@ -16,21 +17,16 @@ public class DefaultTeamManager implements TournamentTeamManager {
 
   private final List<TournamentTeam> teams;
 
-  private TeamSetup teamSetup;
+  private @Nullable TeamSetup teamSetup;
   private Map<TournamentTeam, Team> teamMap;
 
-  public DefaultTeamManager(TeamSetup teamSetup) {
-    this.teamSetup = teamSetup;
-    this.teams = new ArrayList<>();
-    teamMap = new HashMap<>();
-  }
-
   public DefaultTeamManager() {
-    this(new ColorTeamSetup(new ArrayList<>()));
+    this.teams = new ArrayList<>();
+    this.teamMap = new HashMap<>();
   }
 
   public static TournamentTeamManager manager() {
-    return new DefaultTeamManager(new ColorTeamSetup(new ArrayList<TournamentTeam>()));
+    return new DefaultTeamManager();
   }
 
   @Override
@@ -38,13 +34,13 @@ public class DefaultTeamManager implements TournamentTeamManager {
     if (this.teams.contains(team)) return;
 
     this.teams.add(team);
-    this.teamSetup = new ColorTeamSetup(teams);
+    this.teamSetup = null;
   }
 
   @Override
   public void clear() {
     this.teams.clear();
-    this.teamSetup = new ColorTeamSetup(teams);
+    this.teamSetup = null;
   }
 
   @Override
@@ -57,7 +53,7 @@ public class DefaultTeamManager implements TournamentTeamManager {
 
   @Override
   public void setupTeams(Collection<Team> teams) {
-    teamMap = teamSetup.setup(teams);
+    teamMap = getTeamSetup().setup(teams);
   }
 
   @Override
@@ -99,7 +95,7 @@ public class DefaultTeamManager implements TournamentTeamManager {
 
   @Override
   public ChatColor teamColour(TournamentTeam tournamentTeam) {
-    return teamSetup.colour(tournamentTeam);
+    return getTeamSetup().colour(tournamentTeam);
   }
 
   @Override
@@ -109,7 +105,12 @@ public class DefaultTeamManager implements TournamentTeamManager {
 
   @Override
   public Collection<? extends TournamentTeam> teams() {
-    return teamSetup.teams();
+    return getTeamSetup().teams();
+  }
+
+  private TeamSetup getTeamSetup() {
+    if (teamSetup == null) this.teamSetup = new ColorTeamSetup(this.teams);
+    return teamSetup;
   }
 
   @Override

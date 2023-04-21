@@ -2,30 +2,29 @@ package dev.pgm.events.team;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.EnumMap;
+import java.util.IdentityHashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import org.bukkit.ChatColor;
 import tc.oc.pgm.teams.Team;
 
 public class ColorTeamSetup implements TeamSetup {
 
-  private final Collection<? extends TournamentTeam> currentTeams;
+  private final List<TournamentTeam> currentTeams;
   // not active at the moment
   private final Set<TournamentTeam> unassigned;
-  private final Map<ChatColor, TournamentTeam> colorTeams = new HashMap<>();
+  private final Map<ChatColor, TournamentTeam> colorTeams = new EnumMap<>(ChatColor.class);
 
   // active at the moment
-  private final Map<TournamentTeam, Team> assigned = new HashMap<>();
+  private final Map<TournamentTeam, Team> assigned = new IdentityHashMap<>();
 
   public ColorTeamSetup(Collection<? extends TournamentTeam> tournamentTeams) {
-    unassigned = new HashSet<>();
-    unassigned.addAll(tournamentTeams);
-    this.currentTeams = tournamentTeams;
+    this.currentTeams = new ArrayList<>(tournamentTeams);
+    this.unassigned = new LinkedHashSet<>(tournamentTeams);
   }
 
   @Override
@@ -79,8 +78,8 @@ public class ColorTeamSetup implements TeamSetup {
   }
 
   private void unassignColourTeams() {
-    colorTeams.values().stream()
-        .filter(Objects::nonNull)
+    currentTeams.stream()
+        .filter(colorTeams::containsValue)
         .filter(x -> !assigned.containsKey(x))
         .forEach(unassigned::add);
   }
