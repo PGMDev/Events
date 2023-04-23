@@ -5,8 +5,8 @@ import net.kyori.adventure.text.Component;
 
 public class Response {
 
-  boolean allowed;
-  Component message = null;
+  private final boolean allowed;
+  private final Component message;
 
   public Response(boolean allowed, @Nullable Component message) {
     this.allowed = allowed;

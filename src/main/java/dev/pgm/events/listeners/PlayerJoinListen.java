@@ -3,7 +3,7 @@ package dev.pgm.events.listeners;
 import static net.kyori.adventure.text.Component.text;
 
 import dev.pgm.events.team.TournamentTeamManager;
-import dev.pgm.events.utils.Parties;
+import dev.pgm.events.utils.JoinUtils;
 import java.util.Optional;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -15,7 +15,6 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import tc.oc.pgm.api.PGM;
 import tc.oc.pgm.api.integration.Integration;
 import tc.oc.pgm.api.player.event.MatchPlayerAddEvent;
-import tc.oc.pgm.blitz.BlitzMatchModule;
 import tc.oc.pgm.events.PlayerParticipationStartEvent;
 import tc.oc.pgm.events.PlayerParticipationStopEvent;
 import tc.oc.pgm.teams.Team;
@@ -33,10 +32,7 @@ public class PlayerJoinListen implements Listener {
     Optional<Team> playerTeam = manager.playerTeam(event.getPlayer().getId());
     if (playerTeam.isPresent()) {
       Team team = playerTeam.get();
-      if (!Parties.isFull(team)) {
-        if (event.getMatch().isRunning() && event.getMatch().hasModule(BlitzMatchModule.class))
-          return;
-
+      if (JoinUtils.canJoin(event.getPlayer().getId(), team)) {
         event.setInitialParty(team);
       } else {
         // team is full, lets kick this man
@@ -46,6 +42,7 @@ public class PlayerJoinListen implements Listener {
                 PGM.get(),
                 () -> Bukkit.getPlayer(event.getPlayer().getId()).kickPlayer("Your team is full!"),
                 2);
+        event.setInitialParty(team);
       }
     }
   }
@@ -57,7 +54,7 @@ public class PlayerJoinListen implements Listener {
     if (playerTeam.isPresent()) {
       Team team = playerTeam.get();
 
-      if (Parties.isFull(team)) {
+      if (JoinUtils.canJoin(event.getPlayer().getUniqueId(), team)) {
         // team is full -- lets kick this mad lad
         event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "Your team is full!");
       } else {
@@ -88,7 +85,7 @@ public class PlayerJoinListen implements Listener {
     // check if the player is on one of the teams
     if (playerTeam.isPresent()) {
       Team team = playerTeam.get();
-      if (!Parties.isFull(team)) return;
+      if (!JoinUtils.isPartyFull(team)) return;
     }
 
     event.cancel(text("You may not join in a tournament setting!", NamedTextColor.RED));
@@ -102,8 +99,7 @@ public class PlayerJoinListen implements Listener {
     if (playerTeam.isPresent() && playerTeam.get().equals(event.getCompetitor()))
       event.cancel(text("You may not leave in a tournament setting!", NamedTextColor.RED));
 
-    BlitzMatchModule blitz = event.getMatch().getModule(BlitzMatchModule.class);
-    if (blitz != null && blitz.getNumOfLives(event.getPlayer().getId()) <= 0) {
+    if (JoinUtils.isBlitzEliminated(event.getPlayer())) {
       event.setCancelled(false);
     }
   }
