@@ -21,10 +21,6 @@ public class JoinUtils {
     return false;
   }
 
-  public static boolean canJoinBlitz(MatchPlayer player) {
-    return canJoinBlitz(player.getId(), player.getMatch());
-  }
-
   public static boolean canJoinBlitz(UUID uuid, Match match) {
     return match
         .moduleOptional(BlitzMatchModule.class)
@@ -33,9 +29,9 @@ public class JoinUtils {
   }
 
   // Mimics PGM behavior for BlitzMatchModule#canJoin, but uuid as player to run this before login
-  public static boolean canJoinBlitz(BlitzMatchModule bmm, UUID uuid, Match match) {
+  private static boolean canJoinBlitz(BlitzMatchModule bmm, UUID uuid, Match match) {
     if (bmm.isPlayerEliminated(uuid)) return false;
-    return match.isRunning() && bmm.getConfig().getJoinFilter().query(match).isAllowed();
+    return !match.isRunning() || bmm.getConfig().getJoinFilter().query(match).isAllowed();
   }
 
   public static boolean isBlitzEliminated(MatchPlayer player) {

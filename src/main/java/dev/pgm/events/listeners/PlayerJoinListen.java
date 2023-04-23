@@ -42,7 +42,6 @@ public class PlayerJoinListen implements Listener {
                 PGM.get(),
                 () -> Bukkit.getPlayer(event.getPlayer().getId()).kickPlayer("Your team is full!"),
                 2);
-        event.setInitialParty(team);
       }
     }
   }
@@ -55,10 +54,10 @@ public class PlayerJoinListen implements Listener {
       Team team = playerTeam.get();
 
       if (JoinUtils.canJoin(event.getPlayer().getUniqueId(), team)) {
+        event.allow();
+      } else {
         // team is full -- lets kick this mad lad
         event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "Your team is full!");
-      } else {
-        event.allow();
       }
       return;
     }
