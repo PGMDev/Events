@@ -24,4 +24,8 @@ public class AppData {
   public static boolean autoUnready() {
     return EventsPlugin.get().getConfig().getBoolean("auto-unready", false);
   }
+
+  public static boolean allowSpectators() {
+    return EventsPlugin.get().getConfig().getBoolean("allow-spectators", false);
+  }
 }

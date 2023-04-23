@@ -9,8 +9,12 @@ import tc.oc.pgm.teams.Team;
 
 public class JoinUtils {
 
-  public static boolean canJoin(UUID uuid, Party party) {
-    return !isPartyFull(party) && canJoinBlitz(uuid, party.getMatch());
+  public static Response canJoin(UUID uuid, Party party) {
+    if (isPartyFull(party)) return Response.deny("You team is full!");
+    if (!canJoinBlitz(uuid, party.getMatch()))
+      return Response.deny("You may not join a blitz match in progress!");
+
+    return Response.allow();
   }
 
   public static boolean isPartyFull(Party party) {

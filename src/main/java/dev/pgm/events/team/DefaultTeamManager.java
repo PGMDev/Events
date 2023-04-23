@@ -144,7 +144,7 @@ public class DefaultTeamManager implements TournamentTeamManager {
     toAssign.forEach(
         tournamentPlayer -> {
           MatchPlayer player = pgmTeam.getMatch().getPlayer(tournamentPlayer.getUUID());
-          if (player != null && JoinUtils.canJoin(player.getId(), pgmTeam)) {
+          if (player != null && JoinUtils.canJoin(player.getId(), pgmTeam).isAllowed()) {
             if (syncPlayer(player, pgmTeam, joinRequest)) {
               unassigned.remove(player);
             }
