@@ -1,15 +1,31 @@
 package dev.pgm.events.utils;
 
+import static net.kyori.adventure.text.Component.text;
+
 import javax.annotation.Nullable;
 import net.kyori.adventure.text.Component;
 
 public class Response {
 
-  boolean allowed;
-  Component message = null;
+  private final boolean allowed;
+  private final Component component;
+  private final String message;
+
+  public Response(boolean allowed) {
+    this.allowed = allowed;
+    this.component = null;
+    this.message = null;
+  }
 
   public Response(boolean allowed, @Nullable Component message) {
     this.allowed = allowed;
+    this.component = message;
+    this.message = null;
+  }
+
+  public Response(boolean allowed, String message) {
+    this.allowed = allowed;
+    this.component = text(message);
     this.message = message;
   }
 
@@ -21,23 +37,35 @@ public class Response {
     return !this.allowed;
   }
 
-  public Component getMessage() {
+  public Component getComponent() {
+    return component;
+  }
+
+  public String getMessage() {
     return message;
   }
 
   public static Response allow() {
-    return Response.allow(null);
+    return new Response(true);
   }
 
-  public static Response allow(@Nullable Component message) {
+  public static Response allow(Component message) {
+    return new Response(true, message);
+  }
+
+  public static Response allow(String message) {
     return new Response(true, message);
   }
 
   public static Response deny() {
-    return Response.deny(null);
+    return new Response(false);
   }
 
-  public static Response deny(@Nullable Component message) {
+  public static Response deny(Component message) {
+    return new Response(false, message);
+  }
+
+  public static Response deny(String message) {
     return new Response(false, message);
   }
 }

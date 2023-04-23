@@ -3,7 +3,7 @@ package dev.pgm.events.ready;
 import static net.kyori.adventure.text.Component.text;
 
 import dev.pgm.events.config.AppData;
-import dev.pgm.events.utils.Parties;
+import dev.pgm.events.utils.JoinUtils;
 import dev.pgm.events.utils.Response;
 import java.time.Duration;
 import javax.annotation.Nullable;
@@ -113,7 +113,7 @@ public class ReadyManagerImpl implements ReadyManager {
       return Response.deny(text("You are already " + (state ? "ready" : "unready") + "!"));
     }
 
-    if (state && AppData.readyFullTeamRequired() && !Parties.isFull(party)) {
+    if (state && AppData.readyFullTeamRequired() && !JoinUtils.isPartyFull(party)) {
       return Response.deny(text("You can not ready until your team is full!"));
     }
 

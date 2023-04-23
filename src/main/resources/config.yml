@@ -11,3 +11,7 @@ ready-reminders: true
 
 # unready if a team player leaves
 auto-unready: false
+
+# should anyone be allowed to spectate
+# (includes non-playing team members)
+allow-spectators: false

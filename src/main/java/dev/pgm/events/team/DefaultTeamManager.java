@@ -1,5 +1,6 @@
 package dev.pgm.events.team;
 
+import dev.pgm.events.utils.JoinUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,7 +11,9 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 import org.bukkit.ChatColor;
 import tc.oc.pgm.api.party.Competitor;
+import tc.oc.pgm.api.party.Party;
 import tc.oc.pgm.api.player.MatchPlayer;
+import tc.oc.pgm.join.JoinRequest;
 import tc.oc.pgm.teams.Team;
 
 public class DefaultTeamManager implements TournamentTeamManager {
@@ -118,40 +121,44 @@ public class DefaultTeamManager implements TournamentTeamManager {
     List<MatchPlayer> unassigned = new ArrayList<>();
 
     teams.forEach(
-        tournamentTeam -> {
-          // Get the matching team if playing
-          Optional<Team> matchTeam = fromTournamentTeam(tournamentTeam);
-          matchTeam.ifPresent(
-              team -> {
-                List<? extends TournamentPlayer> toAssign =
-                    new ArrayList<>(tournamentTeam.getPlayers());
-                team.getPlayers()
-                    .forEach(
-                        player -> {
-                          // If not on team move to unassigned
-                          if (!tournamentTeam.containsPlayer(player.getId())) {
-                            unassigned.add(player);
-                          } else {
-                            toAssign.removeIf(
-                                tournamentPlayer ->
-                                    tournamentPlayer.getUUID().equals(player.getId()));
-                          }
-                        });
+        eventsTeam ->
+            fromTournamentTeam(eventsTeam)
+                .ifPresent(pgmTeam -> syncTeam(eventsTeam, pgmTeam, unassigned)));
 
-                // Find other players on server to assign
-                toAssign.forEach(
-                    tournamentPlayer -> {
-                      MatchPlayer player = team.getMatch().getPlayer(tournamentPlayer.getUUID());
-                      if (player != null) {
-                        player.getMatch().setParty(player, team);
-                        unassigned.remove(player);
-                      }
-                    });
-              });
+    syncObserverPlayers(unassigned);
+  }
+
+  private void syncTeam(TournamentTeam eventsTeam, Team pgmTeam, List<MatchPlayer> unassigned) {
+    List<TournamentPlayer> toAssign = new ArrayList<>(eventsTeam.getPlayers());
+    JoinRequest joinRequest = JoinRequest.of(pgmTeam);
+
+    for (MatchPlayer matchPlayer : pgmTeam.getPlayers()) {
+      // Not in team, move to unassigned. Either another team, or end up in obs
+      if (!eventsTeam.containsPlayer(matchPlayer.getId())) unassigned.add(matchPlayer);
+      else
+        toAssign.removeIf(
+            tournamentPlayer -> tournamentPlayer.getUUID().equals(matchPlayer.getId()));
+    }
+
+    // Move other players to the team (from obs or other teams)
+    toAssign.forEach(
+        tournamentPlayer -> {
+          MatchPlayer player = pgmTeam.getMatch().getPlayer(tournamentPlayer.getUUID());
+          if (player != null && JoinUtils.canJoin(player.getId(), pgmTeam).isAllowed()) {
+            if (syncPlayer(player, pgmTeam, joinRequest)) {
+              unassigned.remove(player);
+            }
+          }
         });
+  }
 
-    // Move all unassigned players to obs
-    unassigned.forEach(
-        player -> player.getMatch().setParty(player, player.getMatch().getDefaultParty()));
+  private void syncObserverPlayers(List<MatchPlayer> unassigned) {
+    JoinRequest request = JoinRequest.of(null, JoinRequest.Flag.FORCE);
+    unassigned.forEach(player -> syncPlayer(player, player.getMatch().getDefaultParty(), request));
+  }
+
+  private boolean syncPlayer(MatchPlayer player, Party party, JoinRequest request) {
+    if (player.getParty() == party) return true;
+    return player.getMatch().setParty(player, party, request);
   }
 }
