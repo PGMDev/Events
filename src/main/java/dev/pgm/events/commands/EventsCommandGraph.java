@@ -16,8 +16,7 @@ import tc.oc.pgm.command.injectors.MatchPlayerProvider;
 import tc.oc.pgm.command.injectors.MatchProvider;
 import tc.oc.pgm.command.injectors.PlayerProvider;
 import tc.oc.pgm.command.util.CommandGraph;
-import tc.oc.pgm.lib.cloud.commandframework.extra.confirmation.CommandConfirmationManager;
-import tc.oc.pgm.lib.cloud.commandframework.minecraft.extras.MinecraftHelp;
+import tc.oc.pgm.lib.org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import tc.oc.pgm.util.Audience;
 
 public class EventsCommandGraph extends CommandGraph<EventsPlugin> {
@@ -28,12 +27,7 @@ public class EventsCommandGraph extends CommandGraph<EventsPlugin> {
 
   @Override
   protected MinecraftHelp<CommandSender> createHelp() {
-    return new MinecraftHelp<>("/events help", Audience::get, manager);
-  }
-
-  @Override
-  protected CommandConfirmationManager<CommandSender> createConfirmationManager() {
-    return null;
+    return MinecraftHelp.create("/events help", manager, Audience::get);
   }
 
   @Override
