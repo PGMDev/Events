@@ -16,18 +16,18 @@ import tc.oc.pgm.api.integration.Integration;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.api.match.MatchManager;
 import tc.oc.pgm.api.player.MatchPlayer;
-import tc.oc.pgm.lib.cloud.commandframework.annotations.Argument;
-import tc.oc.pgm.lib.cloud.commandframework.annotations.CommandDescription;
-import tc.oc.pgm.lib.cloud.commandframework.annotations.CommandMethod;
-import tc.oc.pgm.lib.cloud.commandframework.annotations.CommandPermission;
-import tc.oc.pgm.lib.cloud.commandframework.annotations.specifier.Greedy;
+import tc.oc.pgm.lib.org.incendo.cloud.annotation.specifier.Greedy;
+import tc.oc.pgm.lib.org.incendo.cloud.annotations.Argument;
+import tc.oc.pgm.lib.org.incendo.cloud.annotations.Command;
+import tc.oc.pgm.lib.org.incendo.cloud.annotations.CommandDescription;
+import tc.oc.pgm.lib.org.incendo.cloud.annotations.Permission;
 
-@CommandMethod("tourney|tournament|tm|events")
+@Command("tourney|tournament|tm|events")
 public class TournamentAdminCommands {
 
-  @CommandMethod("create <format>")
+  @Command("create <format>")
   @CommandDescription("Creates a tournament")
-  @CommandPermission("events.staff")
+  @Permission("events.staff")
   public void tourney(
       CommandSender sender,
       TournamentManager manager,
@@ -37,9 +37,9 @@ public class TournamentAdminCommands {
     sender.sendMessage(ChatColor.GOLD + "Starting tournament.");
   }
 
-  @CommandMethod("register <team>")
+  @Command("register <team>")
   @CommandDescription("Register a team")
-  @CommandPermission("events.staff")
+  @Permission("events.staff")
   public void register(
       CommandSender sender,
       TournamentTeamRegistry teamRegistry,
@@ -61,9 +61,9 @@ public class TournamentAdminCommands {
     sender.sendMessage(ChatColor.YELLOW + "Added team " + team.getName() + "!");
   }
 
-  @CommandMethod("list")
+  @Command("list")
   @CommandDescription("List all loaded teams")
-  @CommandPermission("events.staff")
+  @Permission("events.staff")
   public void list(CommandSender sender, TournamentTeamRegistry registry) {
     sender.sendMessage(
         ChatColor.GOLD
@@ -77,9 +77,9 @@ public class TournamentAdminCommands {
     sender.sendMessage(ChatColor.YELLOW + "Run /tourney info <team> to see player roster!");
   }
 
-  @CommandMethod("info <team>")
+  @Command("info <team>")
   @CommandDescription("View information about a team")
-  @CommandPermission("events.staff")
+  @Permission("events.staff")
   public void info(
       CommandSender sender,
       TournamentTeamRegistry registry,
@@ -104,9 +104,9 @@ public class TournamentAdminCommands {
     }
   }
 
-  @CommandMethod("unregisterall")
+  @Command("unregisterall")
   @CommandDescription("Clear all registered teams")
-  @CommandPermission("events.staff")
+  @Permission("events.staff")
   public void clear(CommandSender sender, TournamentTeamManager teamManager) {
     teamManager.clear();
     sender.sendMessage(ChatColor.YELLOW + "Unregistered all teams!");

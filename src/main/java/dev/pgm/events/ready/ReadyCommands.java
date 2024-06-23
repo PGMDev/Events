@@ -4,8 +4,8 @@ import dev.pgm.events.commands.CommandException;
 import dev.pgm.events.utils.Response;
 import org.bukkit.command.CommandSender;
 import tc.oc.pgm.api.player.MatchPlayer;
-import tc.oc.pgm.lib.cloud.commandframework.annotations.CommandDescription;
-import tc.oc.pgm.lib.cloud.commandframework.annotations.CommandMethod;
+import tc.oc.pgm.lib.org.incendo.cloud.annotations.Command;
+import tc.oc.pgm.lib.org.incendo.cloud.annotations.CommandDescription;
 
 public class ReadyCommands {
 
@@ -15,7 +15,7 @@ public class ReadyCommands {
     this.manager = readyManager;
   }
 
-  @CommandMethod("ready")
+  @Command("ready")
   @CommandDescription("Ready up")
   public void readyCommand(CommandSender sender, MatchPlayer player) {
     Response response = manager.canReady(player);
@@ -24,7 +24,7 @@ public class ReadyCommands {
     manager.ready(player.getParty(), player);
   }
 
-  @CommandMethod("unready")
+  @Command("unready")
   @CommandDescription("Mark your team as no longer being ready")
   public void unreadyCommand(CommandSender sender, MatchPlayer player) {
     Response response = manager.canUnready(player);

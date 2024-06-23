@@ -6,12 +6,12 @@ import dev.pgm.events.format.TournamentFormat;
 import dev.pgm.events.format.rounds.format.FormatRound;
 import java.util.Optional;
 import org.bukkit.command.CommandSender;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import tc.oc.pgm.lib.cloud.commandframework.annotations.AnnotationAccessor;
-import tc.oc.pgm.lib.cloud.commandframework.annotations.injection.ParameterInjector;
-import tc.oc.pgm.lib.cloud.commandframework.context.CommandContext;
-import tc.oc.pgm.lib.cloud.commandframework.exceptions.CommandExecutionException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import tc.oc.pgm.lib.org.incendo.cloud.context.CommandContext;
+import tc.oc.pgm.lib.org.incendo.cloud.exception.CommandExecutionException;
+import tc.oc.pgm.lib.org.incendo.cloud.injection.ParameterInjector;
+import tc.oc.pgm.lib.org.incendo.cloud.util.annotation.AnnotationAccessor;
 
 public class TournamentProvider implements ParameterInjector<CommandSender, TournamentFormat> {
 
@@ -23,8 +23,8 @@ public class TournamentProvider implements ParameterInjector<CommandSender, Tour
 
   @Override
   public @Nullable TournamentFormat create(
-      @NonNull CommandContext<CommandSender> context,
-      @NonNull AnnotationAccessor annotationAccessor) {
+      @NotNull CommandContext<CommandSender> context,
+      @NotNull AnnotationAccessor annotationAccessor) {
     Optional<TournamentFormat> tournamentFormat = tournamentManager.currentTournament();
     if (tournamentFormat.isPresent()) {
       TournamentFormat format = tournamentFormat.get();

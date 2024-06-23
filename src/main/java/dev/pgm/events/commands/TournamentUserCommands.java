@@ -8,13 +8,13 @@ import java.util.Optional;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import tc.oc.pgm.lib.cloud.commandframework.annotations.CommandDescription;
-import tc.oc.pgm.lib.cloud.commandframework.annotations.CommandMethod;
+import tc.oc.pgm.lib.org.incendo.cloud.annotations.Command;
+import tc.oc.pgm.lib.org.incendo.cloud.annotations.CommandDescription;
 
-@CommandMethod("tourney|tournament|tm|events")
+@Command("tourney|tournament|tm|events")
 public class TournamentUserCommands {
 
-  @CommandMethod("score")
+  @Command("score")
   @CommandDescription("Shows the current score in the tournament")
   public void currentScore(CommandSender sender, TournamentFormat format) {
     if (format instanceof FormatTournamentImpl) {
@@ -33,7 +33,7 @@ public class TournamentUserCommands {
     }
   }
 
-  @CommandMethod("rounds")
+  @Command("rounds")
   @CommandDescription("Shows the rounds from this event")
   public void rounds(CommandSender sender, TournamentFormat format) {
     String header = "Event Rounds";
