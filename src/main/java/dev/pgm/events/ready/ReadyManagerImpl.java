@@ -6,9 +6,9 @@ import dev.pgm.events.config.AppData;
 import dev.pgm.events.utils.JoinUtils;
 import dev.pgm.events.utils.Response;
 import java.time.Duration;
-import javax.annotation.Nullable;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.jetbrains.annotations.Nullable;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.api.match.MatchPhase;
 import tc.oc.pgm.api.party.Party;
@@ -41,10 +41,9 @@ public class ReadyManagerImpl implements ReadyManager {
   public void ready(Party party, @Nullable MatchPlayer player) {
     Match match = party.getMatch();
 
-    TextComponent.Builder message =
-        text()
-            .append(party.getName())
-            .append(text(" marked as ").append(text("ready", NamedTextColor.GREEN)));
+    TextComponent.Builder message = text()
+        .append(party.getName())
+        .append(text(" marked as ").append(text("ready", NamedTextColor.GREEN)));
     if (player != null) message.append(text(" by ").append(player.getName(NameStyle.COLOR)));
 
     match.sendMessage(message);
@@ -59,10 +58,9 @@ public class ReadyManagerImpl implements ReadyManager {
   public void unready(Party party, @Nullable MatchPlayer player) {
     Match match = party.getMatch();
 
-    TextComponent.Builder message =
-        text()
-            .append(party.getName())
-            .append(text(" marked as ").append(text("unready", NamedTextColor.RED)));
+    TextComponent.Builder message = text()
+        .append(party.getName())
+        .append(text(" marked as ").append(text("unready", NamedTextColor.RED)));
     if (player != null) message.append(text(" by ").append(player.getName(NameStyle.COLOR)));
 
     match.sendMessage(message);

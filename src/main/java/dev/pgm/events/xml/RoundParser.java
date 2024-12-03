@@ -23,20 +23,15 @@ import org.jdom2.Element;
 public class RoundParser {
 
   public static TournamentRound parse(TournamentFormat format, Element round) {
-    switch (round.getName().toLowerCase()) {
-      case "match":
-        return SingleParser.parse(format, round);
-      case "veto":
-        return VetoParser.parse(format, round);
-      case "result-from":
-        return ResultFromParser.parse(format, round);
-      case "format":
-        return FormatParser.parse(format, round);
-      case "veto-selector":
-        return new VetoSelectorRound(format, new VetoSelectorSettings());
-    }
-
-    throw new IllegalArgumentException("Round " + round.getName() + " is not supported!");
+    return switch (round.getName().toLowerCase()) {
+      case "match" -> SingleParser.parse(format, round);
+      case "veto" -> VetoParser.parse(format, round);
+      case "result-from" -> ResultFromParser.parse(format, round);
+      case "format" -> FormatParser.parse(format, round);
+      case "veto-selector" -> new VetoSelectorRound(format, new VetoSelectorSettings());
+      default -> throw new IllegalArgumentException(
+          "Round " + round.getName() + " is not supported!");
+    };
   }
 
   public static class SingleParser {
@@ -118,10 +113,9 @@ public class RoundParser {
         if (insert.equalsIgnoreCase("back")) type = VetoSettings.VetoType.CHOOSE_LAST;
         else if (insert.equalsIgnoreCase("front")) type = VetoSettings.VetoType.CHOOSE_FIRST;
         else
-          throw new IllegalArgumentException(
-              "Invalid insert position "
-                  + insert
-                  + ". Valid positions are back (default) or front.");
+          throw new IllegalArgumentException("Invalid insert position "
+              + insert
+              + ". Valid positions are back (default) or front.");
       }
 
       if (type == null)
