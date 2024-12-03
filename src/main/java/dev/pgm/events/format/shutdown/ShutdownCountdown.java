@@ -1,22 +1,17 @@
 package dev.pgm.events.format.shutdown;
 
-import static net.kyori.adventure.key.Key.key;
 import static net.kyori.adventure.text.Component.text;
 
 import dev.pgm.events.utils.TimeFormatter;
 import java.time.Duration;
-import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.countdowns.MatchCountdown;
+import tc.oc.pgm.util.bukkit.Sounds;
 
 public class ShutdownCountdown extends MatchCountdown {
-
-  protected static final Sound COUNT_SOUND =
-      Sound.sound(key("note.pling"), Sound.Source.MASTER, 1f, 1.19f);
-
   public ShutdownCountdown(Match match) {
     super(match);
   }
@@ -25,7 +20,7 @@ public class ShutdownCountdown extends MatchCountdown {
   public void onTick(Duration remaining, Duration total) {
     super.onTick(remaining, total);
     if (remaining.getSeconds() >= 1 && remaining.getSeconds() <= 3)
-      getMatch().playSound(COUNT_SOUND);
+      getMatch().playSound(Sounds.MATCH_COUNTDOWN);
   }
 
   @Override

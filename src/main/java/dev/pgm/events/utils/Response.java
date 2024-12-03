@@ -2,8 +2,8 @@ package dev.pgm.events.utils;
 
 import static net.kyori.adventure.text.Component.text;
 
-import javax.annotation.Nullable;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.Nullable;
 
 public class Response {
 

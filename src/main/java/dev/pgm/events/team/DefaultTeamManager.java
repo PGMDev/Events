@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import javax.annotation.Nullable;
 import org.bukkit.ChatColor;
+import org.jetbrains.annotations.Nullable;
 import tc.oc.pgm.api.party.Competitor;
 import tc.oc.pgm.api.party.Party;
 import tc.oc.pgm.api.player.MatchPlayer;
@@ -120,10 +120,8 @@ public class DefaultTeamManager implements TournamentTeamManager {
   public void syncTeams() {
     List<MatchPlayer> unassigned = new ArrayList<>();
 
-    teams.forEach(
-        eventsTeam ->
-            fromTournamentTeam(eventsTeam)
-                .ifPresent(pgmTeam -> syncTeam(eventsTeam, pgmTeam, unassigned)));
+    teams.forEach(eventsTeam -> fromTournamentTeam(eventsTeam)
+        .ifPresent(pgmTeam -> syncTeam(eventsTeam, pgmTeam, unassigned)));
 
     syncObserverPlayers(unassigned);
   }
@@ -141,15 +139,14 @@ public class DefaultTeamManager implements TournamentTeamManager {
     }
 
     // Move other players to the team (from obs or other teams)
-    toAssign.forEach(
-        tournamentPlayer -> {
-          MatchPlayer player = pgmTeam.getMatch().getPlayer(tournamentPlayer.getUUID());
-          if (player != null && JoinUtils.canJoin(player.getId(), pgmTeam).isAllowed()) {
-            if (syncPlayer(player, pgmTeam, joinRequest)) {
-              unassigned.remove(player);
-            }
-          }
-        });
+    toAssign.forEach(tournamentPlayer -> {
+      MatchPlayer player = pgmTeam.getMatch().getPlayer(tournamentPlayer.getUUID());
+      if (player != null && JoinUtils.canJoin(player.getId(), pgmTeam).isAllowed()) {
+        if (syncPlayer(player, pgmTeam, joinRequest)) {
+          unassigned.remove(player);
+        }
+      }
+    });
   }
 
   private void syncObserverPlayers(List<MatchPlayer> unassigned) {

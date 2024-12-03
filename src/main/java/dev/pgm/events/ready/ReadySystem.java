@@ -3,7 +3,7 @@ package dev.pgm.events.ready;
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.Instant;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class ReadySystem {
 
