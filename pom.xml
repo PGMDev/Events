@@ -6,6 +6,12 @@
 	<artifactId>Events</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<name>Events</name>
+	<description>Manage PvP tournament events</description>
+	<url>https://pgm.dev</url>
+
+	<properties>
+		<project.mainClass>dev.pgm.events.EventsPlugin</project.mainClass>
+	</properties>
 
 	<properties>
 		<maven.compiler.source>21</maven.compiler.source>
@@ -63,6 +69,24 @@
 							<version>2.0.0-rc.2</version>
 						</path>
 					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+
+			<!-- Exposes git information to the build environment -->
+			<plugin>
+				<groupId>pl.project13.maven</groupId>
+				<artifactId>git-commit-id-plugin</artifactId>
+				<version>4.9.10</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>revision</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<failOnNoGitDirectory>false</failOnNoGitDirectory>
+					<failOnUnableToExtractRepoInfo>false</failOnUnableToExtractRepoInfo>
 				</configuration>
 			</plugin>
 
@@ -185,8 +209,8 @@
 		</plugins>
 		<resources>
 			<resource>
-				<filtering>true</filtering>
 				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
 			</resource>
 		</resources>
 	</build>
