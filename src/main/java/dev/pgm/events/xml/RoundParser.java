@@ -18,7 +18,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.jdom2.Element;
+import tc.oc.pgm.lib.org.jdom2.Element;
 
 public class RoundParser {
 

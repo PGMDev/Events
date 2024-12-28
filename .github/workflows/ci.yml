@@ -1,9 +1,10 @@
 name: Events CI
 on:
   pull_request:
-    branches: ['*']
+  workflow_dispatch:
   push:
-    branches: ['*']
+    branches:
+      - master
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,11 +17,14 @@ jobs:
         with:
           java-version: 21
           distribution: temurin
-          cache: maven
-      - name: Build jar
-        run: mvn --batch-mode --update-snapshots verify
-      - name: Move generated jar file
-        run: mv target/Events*.jar Events.jar
+      # Configures gradle with caching
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+      # Run "gradlew publish" for origin/master and "gradlew build" for PRs or elsewhere
+      - name: Execute Gradle ${{ (github.repository == 'PGMDev/Events' && github.ref == 'refs/heads/master') && 'Publish' || 'Build' }}
+        run: ./gradlew ${{ (github.repository == 'PGMDev/Events' && github.ref == 'refs/heads/master') && 'publish' || 'build' }}
+        env:
+          GITHUB_TOKEN: ${{ (github.repository == 'PGMDev/Events' && github.ref == 'refs/heads/master') && secrets.GITHUB_TOKEN || '' }}
       - name: Create Release
         id: create_release
         if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/master')
@@ -40,6 +44,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} 
-          asset_path: ./Events.jar
+          asset_path: ./build/libs/Events.jar
           asset_name: Events.jar
           asset_content_type: application/java-archive

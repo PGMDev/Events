@@ -9,10 +9,10 @@ import dev.pgm.events.format.winner.BestOfCalculation;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
+import tc.oc.pgm.lib.org.jdom2.Document;
+import tc.oc.pgm.lib.org.jdom2.Element;
+import tc.oc.pgm.lib.org.jdom2.JDOMException;
+import tc.oc.pgm.lib.org.jdom2.input.SAXBuilder;
 
 public class MapFormatXMLParser {
 
@@ -37,18 +37,16 @@ public class MapFormatXMLParser {
     if (bestOfArgs == null) throw new IllegalArgumentException("No best-of specified on format!");
     int bestOf = Integer.parseInt(bestOfArgs);
 
-    TournamentRoundOptions options =
-        new TournamentRoundOptions(
-            false,
-            true,
-            true,
-            Duration.ofSeconds(20),
-            Duration.ofSeconds(30),
-            Duration.ofSeconds(40),
-            new BestOfCalculation<>(bestOf));
-    TournamentFormat format =
-        new TournamentFormatImpl(
-            EventsPlugin.get().getTeamManager(), options, new RoundReferenceHolder());
+    TournamentRoundOptions options = new TournamentRoundOptions(
+        false,
+        true,
+        true,
+        Duration.ofSeconds(20),
+        Duration.ofSeconds(30),
+        Duration.ofSeconds(40),
+        new BestOfCalculation<>(bestOf));
+    TournamentFormat format = new TournamentFormatImpl(
+        EventsPlugin.get().getTeamManager(), options, new RoundReferenceHolder());
 
     if (!root.getName().toLowerCase().equals("format"))
       System.out.println(
