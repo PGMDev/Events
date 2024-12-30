@@ -21,7 +21,7 @@ tasks.named<ShadowJar>("shadowJar") {
 }
 
 publishing {
-    publications.create<MavenPublication>("Events") {
+    publications.create<MavenPublication>("events") {
         groupId = project.group as String
         artifactId = project.name
         version = project.version as String
