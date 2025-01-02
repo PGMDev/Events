@@ -19,12 +19,11 @@ repositories {
 }
 
 dependencies {
-    implementation("org.incendo:cloud-annotations:2.0.0")
-    implementation("org.jetbrains:annotations:22.0.0")
-
-    compileOnly("net.md-5:bungeecord-chat:1.20-R0.2-deprecated+build.18")
     compileOnly("dev.pgm.paper:paper-api:1.8_1.21.1-SNAPSHOT")
     compileOnly("tc.oc.pgm:core:0.16-SNAPSHOT")
+    compileOnly("net.md-5:bungeecord-chat:1.20-R0.2-deprecated+build.18")
+    compileOnly("org.incendo:cloud-annotations:2.0.0")
+    compileOnly("org.jetbrains:annotations:22.0.0")
 }
 
 group = "dev.pgm"
