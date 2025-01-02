@@ -1,4 +1,6 @@
 name: Events
-main: dev.pgm.events.EventsPlugin
-version: 1.0.0-SNAPSHOT
+description: ${description}
+main: ${mainClass}
+version: ${version} (git-${commitHash})
+website: ${url}
 depend: [PGM]

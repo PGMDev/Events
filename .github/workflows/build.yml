@@ -1,0 +1,40 @@
+name: Build
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    permissions:
+      contents: read
+      packages: write
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout
+        name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: setup-java
+        name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: temurin
+      # Configures gradle with caching
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+      # Run "gradlew publish" for origin/master and "gradlew build" for PRs or elsewhere
+      - name: Execute Gradle ${{ (github.repository == 'PGMDev/Events' && github.ref == 'refs/heads/master') && 'Publish' || 'Build' }}
+        run: ./gradlew ${{ (github.repository == 'PGMDev/Events' && github.ref == 'refs/heads/master') && 'publish' || 'build' }}
+        env:
+          GITHUB_TOKEN: ${{ (github.repository == 'PGMDev/Events' && github.ref == 'refs/heads/master') && secrets.GITHUB_TOKEN || '' }}
+      - id: artifact
+        name: Upload Jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: Events.jar
+          path: build/libs/Events.jar
+          if-no-files-found: error
