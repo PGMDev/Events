@@ -54,7 +54,7 @@ public class TournamentAdminCommands {
     for (TournamentPlayer player : team.getPlayers()) {
       Player bukkit = Bukkit.getPlayer(player.getUUID());
       MatchPlayer mp = matchManager.getPlayer(bukkit);
-      if (Integration.isVanished(bukkit)) Integration.setVanished(mp, false, false);
+      if (bukkit != null && Integration.isVanished(bukkit)) Integration.setVanished(mp, false, false);
     }
 
     teamManager.addTeam(team);
