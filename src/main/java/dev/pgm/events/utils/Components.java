@@ -25,7 +25,7 @@ public class Components {
 
     var payload = ClickEvent.Payload.string(command);
     return Component.text(command, style)
-        .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, payload))
+        .clickEvent(ClickEvent.runCommand(command))
         .hoverEvent(Component.text("Click to run ", NamedTextColor.GREEN)
             .append(Component.text(command, style)));
   }
