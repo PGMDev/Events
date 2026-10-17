@@ -1,7 +1,7 @@
 package dev.pgm.events.ready;
 
 import dev.pgm.events.utils.Response;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.api.party.Party;
 import tc.oc.pgm.api.player.MatchPlayer;

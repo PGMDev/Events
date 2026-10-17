@@ -57,7 +57,7 @@ public class FormatRound extends AbstractRound<FormatRoundSettings> {
 
   @Override
   public Map<TournamentTeam, Integer> scores() {
-    Map<TournamentTeam, Integer> scores = new HashMap<TournamentTeam, Integer>();
+    Map<TournamentTeam, Integer> scores = new HashMap<>();
     if (winner != null) scores.put(winner, 1);
 
     return scores;

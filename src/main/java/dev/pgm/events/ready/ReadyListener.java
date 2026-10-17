@@ -74,10 +74,8 @@ public class ReadyListener implements Listener {
         && manager.canReady(event.getMatch()).isAllowed()
         && manager.canReady(playerTeam.get()).isAllowed()) {
 
-      TextComponent readyHint =
-          text("Mark your team as ready using ", NamedTextColor.GREEN)
-              .append(
-                  command(Style.style(NamedTextColor.YELLOW, TextDecoration.UNDERLINED), "ready"));
+      TextComponent readyHint = text("Mark your team as ready using ", NamedTextColor.GREEN)
+          .append(command(Style.style(NamedTextColor.YELLOW, TextDecoration.UNDERLINED), "ready"));
 
       Bukkit.getScheduler()
           .scheduleSyncDelayedTask(

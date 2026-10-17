@@ -6,8 +6,10 @@ import dev.pgm.events.team.TournamentTeam;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import tc.oc.pgm.util.Audience;
 import tc.oc.pgm.util.StringUtils;
 
 public class DefaultTeamRegistry implements TournamentTeamRegistry {
@@ -47,20 +49,15 @@ public class DefaultTeamRegistry implements TournamentTeamRegistry {
 
   @Override
   public void reload() {
-    Bukkit.getScheduler()
-        .runTaskAsynchronously(
-            EventsPlugin.get(),
-            () -> {
-              List<? extends TournamentTeam> teams = tournamentTeamFetcher.getTeams();
-              Bukkit.getScheduler()
-                  .runTask(
-                      EventsPlugin.get(),
-                      () -> {
-                        teams.forEach(x -> teamMap.put(x.getName(), x));
-                        Bukkit.getOnlinePlayers().stream()
-                            .filter(x -> x.hasPermission("events.staff"))
-                            .forEach(x -> x.sendMessage(ChatColor.AQUA + "Teams reloaded!"));
-                      });
-            });
+    Bukkit.getScheduler().runTaskAsynchronously(EventsPlugin.get(), () -> {
+      List<? extends TournamentTeam> teams = tournamentTeamFetcher.getTeams();
+      Bukkit.getScheduler().runTask(EventsPlugin.get(), () -> {
+        teams.forEach(x -> teamMap.put(x.getName(), x));
+        Bukkit.getOnlinePlayers().stream()
+            .filter(x -> x.hasPermission("events.staff"))
+            .forEach(x -> Audience.get(x)
+                .sendMessage(Component.text("Teams reloaded!", NamedTextColor.AQUA)));
+      });
+    });
   }
 }

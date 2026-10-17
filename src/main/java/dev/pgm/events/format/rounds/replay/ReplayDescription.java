@@ -2,9 +2,9 @@ package dev.pgm.events.format.rounds.replay;
 
 import dev.pgm.events.format.rounds.RoundDescription;
 import dev.pgm.events.format.rounds.RoundPhase;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 
 public class ReplayDescription implements RoundDescription {
 
@@ -15,15 +15,17 @@ public class ReplayDescription implements RoundDescription {
   }
 
   @Override
-  public BaseComponent roundInfo() {
-    if (round.phase() != RoundPhase.FINISHED) // haven't yet decided if we're gonna play if here
-    return new TextComponent(ChatColor.GRAY + "Replay tied round");
+  public Component roundInfo() {
+    // haven't yet decided if we're gonna play if here
+    if (round.phase() != RoundPhase.FINISHED)
+      return Component.text("Replay tied round", NamedTextColor.GRAY);
 
-    if (round.shouldShowInHistory()) // not gonna replay
-    return new TextComponent(
-          "" + ChatColor.GRAY + ChatColor.STRIKETHROUGH + "Not replaying a round");
+    // not gonna replay
+    if (round.shouldShowInHistory())
+      return Component.text("Not replaying a round", NamedTextColor.GRAY)
+          .decorate(TextDecoration.STRIKETHROUGH);
 
-    return new TextComponent("Error replaying a round");
+    return Component.text("Error replaying a round");
   }
 
   @Override

@@ -4,7 +4,9 @@ import dev.pgm.events.team.TournamentTeam;
 import dev.pgm.events.team.TournamentTeamManager;
 import dev.pgm.events.utils.Pair;
 import java.util.Collection;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 
 public class TwoTeamFormattedScore implements FormattedScore {
 
@@ -23,51 +25,39 @@ public class TwoTeamFormattedScore implements FormattedScore {
   }
 
   @Override
-  public String topLine() {
-    String firstName = teamManager.formattedName(topTwo.first.team());
-    String secondName = teamManager.formattedName(topTwo.second.team());
-
-    firstName = addPadding(firstName, secondName);
-    secondName = addPadding(secondName, firstName);
-    return firstName + ChatColor.GRAY + " - " + secondName;
-  }
-
-  private String addPadding(String target, String otherString) {
-    if (target.length() < otherString.length())
-      for (int i = 0; i < otherString.length() - target.length(); i++) target = " " + target;
-
-    return target;
+  public Component topLine() {
+    return teamManager
+        .formattedName(topTwo.first.team())
+        .append(Component.text(" - ", NamedTextColor.GRAY))
+        .append(teamManager.formattedName(topTwo.second.team()));
   }
 
   @Override
-  public String bottomLine() {
-    String bott = "";
-    bott += teamManager.teamColour(topTwo.first.team());
+  public Component bottomLine() {
+    Component first =
+        Component.text(topTwo.first.score(), teamManager.teamColour(topTwo.first.team()));
     if (justWon.contains(topTwo.first.team())) {
-      bott += ChatColor.BOLD;
-      bott += ChatColor.UNDERLINE;
+      first = first.decorate(TextDecoration.BOLD).decorate(TextDecoration.UNDERLINED);
     }
-    bott += topTwo.first.score() + ChatColor.RESET.toString() + ChatColor.GRAY + " - ";
-    bott += teamManager.teamColour(topTwo.second.team());
+
+    Component second =
+        Component.text(topTwo.second.score(), teamManager.teamColour(topTwo.second.team()));
     if (justWon.contains(topTwo.second.team())) {
-      bott += ChatColor.BOLD;
-      bott += ChatColor.UNDERLINE;
+      second = second.decorate(TextDecoration.BOLD).decorate(TextDecoration.UNDERLINED);
     }
-    bott += topTwo.second.score();
-    return bott;
+
+    return first.append(Component.text(" - ", NamedTextColor.GRAY)).append(second);
   }
 
   @Override
-  public String condensed() {
-    return teamManager.formattedName(topTwo.first.team())
-        + " "
-        + ChatColor.WHITE
-        + +topTwo.first.score()
-        + ChatColor.GRAY
-        + " - "
-        + ChatColor.WHITE
-        + topTwo.second.score()
-        + " "
-        + teamManager.formattedName(topTwo.second.team());
+  public Component condensed() {
+    return teamManager
+        .formattedName(topTwo.first.team())
+        .append(Component.space())
+        .append(Component.text(topTwo.first.score(), NamedTextColor.WHITE))
+        .append(Component.text(" - ", NamedTextColor.GRAY))
+        .append(Component.text(topTwo.second.score(), NamedTextColor.WHITE))
+        .append(Component.space())
+        .append(teamManager.formattedName(topTwo.second.team()));
   }
 }

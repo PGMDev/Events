@@ -22,23 +22,20 @@ public class VetoCommands {
       TournamentTeamManager teamManager,
       TournamentFormat format,
       @Argument("map") Integer option) {
-    if (format.currentRound() == null || !(format.currentRound() instanceof VetoRound))
+    if (format.currentRound() == null || !(format.currentRound() instanceof VetoRound vetoRound))
       throw new CommandException("Veto round is not currently running!");
 
-    if (!(sender instanceof Player))
+    if (!(sender instanceof Player player))
       throw new CommandException("Only players can run this command!");
 
-    Player player = (Player) sender;
     Optional<TournamentTeam> team = teamManager.tournamentTeamPlayer((player).getUniqueId());
-    if (!team.isPresent())
-      throw new CommandException("Only players on teams can run this command!");
+    if (team.isEmpty()) throw new CommandException("Only players on teams can run this command!");
 
     if (!team.get().canVeto(player))
       throw new CommandException("You are not registered as a vetoer for this team!");
 
     try {
       int num = option - 1;
-      VetoRound vetoRound = (VetoRound) format.currentRound();
       if (!vetoRound.validVetoNumber(num))
         throw new CommandException("That is not a valid veto number: " + (num + 1));
 

@@ -34,7 +34,6 @@ public abstract class RoundSettings {
    *
    * @param format the tournament format
    * @param id the id of the new round to be created
-   * @return
    */
   public abstract TournamentRound newRound(TournamentFormat format, String id);
 }

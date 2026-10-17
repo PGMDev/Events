@@ -12,7 +12,7 @@ import tc.oc.pgm.api.match.Match;
 
 public class FormatTournamentImpl extends TournamentFormatImpl {
 
-  private FormatRound formatRound;
+  private final FormatRound formatRound;
 
   public FormatTournamentImpl(
       TournamentTeamManager teamManager, RoundReferenceHolder references, FormatRound formatRound) {
@@ -32,7 +32,7 @@ public class FormatTournamentImpl extends TournamentFormatImpl {
 
   @Override
   public void onEnd(Match match, Optional<TournamentTeam> winner) {
-    formatRound.setWinner(match, winner.isPresent() ? winner.get() : null);
+    formatRound.setWinner(match, winner.orElse(null));
   }
 
   public FormatRound getFormatRound() {

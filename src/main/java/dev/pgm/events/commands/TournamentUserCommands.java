@@ -5,11 +5,12 @@ import dev.pgm.events.format.TournamentFormat;
 import dev.pgm.events.format.rounds.RoundDescription;
 import dev.pgm.events.format.rounds.format.FormatTournamentImpl;
 import java.util.Optional;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
 import tc.oc.pgm.lib.org.incendo.cloud.annotations.Command;
 import tc.oc.pgm.lib.org.incendo.cloud.annotations.CommandDescription;
+import tc.oc.pgm.util.Audience;
 
 @Command("tourney|tournament|tm|events")
 public class TournamentUserCommands {
@@ -17,19 +18,22 @@ public class TournamentUserCommands {
   @Command("score")
   @CommandDescription("Shows the current score in the tournament")
   public void currentScore(CommandSender sender, TournamentFormat format) {
+    Audience audience = Audience.get(sender);
     if (format instanceof FormatTournamentImpl) {
-      String formatName = ((FormatTournamentImpl) format).getFormatRound().settings().name();
-      sender.sendMessage(ChatColor.YELLOW + "For " + formatName + ":");
-      sender.sendMessage(format.currentScore().condensed());
+      String formatName =
+          ((FormatTournamentImpl) format).getFormatRound().settings().name();
+      audience.sendMessage(Component.text("For " + formatName + ":", NamedTextColor.YELLOW));
+      audience.sendMessage(format.currentScore().condensed());
 
       Optional<TournamentFormat> parentOptional =
           EventsPlugin.get().getTournamentManager().currentTournament();
       if (parentOptional.isPresent()) {
-        sender.sendMessage(ChatColor.YELLOW + "Overall score (excluding " + formatName + "):");
-        sender.sendMessage(parentOptional.get().currentScore().condensed());
+        audience.sendMessage(
+            Component.text("Overall score (excluding " + formatName + "):", NamedTextColor.YELLOW));
+        audience.sendMessage(parentOptional.get().currentScore().condensed());
       }
     } else {
-      sender.sendMessage(format.currentScore().condensed());
+      audience.sendMessage(format.currentScore().condensed());
     }
   }
 
@@ -38,15 +42,18 @@ public class TournamentUserCommands {
   public void rounds(CommandSender sender, TournamentFormat format) {
     String header = "Event Rounds";
     if (format instanceof FormatTournamentImpl)
-      header += " (" + ((FormatTournamentImpl) format).getFormatRound().settings().name() + ")";
+      header +=
+          " (" + ((FormatTournamentImpl) format).getFormatRound().settings().name() + ")";
 
-    sender.sendMessage(
-        ChatColor.GOLD + "------- " + ChatColor.AQUA + header + ChatColor.GOLD + " -------");
+    Audience audience = Audience.get(sender);
+    audience.sendMessage(Component.text("------- ", NamedTextColor.GOLD)
+        .append(Component.text(header, NamedTextColor.AQUA))
+        .append(Component.text(" -------", NamedTextColor.GOLD)));
+
     int round = 1;
     for (RoundDescription roundDescription : format.roundsInformation()) {
-      String roundString = ChatColor.GOLD + Integer.toString(round) + ". ";
-      TextComponent roundPart = new TextComponent(roundString);
-      sender.sendMessage(roundPart, roundDescription.roundInfo());
+      audience.sendMessage(
+          Component.text(round + ". ", NamedTextColor.GOLD).append(roundDescription.roundInfo()));
       round++;
     }
   }

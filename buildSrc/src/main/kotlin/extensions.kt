@@ -1,16 +1,14 @@
 import org.gradle.api.Project
-import java.io.ByteArrayOutputStream
+import org.gradle.api.provider.Provider
 
 
-fun Project.latestCommitHash(): String {
+fun Project.latestCommitHash(): Provider<String> {
     return runGitCommand(listOf("rev-parse", "--short", "HEAD"))
 }
 
-fun Project.runGitCommand(args: List<String>): String {
-    val byteOut = ByteArrayOutputStream()
-    exec {
-        commandLine = listOf("git") + args
-        standardOutput = byteOut
-    }
-    return byteOut.toString(Charsets.UTF_8.name()).trim()
+fun Project.runGitCommand(args: List<String>): Provider<String> {
+    return providers.exec {
+        commandLine("git")
+        args(args)
+    }.standardOutput.asText.map { it.trim() }
 }

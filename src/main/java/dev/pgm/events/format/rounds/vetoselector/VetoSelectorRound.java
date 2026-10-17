@@ -30,7 +30,7 @@ public class VetoSelectorRound extends AbstractRound<VetoSelectorSettings> {
 
   @Override
   public Map<TournamentTeam, Integer> scores() {
-    Map<TournamentTeam, Integer> scores = new HashMap<TournamentTeam, Integer>();
+    Map<TournamentTeam, Integer> scores = new HashMap<>();
     if (selectingTeam != null) scores.put(selectingTeam, 1);
 
     return scores;

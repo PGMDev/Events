@@ -3,7 +3,7 @@ package dev.pgm.events.utils;
 import static net.kyori.adventure.text.Component.text;
 
 import net.kyori.adventure.text.Component;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class Response {
 

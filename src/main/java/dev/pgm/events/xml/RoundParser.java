@@ -16,7 +16,7 @@ import dev.pgm.events.format.rounds.vetoselector.VetoSelectorRound;
 import dev.pgm.events.format.rounds.vetoselector.VetoSelectorSettings;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import tc.oc.pgm.lib.org.jdom2.Element;
 
@@ -29,8 +29,8 @@ public class RoundParser {
       case "result-from" -> ResultFromParser.parse(format, round);
       case "format" -> FormatParser.parse(format, round);
       case "veto-selector" -> new VetoSelectorRound(format, new VetoSelectorSettings());
-      default -> throw new IllegalArgumentException(
-          "Round " + round.getName() + " is not supported!");
+      default ->
+        throw new IllegalArgumentException("Round " + round.getName() + " is not supported!");
     };
   }
 
@@ -56,7 +56,7 @@ public class RoundParser {
       String id = element.getAttributeValue("id", "veto");
       Element order = element.getChild("order");
       if (order == null) throw new IllegalArgumentException("Order element is missing from veto!");
-      Duration vetoTime = Duration.ofSeconds(30);
+      Duration vetoTime;
       try {
         vetoTime = Duration.ofSeconds(Long.parseLong(order.getAttributeValue("time", "30")));
       } catch (NumberFormatException e) {
@@ -65,7 +65,7 @@ public class RoundParser {
       }
 
       TournamentRound decider =
-          RoundParser.parse(format, element.getChild("decider").getChildren().get(0));
+          RoundParser.parse(format, element.getChild("decider").getChildren().getFirst());
 
       List<VetoOption> options = constructVetoOptions(format, element.getChild("options"));
       List<VetoSettings.Veto> vetoList = constructVetoList(order, options.size());
@@ -76,8 +76,8 @@ public class RoundParser {
     }
 
     private static List<VetoSettings.Veto> constructVetoList(Element element, int numOptions) {
-      ArrayList<VetoSettings.Veto> vetos = new ArrayList<VetoSettings.Veto>();
-      if (element.getChildren().size() == 0) {
+      ArrayList<VetoSettings.Veto> vetos = new ArrayList<>();
+      if (element.getChildren().isEmpty()) {
         int until = Integer.parseInt(element.getAttributeValue("ban-until", "1"));
         int startingTeam = Integer.parseInt(element.getAttributeValue("starting-team", "2"));
         int numTeams = Integer.parseInt(element.getAttributeValue("teams", "2"));
@@ -126,15 +126,15 @@ public class RoundParser {
     }
 
     private static List<VetoOption> constructVetoOptions(TournamentFormat format, Element element) {
-      ArrayList<VetoOption> options = new ArrayList<VetoOption>();
+      ArrayList<VetoOption> options = new ArrayList<>();
 
       for (Element child : element.getChildren()) {
         RoundSettings round = RoundParser.parse(format, child).settings();
         String defaultName = "Name not defined in XML!";
         if (round instanceof SingleRoundOptions) defaultName = ((SingleRoundOptions) round).map();
 
-        options.add(
-            new VetoOption(Arrays.asList(round), child.getAttributeValue("name", defaultName)));
+        options.add(new VetoOption(
+            Collections.singletonList(round), child.getAttributeValue("name", defaultName)));
       }
 
       return options;
@@ -161,7 +161,7 @@ public class RoundParser {
       if (bestOfArgs == null) throw new IllegalArgumentException("No best-of specified on format!");
       int bestOf = Integer.parseInt(bestOfArgs);
 
-      List<RoundSettings> rounds = new ArrayList<RoundSettings>();
+      List<RoundSettings> rounds = new ArrayList<>();
       for (Element child : element.getChildren()) {
         TournamentRound round = RoundParser.parse(format, child);
         rounds.add(round.settings());

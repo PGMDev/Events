@@ -38,7 +38,6 @@ public class FormatRoundSettings extends RoundSettings {
 
   @Override
   public TournamentRound newRound(TournamentFormat format, String id) {
-    return new FormatRoundSettings(id, name, new ArrayList<RoundSettings>(rounds), bestOf)
-        .newRound(format);
+    return new FormatRoundSettings(id, name, new ArrayList<>(rounds), bestOf).newRound(format);
   }
 }

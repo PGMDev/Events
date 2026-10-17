@@ -1,19 +1,19 @@
 package dev.pgm.events.format.rounds;
 
-import net.md_5.bungee.api.chat.BaseComponent;
+import net.kyori.adventure.text.Component;
 
 public class SimpleRoundDescription implements RoundDescription {
 
   private final String status;
-  private final BaseComponent roundInfo;
+  private final Component roundInfo;
 
-  public SimpleRoundDescription(String status, BaseComponent roundInfo) {
+  public SimpleRoundDescription(String status, Component roundInfo) {
     this.status = status;
     this.roundInfo = roundInfo;
   }
 
   @Override
-  public BaseComponent roundInfo() {
+  public Component roundInfo() {
     return roundInfo;
   }
 

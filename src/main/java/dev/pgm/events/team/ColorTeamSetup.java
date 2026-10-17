@@ -2,14 +2,14 @@ package dev.pgm.events.team;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.format.NamedTextColor;
 import tc.oc.pgm.teams.Team;
 
 public class ColorTeamSetup implements TeamSetup {
@@ -17,7 +17,7 @@ public class ColorTeamSetup implements TeamSetup {
   private final List<TournamentTeam> currentTeams;
   // not active at the moment
   private final Set<TournamentTeam> unassigned;
-  private final Map<ChatColor, TournamentTeam> colorTeams = new EnumMap<>(ChatColor.class);
+  private final Map<NamedTextColor, TournamentTeam> colorTeams = new HashMap<>();
 
   // active at the moment
   private final Map<TournamentTeam, Team> assigned = new IdentityHashMap<>();
@@ -33,16 +33,16 @@ public class ColorTeamSetup implements TeamSetup {
   }
 
   @Override
-  public ChatColor colour(TournamentTeam tournamentTeam) {
+  public NamedTextColor colour(TournamentTeam tournamentTeam) {
     if (assigned.containsKey(tournamentTeam)) {
-      return assigned.get(tournamentTeam).getColor();
+      return assigned.get(tournamentTeam).getTextColor();
     }
-    for (ChatColor colour : colorTeams.keySet()) {
-      if (colorTeams.get(colour).equals(tournamentTeam)) {
-        return colour;
+    for (Map.Entry<NamedTextColor, TournamentTeam> entry : colorTeams.entrySet()) {
+      if (entry.getValue().equals(tournamentTeam)) {
+        return entry.getKey();
       }
     }
-    return ChatColor.WHITE;
+    return NamedTextColor.WHITE;
   }
 
   @Override
@@ -56,14 +56,14 @@ public class ColorTeamSetup implements TeamSetup {
     List<Team> unassignedTeams = new ArrayList<>();
 
     for (Team team : teams) {
-      TournamentTeam colourTeam = colorTeams.get(team.getColor());
+      TournamentTeam colourTeam = colorTeams.get(team.getTextColor());
       if (colourTeam != null && !this.assigned.containsKey(colourTeam)) {
         // team with that colour, lets assign the
         assignTeam(team, colourTeam);
         continue;
       }
 
-      // no team with that colour, time to do a bit of soul searching and add the team to the cool
+      // no team with that colour, time to do a bit of soul-searching and add the team to the cool
       // list
       unassignedTeams.add(team);
     }
@@ -106,7 +106,7 @@ public class ColorTeamSetup implements TeamSetup {
   private void reset() {
     for (TournamentTeam tournamentTeam : assigned.keySet()) {
       Team team = assigned.get(tournamentTeam);
-      TournamentTeam deleted = colorTeams.put(team.getColor(), tournamentTeam);
+      TournamentTeam deleted = colorTeams.put(team.getTextColor(), tournamentTeam);
 
       // there should never be a duplicate but just in case remove it here
       if (deleted != null && !deleted.equals(tournamentTeam)) {

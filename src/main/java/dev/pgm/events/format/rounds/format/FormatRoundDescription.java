@@ -1,10 +1,9 @@
 package dev.pgm.events.format.rounds.format;
 
 import dev.pgm.events.format.rounds.RoundDescription;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 public class FormatRoundDescription implements RoundDescription {
 
@@ -15,22 +14,15 @@ public class FormatRoundDescription implements RoundDescription {
   }
 
   @Override
-  public BaseComponent roundInfo() {
-    TextComponent component =
-        new TextComponent(
-            formatRound.settings().name() + " - Best of " + formatRound.settings().bestOf());
-    if (formatRound.formatTournament() != null)
-      component.setHoverEvent(
-          new HoverEvent(
-              HoverEvent.Action.SHOW_TEXT,
-              new BaseComponent[] {new TextComponent(formatRound.formattedScore().condensed())}));
-    else
-      component.setHoverEvent(
-          new HoverEvent(
-              HoverEvent.Action.SHOW_TEXT,
-              new BaseComponent[] {new TextComponent(ChatColor.YELLOW + "Loading...")}));
-
-    return component;
+  public Component roundInfo() {
+    Component base = Component.text(
+        formatRound.settings().name() + " - Best of " + formatRound.settings().bestOf());
+    if (formatRound.formatTournament() != null) {
+      return base.hoverEvent(HoverEvent.showText(formatRound.formattedScore().condensed()));
+    } else {
+      return base.hoverEvent(
+          HoverEvent.showText(Component.text("Loading...", NamedTextColor.YELLOW)));
+    }
   }
 
   @Override

@@ -3,7 +3,8 @@ package dev.pgm.events.team;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import tc.oc.pgm.api.party.Competitor;
 import tc.oc.pgm.teams.Team;
 
@@ -33,13 +34,13 @@ public interface TournamentTeamManager {
 
   Optional<Team> fromTournamentTeam(TournamentTeam tournamentTeam);
 
-  ChatColor teamColour(TournamentTeam tournamentTeam);
+  NamedTextColor teamColour(TournamentTeam tournamentTeam);
 
-  default String formattedName(Competitor team) {
-    return tournamentTeam(team).map(this::formattedName).orElse("NULL");
+  default Component formattedName(Competitor team) {
+    return tournamentTeam(team).map(this::formattedName).orElse(Component.text("NULL"));
   }
 
-  String formattedName(TournamentTeam tournamentTeam);
+  Component formattedName(TournamentTeam tournamentTeam);
 
   Collection<? extends TournamentTeam> teams();
 

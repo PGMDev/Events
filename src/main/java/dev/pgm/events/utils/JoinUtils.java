@@ -18,8 +18,7 @@ public class JoinUtils {
   }
 
   public static boolean isPartyFull(Party party) {
-    if (party instanceof Team) {
-      Team team = (Team) party;
+    if (party instanceof Team team) {
       return team.getSize() >= team.getMaxPlayers();
     }
     return false;

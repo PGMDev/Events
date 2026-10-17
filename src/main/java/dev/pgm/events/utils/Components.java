@@ -23,11 +23,11 @@ public class Components {
     for (String arg : cmdArgs) builder.append(" ").append(Components.toArgument(arg));
     command = builder.toString();
 
+    var payload = ClickEvent.Payload.string(command);
     return Component.text(command, style)
-        .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, command))
-        .hoverEvent(
-            Component.text("Click to run ", NamedTextColor.GREEN)
-                .append(Component.text(command, style)));
+        .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, payload))
+        .hoverEvent(Component.text("Click to run ", NamedTextColor.GREEN)
+            .append(Component.text(command, style)));
   }
 
   private static String toArgument(String input) {

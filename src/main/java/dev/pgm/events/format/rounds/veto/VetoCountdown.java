@@ -6,7 +6,6 @@ import dev.pgm.events.team.TournamentTeam;
 import java.time.Duration;
 import java.util.Optional;
 import net.kyori.adventure.text.Component;
-import net.md_5.bungee.api.chat.BaseComponent;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.countdowns.MatchCountdown;
 
@@ -35,9 +34,9 @@ public class VetoCountdown extends MatchCountdown {
     long secondsLeft = remaining.getSeconds();
     long origSeconds = total.getSeconds();
 
+    // announce it
     if ((secondsLeft <= 10 && secondsLeft % 5 == 0)
-        || (secondsLeft % 30 == 0 && origSeconds - secondsLeft > 20)) // announce it
-    announceRemaining();
+        || (secondsLeft % 30 == 0 && origSeconds - secondsLeft > 20)) announceRemaining();
   }
 
   @Override
@@ -48,11 +47,11 @@ public class VetoCountdown extends MatchCountdown {
 
   private void announceRemaining() {
     Optional<TournamentTeam> teamOpt = controller.picking();
-    if (!teamOpt.isPresent()) return;
+    if (teamOpt.isEmpty()) return;
 
     TournamentTeam team = teamOpt.get();
     team.sendMessage(vetoRound.describe().optionsHeader(controller.currentType()));
-    for (BaseComponent[] comp :
+    for (Component comp :
         vetoRound.describe().formatOptions(controller.remainingOptions(), controller.currentType()))
       team.sendMessage(comp);
 

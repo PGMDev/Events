@@ -5,7 +5,7 @@ import dev.pgm.events.EventsPlugin;
 /**
  * Config options used around the plugin.
  *
- * <p>Values are are stored in the <code>`resources/config.yml`</code> file.
+ * <p>Values are stored in the <code>`resources/config.yml`</code> file.
  */
 public class AppData {
 

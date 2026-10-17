@@ -13,13 +13,15 @@ import dev.pgm.events.team.TournamentTeamManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import tc.oc.pgm.api.PGM;
 import tc.oc.pgm.api.match.Match;
+import tc.oc.pgm.util.Audience;
 import tc.oc.pgm.util.bukkit.Events;
 
 public class TournamentFormatImpl implements TournamentFormat {
@@ -154,23 +156,18 @@ public class TournamentFormatImpl implements TournamentFormat {
     Bukkit.getScheduler()
         .scheduleSyncDelayedTask(
             EventsPlugin.get(),
-            new Runnable() {
-
-              @Override
-              public void run() {
-                Bukkit.broadcastMessage(scores.condensed());
-              }
-            },
+            () -> Audience.PROVIDER.players().sendMessage(scores.condensed()),
             3 * 20);
   }
 
   public void onEnd(Match match, Optional<TournamentTeam> winner) {
     if (tournamentRoundOptions.shouldAnnounceWinner()) {
       if (winner.isPresent()) {
-        Bukkit.broadcastMessage(
-            teamManager.formattedName(winner.get()) + ChatColor.GOLD + " wins this round!");
+        match.sendMessage(teamManager
+            .formattedName(winner.get())
+            .append(Component.text(" wins this round!", NamedTextColor.GOLD)));
       } else {
-        Bukkit.broadcastMessage(ChatColor.GRAY + "This round has ended in a draw!");
+        match.sendMessage(Component.text("This round has ended in a draw!", NamedTextColor.GRAY));
       }
     }
 

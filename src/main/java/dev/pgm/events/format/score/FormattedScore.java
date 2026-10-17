@@ -1,10 +1,12 @@
 package dev.pgm.events.format.score;
 
+import net.kyori.adventure.text.Component;
+
 public interface FormattedScore {
 
-  String topLine();
+  Component topLine();
 
-  String bottomLine();
+  Component bottomLine();
 
-  String condensed();
+  Component condensed();
 }

@@ -18,14 +18,12 @@ public class MatchLoadListener implements Listener {
 
   @EventHandler
   public void onLoad(MatchLoadEvent event) {
-    if (!event
-        .getMatch()
-        .hasModule(
-            TeamMatchModule
-                .class)) // shouldn't really ever happen, maybe ffa? just ignore that game
-    return;
+    var tmm = event.getMatch().getModule(TeamMatchModule.class);
+    if (tmm == null) return;
 
-    Collection<Team> teams = event.getMatch().getModule(TeamMatchModule.class).getTeams();
+    Collection<Team> teams = tmm.getTeams();
+    if (teams.isEmpty()) return;
+
     teamManager.setupTeams(teams);
   }
 }

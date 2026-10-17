@@ -13,9 +13,8 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import tc.oc.pgm.api.match.Match;
 
 public class VetoRound extends AbstractRound<VetoSettings> {
@@ -40,19 +39,18 @@ public class VetoRound extends AbstractRound<VetoSettings> {
   @Override
   public void load() {
     setPhase(RoundPhase.WAITING);
-    vetoDecider =
-        new VetoTournamentImpl(
-            tournament().teamManager(),
-            new TournamentRoundOptions(
-                false,
-                false,
-                false,
-                Duration.ofSeconds(20),
-                Duration.ofSeconds(30),
-                Duration.ofSeconds(40),
-                new BestOfCalculation<>(1)),
-            this,
-            tournament().references());
+    vetoDecider = new VetoTournamentImpl(
+        tournament().teamManager(),
+        new TournamentRoundOptions(
+            false,
+            false,
+            false,
+            Duration.ofSeconds(20),
+            Duration.ofSeconds(30),
+            Duration.ofSeconds(40),
+            new BestOfCalculation<>(1)),
+        this,
+        tournament().references());
 
     TournamentRound decider = settings().decider().newRound(vetoDecider);
     if (decider instanceof VetoSelectorRound)
@@ -88,12 +86,14 @@ public class VetoRound extends AbstractRound<VetoSettings> {
     tournament().addRoundAfterCurrent(controller.toPlay());
 
     // move the below formatting to the description class
-    Bukkit.broadcastMessage(
-        ChatColor.GOLD + "------ " + ChatColor.AQUA + "Veto Finished" + ChatColor.GOLD + " ------");
-    for (int i = 0; i < controller.toPlay().size(); i++)
-      Bukkit.broadcast(
-          new TextComponent(ChatColor.GOLD + Integer.toString(i + 1) + ". "),
-          controller.toPlay().get(i).describe().roundInfo());
+    match.sendMessage(Component.text("------ ", NamedTextColor.GOLD)
+        .append(Component.text("Veto Finished", NamedTextColor.AQUA))
+        .append(Component.text(" ------", NamedTextColor.GOLD)));
+
+    for (int i = 0; i < controller.toPlay().size(); i++) {
+      match.sendMessage(Component.text((i + 1) + ". ", NamedTextColor.GOLD)
+          .append(controller.toPlay().get(i).describe().roundInfo()));
+    }
 
     tournament().nextRound(match);
   }
@@ -101,7 +101,7 @@ public class VetoRound extends AbstractRound<VetoSettings> {
   private void cycleVeto(Match match) {
     // cycle to next veto
     Optional<TournamentTeam> picking = picking();
-    if (!picking.isPresent()) {
+    if (picking.isEmpty()) {
       tryAutoVeto(match);
       return;
     }
@@ -135,7 +135,7 @@ public class VetoRound extends AbstractRound<VetoSettings> {
 
   public void randomVeto(Match match) {
     Optional<TournamentTeam> picking = picking();
-    if (!picking.isPresent()) {
+    if (picking.isEmpty()) {
       tryAutoVeto(match);
       return;
     }
@@ -160,12 +160,11 @@ public class VetoRound extends AbstractRound<VetoSettings> {
   private void doVeto(Match match, TournamentTeam team, int pick) {
     match.getCountdown().cancelAll(VetoCountdown.class);
     VetoHistory history = controller.veto(team, pick);
-    if (history.shouldAnnounce()) Bukkit.broadcastMessage(description.formatHistory(history));
+    if (history.shouldAnnounce()) match.sendMessage(description.formatHistoryComponent(history));
 
     // maybe move this stuff away?
     if (!canVeto()) endVeto(match);
-    else // cycle veto
-    cycleVeto(match);
+    else cycleVeto(match);
   }
 
   public void veto(Match match, TournamentTeam team, int pick) {

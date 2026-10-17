@@ -76,7 +76,7 @@ public class VetoSettings extends RoundSettings {
   public static class Veto {
     public final VetoType vetoType;
     public final int team;
-    public Duration vetoDuration;
+    public final Duration vetoDuration;
     public final boolean shouldAnnounce;
 
     public Veto(VetoType vetoType, int team, Duration vetoDuration, boolean shouldAnnounce) {

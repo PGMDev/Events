@@ -28,11 +28,10 @@ public class VetoTournamentImpl extends TournamentFormatImpl {
   @Override
   public void onEnd(Match match, Optional<TournamentTeam> winner) {
     // list in descending order of score
-    List<TournamentTeam> vetoOrder =
-        this.scores().scores().stream()
-            .sorted(Comparator.comparingInt(Score::score).reversed())
-            .map(Score::team)
-            .collect(Collectors.toList());
+    List<TournamentTeam> vetoOrder = this.scores().scores().stream()
+        .sorted(Comparator.comparingInt(Score::score).reversed())
+        .map(Score::team)
+        .collect(Collectors.toList());
 
     // unregister everything with this fake event
     unregisterAll();

@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
-import net.md_5.bungee.api.chat.BaseComponent;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import tc.oc.pgm.util.Audience;
 
 public interface TournamentTeam {
 
@@ -19,15 +20,11 @@ public interface TournamentTeam {
   }
 
   default void sendMessage(String message) {
-    forEachPlayer(x -> x.sendMessage(message));
+    sendMessage(Component.text(message));
   }
 
-  default void sendMessage(BaseComponent component) {
-    forEachPlayer(x -> x.sendMessage(component));
-  }
-
-  default void sendMessage(BaseComponent... components) {
-    forEachPlayer(x -> x.sendMessage(components));
+  default void sendMessage(Component component) {
+    forEachPlayer(p -> Audience.get(p).sendMessage(component));
   }
 
   default void forEachPlayer(Consumer<Player> func) {

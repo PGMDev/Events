@@ -2,8 +2,8 @@ package dev.pgm.events.utils;
 
 public class Pair<T, U> {
 
-  public T first;
-  public U second;
+  public final T first;
+  public final U second;
 
   public Pair(T first, U second) {
     this.first = first;
@@ -11,6 +11,6 @@ public class Pair<T, U> {
   }
 
   public static <T, U> Pair<T, U> create(T first, U second) {
-    return new Pair<T, U>(first, second);
+    return new Pair<>(first, second);
   }
 }

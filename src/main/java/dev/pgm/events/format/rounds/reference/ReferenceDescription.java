@@ -1,8 +1,7 @@
 package dev.pgm.events.format.rounds.reference;
 
 import dev.pgm.events.format.rounds.RoundDescription;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.kyori.adventure.text.Component;
 
 public class ReferenceDescription implements RoundDescription {
 
@@ -13,8 +12,8 @@ public class ReferenceDescription implements RoundDescription {
   }
 
   @Override
-  public BaseComponent roundInfo() {
-    return new TextComponent(
+  public Component roundInfo() {
+    return Component.text(
         "Reference round -> referencing: " + referenceRound.settings().targetID());
   }
 

@@ -24,8 +24,8 @@ import tc.oc.pgm.start.StartMatchModule;
 public class SingleRound extends AbstractRound<SingleRoundOptions> {
 
   private final Map<TournamentTeam, Integer> scoreMap;
-  private String fullMapName = "";
-  private RoundDescription roundDescription;
+  private final String fullMapName;
+  private final RoundDescription roundDescription;
   private RoundPhase roundPhase;
 
   public SingleRound(TournamentFormat format, SingleRoundOptions options) {
@@ -55,8 +55,9 @@ public class SingleRound extends AbstractRound<SingleRoundOptions> {
   public void start(Match match) {
     this.roundPhase = RoundPhase.WAITING;
     // cycle to the map, start in 10 seconds
-    if (settings().cycleCountdown() != null)
-      match.getModule(CycleMatchModule.class).startCountdown(settings().cycleCountdown());
+    var cmm = match.getModule(CycleMatchModule.class);
+    if (cmm != null && settings().cycleCountdown() != null)
+      cmm.startCountdown(settings().cycleCountdown());
   }
 
   @Override

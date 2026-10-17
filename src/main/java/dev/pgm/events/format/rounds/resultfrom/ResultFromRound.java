@@ -10,7 +10,7 @@ import tc.oc.pgm.api.match.Match;
 
 public class ResultFromRound extends AbstractRound<ResultFromSettings> {
 
-  private TournamentFormat format;
+  private final TournamentFormat format;
 
   public ResultFromRound(TournamentFormat format, ResultFromSettings settings) {
     super(format, settings);

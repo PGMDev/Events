@@ -82,7 +82,7 @@ public class PlayerJoinListen implements Listener {
   public void vanish(PlayerJoinEvent event) {
     if (!event.getPlayer().isOp()
         && event.getPlayer().hasPermission("events.spectate.vanish")
-        && !manager.playerTeam(event.getPlayer().getUniqueId()).isPresent())
+        && manager.playerTeam(event.getPlayer().getUniqueId()).isEmpty())
       Integration.setVanished(PGM.get().getMatchManager().getPlayer(event.getPlayer()), true, true);
   }
 

@@ -6,8 +6,9 @@ import dev.pgm.events.team.TournamentPlayer;
 import dev.pgm.events.team.TournamentTeam;
 import dev.pgm.events.team.TournamentTeamManager;
 import dev.pgm.events.xml.MapFormatXMLParser;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,6 +22,7 @@ import tc.oc.pgm.lib.org.incendo.cloud.annotations.Argument;
 import tc.oc.pgm.lib.org.incendo.cloud.annotations.Command;
 import tc.oc.pgm.lib.org.incendo.cloud.annotations.CommandDescription;
 import tc.oc.pgm.lib.org.incendo.cloud.annotations.Permission;
+import tc.oc.pgm.util.Audience;
 
 @Command("tourney|tournament|tm|events")
 public class TournamentAdminCommands {
@@ -34,7 +36,7 @@ public class TournamentAdminCommands {
       Match match,
       @Argument("format") @Greedy String pool) {
     manager.createTournament(match, MapFormatXMLParser.parse(pool));
-    sender.sendMessage(ChatColor.GOLD + "Starting tournament.");
+    Audience.get(sender).sendMessage(Component.text("Starting tournament.", NamedTextColor.GOLD));
   }
 
   @Command("register <team>")
@@ -54,27 +56,28 @@ public class TournamentAdminCommands {
     for (TournamentPlayer player : team.getPlayers()) {
       Player bukkit = Bukkit.getPlayer(player.getUUID());
       MatchPlayer mp = matchManager.getPlayer(bukkit);
-      if (bukkit != null && Integration.isVanished(bukkit)) Integration.setVanished(mp, false, false);
+      if (bukkit != null && Integration.isVanished(bukkit))
+        Integration.setVanished(mp, false, false);
     }
 
     teamManager.addTeam(team);
-    sender.sendMessage(ChatColor.YELLOW + "Added team " + team.getName() + "!");
+    Audience.get(sender)
+        .sendMessage(Component.text("Added team " + team.getName() + "!", NamedTextColor.YELLOW));
   }
 
   @Command("list")
   @CommandDescription("List all loaded teams")
   @Permission("events.staff")
   public void list(CommandSender sender, TournamentTeamRegistry registry) {
-    sender.sendMessage(
-        ChatColor.GOLD
-            + "------- "
-            + ChatColor.AQUA
-            + "Registered Teams"
-            + ChatColor.GOLD
-            + " -------");
+    Audience audience = Audience.get(sender);
+    audience.sendMessage(Component.text("------- ", NamedTextColor.GOLD)
+        .append(Component.text("Registered Teams", NamedTextColor.AQUA))
+        .append(Component.text(" -------", NamedTextColor.GOLD)));
     for (TournamentTeam team : registry.getTeams())
-      sender.sendMessage(ChatColor.AQUA + "- " + team.getName());
-    sender.sendMessage(ChatColor.YELLOW + "Run /tourney info <team> to see player roster!");
+      audience.sendMessage(
+          Component.text("- ", NamedTextColor.AQUA).append(Component.text(team.getName())));
+    audience.sendMessage(
+        Component.text("Run /tourney info <team> to see player roster!", NamedTextColor.YELLOW));
   }
 
   @Command("info <team>")
@@ -87,20 +90,17 @@ public class TournamentAdminCommands {
     TournamentTeam team = registry.getTeam(name);
     if (team == null) throw new CommandException("Team not found!");
 
-    sender.sendMessage(
-        ChatColor.GOLD
-            + "------- "
-            + ChatColor.AQUA
-            + team.getName()
-            + ChatColor.GOLD
-            + " -------");
+    Audience audience = Audience.get(sender);
+    audience.sendMessage(Component.text("------- ", NamedTextColor.GOLD)
+        .append(Component.text(team.getName(), NamedTextColor.AQUA))
+        .append(Component.text(" -------", NamedTextColor.GOLD)));
     for (TournamentPlayer player : team.getPlayers()) {
-      String playerName =
-          player.getUUID().toString() + ChatColor.GRAY + " (player hasn't logged on)";
+      String playerName = player.getUUID().toString() + " (player hasn't logged on)";
       OfflinePlayer offline = Bukkit.getOfflinePlayer(player.getUUID());
       if (offline.getName() != null) playerName = offline.getName();
 
-      sender.sendMessage(ChatColor.AQUA + "- " + playerName);
+      audience.sendMessage(
+          Component.text("- ", NamedTextColor.AQUA).append(Component.text(playerName)));
     }
   }
 
@@ -109,6 +109,7 @@ public class TournamentAdminCommands {
   @Permission("events.staff")
   public void clear(CommandSender sender, TournamentTeamManager teamManager) {
     teamManager.clear();
-    sender.sendMessage(ChatColor.YELLOW + "Unregistered all teams!");
+    Audience.get(sender)
+        .sendMessage(Component.text("Unregistered all teams!", NamedTextColor.YELLOW));
   }
 }
