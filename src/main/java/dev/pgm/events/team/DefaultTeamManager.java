@@ -1,5 +1,7 @@
 package dev.pgm.events.team;
 
+import static net.kyori.adventure.text.Component.text;
+
 import dev.pgm.events.utils.JoinUtils;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -104,7 +106,7 @@ public class DefaultTeamManager implements TournamentTeamManager {
 
   @Override
   public Component formattedName(TournamentTeam tournamentTeam) {
-    return Component.text(tournamentTeam.getName(), teamColour(tournamentTeam));
+    return text(tournamentTeam.getName(), teamColour(tournamentTeam));
   }
 
   @Override

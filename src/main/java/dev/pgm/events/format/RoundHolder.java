@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import tc.oc.pgm.api.match.Match;
 
 class RoundHolder {
@@ -55,7 +54,7 @@ class RoundHolder {
     return rounds.stream()
         .filter(x -> x.shouldShowInHistory() || context == Context.DEBUG)
         .map(TournamentRound::describe)
-        .collect(Collectors.toList());
+        .toList();
   }
 
   public Scores scores(TournamentTeamManager teamManager) {

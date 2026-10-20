@@ -1,5 +1,7 @@
 package dev.pgm.events.utils;
 
+import static net.kyori.adventure.text.Component.text;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -23,11 +25,9 @@ public class Components {
     for (String arg : cmdArgs) builder.append(" ").append(Components.toArgument(arg));
     command = builder.toString();
 
-    var payload = ClickEvent.Payload.string(command);
-    return Component.text(command, style)
+    return text(command, style)
         .clickEvent(ClickEvent.runCommand(command))
-        .hoverEvent(Component.text("Click to run ", NamedTextColor.GREEN)
-            .append(Component.text(command, style)));
+        .hoverEvent(text("Click to run ", NamedTextColor.GREEN).append(text(command, style)));
   }
 
   private static String toArgument(String input) {

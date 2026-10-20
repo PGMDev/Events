@@ -8,8 +8,7 @@ import dev.pgm.events.team.TournamentTeam;
 import dev.pgm.events.team.TournamentTeamManager;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import org.jspecify.annotations.Nullable;
 import tc.oc.pgm.api.match.Match;
 
 public class VetoTournamentImpl extends TournamentFormatImpl {
@@ -26,15 +25,12 @@ public class VetoTournamentImpl extends TournamentFormatImpl {
   }
 
   @Override
-  public void onEnd(Match match, Optional<TournamentTeam> winner) {
+  public void onEnd(Match match, @Nullable TournamentTeam winner) {
     // list in descending order of score
     List<TournamentTeam> vetoOrder = this.scores().scores().stream()
         .sorted(Comparator.comparingInt(Score::score).reversed())
         .map(Score::team)
-        .collect(Collectors.toList());
-
-    // unregister everything with this fake event
-    unregisterAll();
+        .toList();
 
     // call callback to start the veto process
     vetoRound.startVeto(match, vetoOrder);

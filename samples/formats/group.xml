@@ -34,6 +34,7 @@
 			<match>Facility TE</match>
 			<match>Dwyer Hill</match>
 		</options>
+		<order ban-until="2" starting-team="2"/>
 	</veto>
 	<match>Boom</match><!-- Tiebreaker -->
 </format>

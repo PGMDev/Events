@@ -1,5 +1,7 @@
 package dev.pgm.events.format;
 
+import static net.kyori.adventure.text.Component.text;
+
 import dev.pgm.events.EventsPlugin;
 import dev.pgm.events.api.events.TournamentFinishedEvent;
 import dev.pgm.events.config.Context;
@@ -12,13 +14,12 @@ import dev.pgm.events.team.TournamentTeam;
 import dev.pgm.events.team.TournamentTeamManager;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.jspecify.annotations.Nullable;
 import tc.oc.pgm.api.PGM;
 import tc.oc.pgm.api.match.Match;
 import tc.oc.pgm.util.Audience;
@@ -87,14 +88,14 @@ public class TournamentFormatImpl implements TournamentFormat {
     broadcastScore();
 
     // todo: Check phase of previous round?
-    Optional<TournamentTeam> winner = roundHolder.calculateWinner(teamManager);
-    if (winner.isPresent() || !hasNextRound()) {
+    TournamentTeam winner = roundHolder.calculateWinner(teamManager).orElse(null);
+    if (winner != null || !hasNextRound()) {
       unregisterAll();
       // there's a winner, return and announce them
       state = TournamentState.FINISHED;
-      // if this doesn't call it just call it all normal like
-      onEnd(match, winner);
+      // fire before onEnd, which may synchronously advance a parent tournament
       Events.callEvent(new TournamentFinishedEvent(this, winner), EventPriority.NORMAL);
+      onEnd(match, winner);
       return;
     }
 
@@ -160,14 +161,14 @@ public class TournamentFormatImpl implements TournamentFormat {
             3 * 20);
   }
 
-  public void onEnd(Match match, Optional<TournamentTeam> winner) {
+  public void onEnd(Match match, @Nullable TournamentTeam winner) {
     if (tournamentRoundOptions.shouldAnnounceWinner()) {
-      if (winner.isPresent()) {
+      if (winner != null) {
         match.sendMessage(teamManager
-            .formattedName(winner.get())
-            .append(Component.text(" wins this round!", NamedTextColor.GOLD)));
+            .formattedName(winner)
+            .append(text(" wins this round!", NamedTextColor.GOLD)));
       } else {
-        match.sendMessage(Component.text("This round has ended in a draw!", NamedTextColor.GRAY));
+        match.sendMessage(text("This round has ended in a draw!", NamedTextColor.GRAY));
       }
     }
 

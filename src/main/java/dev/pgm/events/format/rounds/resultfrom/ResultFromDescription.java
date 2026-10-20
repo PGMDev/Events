@@ -1,5 +1,7 @@
 package dev.pgm.events.format.rounds.resultfrom;
 
+import static net.kyori.adventure.text.Component.text;
+
 import dev.pgm.events.format.rounds.RoundDescription;
 import net.kyori.adventure.text.Component;
 
@@ -13,7 +15,7 @@ public class ResultFromDescription implements RoundDescription {
 
   @Override
   public Component roundInfo() {
-    return Component.text(
+    return text(
         "ResultFrom round -> using result from: " + resultFromRound.settings().targetID());
   }
 

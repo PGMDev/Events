@@ -1,5 +1,7 @@
 package dev.pgm.events.format.rounds.vetoselector;
 
+import static net.kyori.adventure.text.Component.text;
+
 import dev.pgm.events.format.rounds.RoundDescription;
 import net.kyori.adventure.text.Component;
 
@@ -13,7 +15,7 @@ public class VetoSelectorDescription implements RoundDescription {
 
   @Override
   public Component roundInfo() {
-    return Component.text(vetoSelectorRound.getSelectingTeam().getName());
+    return text(vetoSelectorRound.getSelectingTeam().getName());
   }
 
   @Override

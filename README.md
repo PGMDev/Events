@@ -52,8 +52,8 @@ players:
 | `<result-from />` | Uses the result from a round with a matching id - useful to stop repeating veto deciders | `id="map-name"` | N/A |
 | `<veto>` | Represents a veto round | `id="veto"` | **Required:** `<decider>`, `<options>`, `<order>` |
 | `<decider>` | Which team vetoes first | N/A | A round |
-| `<options>` | What vetos should there be | `name` on the child element - what name should be displayed in the veto | Round(s) |
-| `<order>` | The veto order (ban, pick, etc.). The last element is enacted by the system (not by a team and so should not have the who attribute). | `ban-until="3"` (ban until 3 maps are left), `starting-team="2"` (the team who lost the decider starts), `time="30"` - the time in seconds that each team has to veto | If no attributes are present, `<pick />` and `<ban />` |
+| `<options>` | What vetos should there be | `name` on the child element - what name should be displayed in the veto | At least 2 rounds |
+| `<order>` | The veto order (ban, pick, etc.), with one element per option and at least one pick. The last element is enacted by the system (not by a team and so should not have a `team` attribute). | `ban-until="3"` (ban until 3 maps are left), `starting-team="2"` (the team who lost the decider starts), `time="30"` - the time in seconds that each team has to veto | If no attributes are present, `<pick />` and `<ban />` |
 | `<pick />` | A pick in the veto | `team="0"` - the team that gets to pick a map (zero is random map picked), `insert="back"` - whether the map should be added to the front or back of the maps to be played | N/A |
 | `<ban />` | A ban in the veto | `team="0"` - the team that gets to ban a map (zero is random map banned), `insert="back"` - whether the map should be added to the front or back of the maps to be played | N/A |
 

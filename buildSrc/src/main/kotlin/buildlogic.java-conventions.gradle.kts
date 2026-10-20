@@ -1,3 +1,5 @@
+import de.skuzzle.restrictimports.gradle.RestrictImports
+
 plugins {
     `java-library`
     id("com.diffplug.spotless")
@@ -6,7 +8,7 @@ plugins {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
@@ -21,14 +23,14 @@ repositories {
 
 dependencies {
     // Annotations
-    api("org.jspecify:jspecify:1.0.0")
+    api("org.jspecify:jspecify:1.0.1")
     compileOnly("org.jetbrains:annotations:26.1.0")
     compileOnly("org.incendo:cloud-annotations:2.0.0")
 
     // Provided dependencies
-    compileOnly("dev.pgm.paper:paper-api:1.8_1.21.11-SNAPSHOT")
+    compileOnly("dev.pgm.paper:paper-api:1.8_26.2-SNAPSHOT")
     compileOnly("tc.oc.pgm:core:0.16-SNAPSHOT") { isTransitive = false }
-    compileOnly("net.kyori:adventure-api:4.26.1")
+    compileOnly("net.kyori:adventure-api:5.2.0")
     compileOnly("com.google.guava:guava:17.0")
 }
 
@@ -50,17 +52,24 @@ spotless {
         removeUnusedImports()
         trimTrailingWhitespace()
         formatAnnotations()
-        palantirJavaFormat("2.93.0").style("GOOGLE").formatJavadoc(true)
+        palantirJavaFormat("2.102.0").style("GOOGLE").formatJavadoc(true)
     }
 }
 
-restrictImports {
-    group {
+tasks {
+    // Bypass inability to have two groups with same base packages inside the import restriction plugin
+    val restrictJavaxAnnotations = register<RestrictImports>("restrictJavaxAnnotations") {
+        group = "verification"
         reason = "Use org.jspecify.annotations to add annotations, or org.jetbrains.annotations if needed"
         bannedImports = listOf("javax.annotation.**")
     }
-    group {
+    val restrictAsserts = register<RestrictImports>("restrictAsserts") {
+        group = "verification"
         reason = "Use tc.oc.pgm.util.Assert to add assertions"
         bannedImports = listOf("com.google.common.base.Preconditions.**", "java.util.Objects.requireNonNull")
+    }
+    // Enforce the import restrictions
+    check {
+        dependsOn(restrictJavaxAnnotations, restrictAsserts)
     }
 }

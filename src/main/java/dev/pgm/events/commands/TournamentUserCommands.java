@@ -1,11 +1,12 @@
 package dev.pgm.events.commands;
 
+import static net.kyori.adventure.text.Component.text;
+
 import dev.pgm.events.EventsPlugin;
 import dev.pgm.events.format.TournamentFormat;
 import dev.pgm.events.format.rounds.RoundDescription;
 import dev.pgm.events.format.rounds.format.FormatTournamentImpl;
 import java.util.Optional;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
 import tc.oc.pgm.lib.org.incendo.cloud.annotations.Command;
@@ -22,14 +23,14 @@ public class TournamentUserCommands {
     if (format instanceof FormatTournamentImpl) {
       String formatName =
           ((FormatTournamentImpl) format).getFormatRound().settings().name();
-      audience.sendMessage(Component.text("For " + formatName + ":", NamedTextColor.YELLOW));
+      audience.sendMessage(text("For " + formatName + ":", NamedTextColor.YELLOW));
       audience.sendMessage(format.currentScore().condensed());
 
       Optional<TournamentFormat> parentOptional =
           EventsPlugin.get().getTournamentManager().currentTournament();
       if (parentOptional.isPresent()) {
         audience.sendMessage(
-            Component.text("Overall score (excluding " + formatName + "):", NamedTextColor.YELLOW));
+            text("Overall score (excluding " + formatName + "):", NamedTextColor.YELLOW));
         audience.sendMessage(parentOptional.get().currentScore().condensed());
       }
     } else {
@@ -46,14 +47,14 @@ public class TournamentUserCommands {
           " (" + ((FormatTournamentImpl) format).getFormatRound().settings().name() + ")";
 
     Audience audience = Audience.get(sender);
-    audience.sendMessage(Component.text("------- ", NamedTextColor.GOLD)
-        .append(Component.text(header, NamedTextColor.AQUA))
-        .append(Component.text(" -------", NamedTextColor.GOLD)));
+    audience.sendMessage(text("------- ", NamedTextColor.GOLD)
+        .append(text(header, NamedTextColor.AQUA))
+        .append(text(" -------", NamedTextColor.GOLD)));
 
     int round = 1;
     for (RoundDescription roundDescription : format.roundsInformation()) {
       audience.sendMessage(
-          Component.text(round + ". ", NamedTextColor.GOLD).append(roundDescription.roundInfo()));
+          text(round + ". ", NamedTextColor.GOLD).append(roundDescription.roundInfo()));
       round++;
     }
   }

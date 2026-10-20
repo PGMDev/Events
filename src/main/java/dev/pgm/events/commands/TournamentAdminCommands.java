@@ -1,12 +1,14 @@
 package dev.pgm.events.commands;
 
+import static net.kyori.adventure.text.Component.text;
+
 import dev.pgm.events.TournamentManager;
 import dev.pgm.events.api.teams.TournamentTeamRegistry;
+import dev.pgm.events.format.TournamentFormat;
 import dev.pgm.events.team.TournamentPlayer;
 import dev.pgm.events.team.TournamentTeam;
 import dev.pgm.events.team.TournamentTeamManager;
 import dev.pgm.events.xml.MapFormatXMLParser;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -35,8 +37,14 @@ public class TournamentAdminCommands {
       TournamentManager manager,
       Match match,
       @Argument("format") @Greedy String pool) {
-    manager.createTournament(match, MapFormatXMLParser.parse(pool));
-    Audience.get(sender).sendMessage(Component.text("Starting tournament.", NamedTextColor.GOLD));
+    TournamentFormat format;
+    try {
+      format = MapFormatXMLParser.parse(pool);
+    } catch (IllegalArgumentException e) {
+      throw new CommandException(e.getMessage());
+    }
+    manager.createTournament(match, format);
+    Audience.get(sender).sendMessage(text("Starting tournament.", NamedTextColor.GOLD));
   }
 
   @Command("register <team>")
@@ -62,7 +70,7 @@ public class TournamentAdminCommands {
 
     teamManager.addTeam(team);
     Audience.get(sender)
-        .sendMessage(Component.text("Added team " + team.getName() + "!", NamedTextColor.YELLOW));
+        .sendMessage(text("Added team " + team.getName() + "!", NamedTextColor.YELLOW));
   }
 
   @Command("list")
@@ -70,14 +78,13 @@ public class TournamentAdminCommands {
   @Permission("events.staff")
   public void list(CommandSender sender, TournamentTeamRegistry registry) {
     Audience audience = Audience.get(sender);
-    audience.sendMessage(Component.text("------- ", NamedTextColor.GOLD)
-        .append(Component.text("Registered Teams", NamedTextColor.AQUA))
-        .append(Component.text(" -------", NamedTextColor.GOLD)));
+    audience.sendMessage(text("------- ", NamedTextColor.GOLD)
+        .append(text("Registered Teams", NamedTextColor.AQUA))
+        .append(text(" -------", NamedTextColor.GOLD)));
     for (TournamentTeam team : registry.getTeams())
-      audience.sendMessage(
-          Component.text("- ", NamedTextColor.AQUA).append(Component.text(team.getName())));
+      audience.sendMessage(text("- ", NamedTextColor.AQUA).append(text(team.getName())));
     audience.sendMessage(
-        Component.text("Run /tourney info <team> to see player roster!", NamedTextColor.YELLOW));
+        text("Run /tourney info <team> to see player roster!", NamedTextColor.YELLOW));
   }
 
   @Command("info <team>")
@@ -91,16 +98,15 @@ public class TournamentAdminCommands {
     if (team == null) throw new CommandException("Team not found!");
 
     Audience audience = Audience.get(sender);
-    audience.sendMessage(Component.text("------- ", NamedTextColor.GOLD)
-        .append(Component.text(team.getName(), NamedTextColor.AQUA))
-        .append(Component.text(" -------", NamedTextColor.GOLD)));
+    audience.sendMessage(text("------- ", NamedTextColor.GOLD)
+        .append(text(team.getName(), NamedTextColor.AQUA))
+        .append(text(" -------", NamedTextColor.GOLD)));
     for (TournamentPlayer player : team.getPlayers()) {
       String playerName = player.getUUID().toString() + " (player hasn't logged on)";
       OfflinePlayer offline = Bukkit.getOfflinePlayer(player.getUUID());
       if (offline.getName() != null) playerName = offline.getName();
 
-      audience.sendMessage(
-          Component.text("- ", NamedTextColor.AQUA).append(Component.text(playerName)));
+      audience.sendMessage(text("- ", NamedTextColor.AQUA).append(text(playerName)));
     }
   }
 
@@ -109,7 +115,6 @@ public class TournamentAdminCommands {
   @Permission("events.staff")
   public void clear(CommandSender sender, TournamentTeamManager teamManager) {
     teamManager.clear();
-    Audience.get(sender)
-        .sendMessage(Component.text("Unregistered all teams!", NamedTextColor.YELLOW));
+    Audience.get(sender).sendMessage(text("Unregistered all teams!", NamedTextColor.YELLOW));
   }
 }

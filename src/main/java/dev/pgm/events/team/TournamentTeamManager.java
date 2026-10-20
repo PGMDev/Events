@@ -1,5 +1,7 @@
 package dev.pgm.events.team;
 
+import static net.kyori.adventure.text.Component.text;
+
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
@@ -37,7 +39,7 @@ public interface TournamentTeamManager {
   NamedTextColor teamColour(TournamentTeam tournamentTeam);
 
   default Component formattedName(Competitor team) {
-    return tournamentTeam(team).map(this::formattedName).orElse(Component.text("NULL"));
+    return tournamentTeam(team).map(this::formattedName).orElse(text("NULL"));
   }
 
   Component formattedName(TournamentTeam tournamentTeam);

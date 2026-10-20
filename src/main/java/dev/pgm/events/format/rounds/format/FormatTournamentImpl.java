@@ -7,7 +7,7 @@ import dev.pgm.events.format.winner.BestOfCalculation;
 import dev.pgm.events.team.TournamentTeam;
 import dev.pgm.events.team.TournamentTeamManager;
 import java.time.Duration;
-import java.util.Optional;
+import org.jspecify.annotations.Nullable;
 import tc.oc.pgm.api.match.Match;
 
 public class FormatTournamentImpl extends TournamentFormatImpl {
@@ -31,8 +31,8 @@ public class FormatTournamentImpl extends TournamentFormatImpl {
   }
 
   @Override
-  public void onEnd(Match match, Optional<TournamentTeam> winner) {
-    formatRound.setWinner(match, winner.orElse(null));
+  public void onEnd(Match match, @Nullable TournamentTeam winner) {
+    formatRound.setWinner(match, winner);
   }
 
   public FormatRound getFormatRound() {

@@ -1,5 +1,7 @@
 package dev.pgm.events.format.score;
 
+import static net.kyori.adventure.text.Component.text;
+
 import dev.pgm.events.team.TournamentTeam;
 import dev.pgm.events.team.TournamentTeamManager;
 import dev.pgm.events.utils.Pair;
@@ -27,37 +29,37 @@ public class TwoTeamFormattedScore implements FormattedScore {
   @Override
   public Component topLine() {
     return teamManager
-        .formattedName(topTwo.first.team())
-        .append(Component.text(" - ", NamedTextColor.GRAY))
-        .append(teamManager.formattedName(topTwo.second.team()));
+        .formattedName(topTwo.first().team())
+        .append(text(" - ", NamedTextColor.GRAY))
+        .append(teamManager.formattedName(topTwo.second().team()));
   }
 
   @Override
   public Component bottomLine() {
     Component first =
-        Component.text(topTwo.first.score(), teamManager.teamColour(topTwo.first.team()));
-    if (justWon.contains(topTwo.first.team())) {
+        text(topTwo.first().score(), teamManager.teamColour(topTwo.first().team()));
+    if (justWon.contains(topTwo.first().team())) {
       first = first.decorate(TextDecoration.BOLD).decorate(TextDecoration.UNDERLINED);
     }
 
     Component second =
-        Component.text(topTwo.second.score(), teamManager.teamColour(topTwo.second.team()));
-    if (justWon.contains(topTwo.second.team())) {
+        text(topTwo.second().score(), teamManager.teamColour(topTwo.second().team()));
+    if (justWon.contains(topTwo.second().team())) {
       second = second.decorate(TextDecoration.BOLD).decorate(TextDecoration.UNDERLINED);
     }
 
-    return first.append(Component.text(" - ", NamedTextColor.GRAY)).append(second);
+    return first.append(text(" - ", NamedTextColor.GRAY)).append(second);
   }
 
   @Override
   public Component condensed() {
     return teamManager
-        .formattedName(topTwo.first.team())
+        .formattedName(topTwo.first().team())
         .append(Component.space())
-        .append(Component.text(topTwo.first.score(), NamedTextColor.WHITE))
-        .append(Component.text(" - ", NamedTextColor.GRAY))
-        .append(Component.text(topTwo.second.score(), NamedTextColor.WHITE))
+        .append(text(topTwo.first().score(), NamedTextColor.WHITE))
+        .append(text(" - ", NamedTextColor.GRAY))
+        .append(text(topTwo.second().score(), NamedTextColor.WHITE))
         .append(Component.space())
-        .append(teamManager.formattedName(topTwo.second.team()));
+        .append(teamManager.formattedName(topTwo.second().team()));
   }
 }

@@ -51,7 +51,7 @@ tasks {
             expand(
                 mapOf(
                     "description" to description,
-                    "apiVersion" to "1.21.11",
+                    "apiVersion" to "26.2",
                     "mainClass" to "dev.pgm.events.EventsPlugin",
                     "version" to version,
                     "commitHash" to commitHash.get(),

@@ -69,7 +69,7 @@ public class Scores {
       }
     }
 
-    return Pair.create(new Score(highest, highestScore), new Score(second, secondHighestScore));
+    return new Pair<>(new Score(highest, highestScore), new Score(second, secondHighestScore));
   }
 
   public Score highestScore() {

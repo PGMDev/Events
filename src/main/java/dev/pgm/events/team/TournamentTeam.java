@@ -1,5 +1,7 @@
 package dev.pgm.events.team;
 
+import static net.kyori.adventure.text.Component.text;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -20,7 +22,7 @@ public interface TournamentTeam {
   }
 
   default void sendMessage(String message) {
-    sendMessage(Component.text(message));
+    sendMessage(text(message));
   }
 
   default void sendMessage(Component component) {

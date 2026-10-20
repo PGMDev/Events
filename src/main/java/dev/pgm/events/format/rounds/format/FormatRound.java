@@ -11,12 +11,13 @@ import dev.pgm.events.format.score.FormattedScore;
 import dev.pgm.events.team.TournamentTeam;
 import java.util.HashMap;
 import java.util.Map;
+import org.jspecify.annotations.Nullable;
 import tc.oc.pgm.api.match.Match;
 
 public class FormatRound extends AbstractRound<FormatRoundSettings> {
 
   private FormatTournamentImpl formatTournament;
-  private TournamentTeam winner;
+  private @Nullable TournamentTeam winner;
 
   private TournamentTeam selectingTeam;
 
@@ -63,7 +64,7 @@ public class FormatRound extends AbstractRound<FormatRoundSettings> {
     return scores;
   }
 
-  public void setWinner(Match match, TournamentTeam winner) {
+  public void setWinner(Match match, @Nullable TournamentTeam winner) {
     this.winner = winner;
     tournament().nextRound(match);
   }

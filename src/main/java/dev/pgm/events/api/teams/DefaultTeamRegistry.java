@@ -1,12 +1,13 @@
 package dev.pgm.events.api.teams;
 
+import static net.kyori.adventure.text.Component.text;
+
 import com.google.common.collect.Maps;
 import dev.pgm.events.EventsPlugin;
 import dev.pgm.events.team.TournamentTeam;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import tc.oc.pgm.util.Audience;
@@ -55,8 +56,8 @@ public class DefaultTeamRegistry implements TournamentTeamRegistry {
         teams.forEach(x -> teamMap.put(x.getName(), x));
         Bukkit.getOnlinePlayers().stream()
             .filter(x -> x.hasPermission("events.staff"))
-            .forEach(x -> Audience.get(x)
-                .sendMessage(Component.text("Teams reloaded!", NamedTextColor.AQUA)));
+            .forEach(
+                x -> Audience.get(x).sendMessage(text("Teams reloaded!", NamedTextColor.AQUA)));
       });
     });
   }

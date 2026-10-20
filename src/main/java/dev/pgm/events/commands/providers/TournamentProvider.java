@@ -6,7 +6,7 @@ import dev.pgm.events.format.TournamentFormat;
 import dev.pgm.events.format.rounds.format.FormatRound;
 import java.util.Optional;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import tc.oc.pgm.lib.org.incendo.cloud.context.CommandContext;
 import tc.oc.pgm.lib.org.incendo.cloud.exception.CommandExecutionException;
@@ -23,8 +23,8 @@ public class TournamentProvider implements ParameterInjector<CommandSender, Tour
 
   @Override
   public @Nullable TournamentFormat create(
-      @NotNull CommandContext<CommandSender> context,
-      @NotNull AnnotationAccessor annotationAccessor) {
+      @NonNull CommandContext<CommandSender> context,
+      @NonNull AnnotationAccessor annotationAccessor) {
     Optional<TournamentFormat> tournamentFormat = tournamentManager.currentTournament();
     if (tournamentFormat.isPresent()) {
       TournamentFormat format = tournamentFormat.get();

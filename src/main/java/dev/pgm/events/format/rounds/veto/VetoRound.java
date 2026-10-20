@@ -1,5 +1,7 @@
 package dev.pgm.events.format.rounds.veto;
 
+import static net.kyori.adventure.text.Component.text;
+
 import dev.pgm.events.format.TournamentFormat;
 import dev.pgm.events.format.TournamentRoundOptions;
 import dev.pgm.events.format.rounds.AbstractRound;
@@ -13,7 +15,6 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import tc.oc.pgm.api.match.Match;
 
@@ -75,8 +76,8 @@ public class VetoRound extends AbstractRound<VetoSettings> {
   }
 
   public void startVeto(Match match, List<TournamentTeam> vetoOrder) {
-    setPhase(RoundPhase.RUNNING);
     this.controller = new VetoController(tournament(), settings(), vetoOrder);
+    setPhase(RoundPhase.RUNNING);
     cycleVeto(match);
   }
 
@@ -86,12 +87,12 @@ public class VetoRound extends AbstractRound<VetoSettings> {
     tournament().addRoundAfterCurrent(controller.toPlay());
 
     // move the below formatting to the description class
-    match.sendMessage(Component.text("------ ", NamedTextColor.GOLD)
-        .append(Component.text("Veto Finished", NamedTextColor.AQUA))
-        .append(Component.text(" ------", NamedTextColor.GOLD)));
+    match.sendMessage(text("------ ", NamedTextColor.GOLD)
+        .append(text("Veto Finished", NamedTextColor.AQUA))
+        .append(text(" ------", NamedTextColor.GOLD)));
 
     for (int i = 0; i < controller.toPlay().size(); i++) {
-      match.sendMessage(Component.text((i + 1) + ". ", NamedTextColor.GOLD)
+      match.sendMessage(text((i + 1) + ". ", NamedTextColor.GOLD)
           .append(controller.toPlay().get(i).describe().roundInfo()));
     }
 
@@ -134,6 +135,8 @@ public class VetoRound extends AbstractRound<VetoSettings> {
   }
 
   public void randomVeto(Match match) {
+    if (phase() != RoundPhase.RUNNING) return;
+
     Optional<TournamentTeam> picking = picking();
     if (picking.isEmpty()) {
       tryAutoVeto(match);
@@ -171,7 +174,7 @@ public class VetoRound extends AbstractRound<VetoSettings> {
     // some quick checks before doing the veto
     if (phase() != RoundPhase.RUNNING) return;
 
-    if (!controller.isPicking(team) && canVeto()) return;
+    if (!controller.isPicking(team)) return;
 
     doVeto(match, team, pick);
   }

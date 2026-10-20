@@ -18,6 +18,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.jspecify.annotations.Nullable;
 import tc.oc.pgm.lib.org.jdom2.Element;
 
 public class RoundParser {
@@ -32,6 +33,19 @@ public class RoundParser {
       default ->
         throw new IllegalArgumentException("Round " + round.getName() + " is not supported!");
     };
+  }
+
+  static int parseInt(Element element, String attribute, @Nullable String def) {
+    String value = element.getAttributeValue(attribute, def);
+    if (value == null)
+      throw new IllegalArgumentException(
+          "No " + attribute + " specified on " + element.getName() + "!");
+    try {
+      return Integer.parseInt(value);
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException(
+          "Invalid " + attribute + " " + value + ". It must be a whole number.");
+    }
   }
 
   public static class SingleParser {
@@ -56,31 +70,59 @@ public class RoundParser {
       String id = element.getAttributeValue("id", "veto");
       Element order = element.getChild("order");
       if (order == null) throw new IllegalArgumentException("Order element is missing from veto!");
-      Duration vetoTime;
-      try {
-        vetoTime = Duration.ofSeconds(Long.parseLong(order.getAttributeValue("time", "30")));
-      } catch (NumberFormatException e) {
+      int seconds = parseInt(order, "time", "30");
+      if (seconds < 1)
         throw new IllegalArgumentException(
-            "Invalid time! Times are provided in seconds with no units.");
-      }
+            "Invalid time " + seconds + ". It must be a positive number of seconds.");
+      Duration vetoTime = Duration.ofSeconds(seconds);
 
+      Element deciderElement = element.getChild("decider");
+      if (deciderElement == null || deciderElement.getChildren().isEmpty())
+        throw new IllegalArgumentException("Decider element is missing from veto!");
       TournamentRound decider =
-          RoundParser.parse(format, element.getChild("decider").getChildren().getFirst());
+          RoundParser.parse(format, deciderElement.getChildren().getFirst());
 
-      List<VetoOption> options = constructVetoOptions(format, element.getChild("options"));
-      List<VetoSettings.Veto> vetoList = constructVetoList(order, options.size());
+      Element optionsElement = element.getChild("options");
+      if (optionsElement == null)
+        throw new IllegalArgumentException("Options element is missing from veto!");
+      List<VetoOption> options = constructVetoOptions(format, optionsElement);
+
+      int teams = format.teamManager().teams().size();
+      List<VetoSettings.Veto> vetoList = constructVetoList(order, options.size(), teams);
+
+      for (VetoSettings.Veto veto : vetoList) {
+        if (veto.team() > teams)
+          throw new IllegalArgumentException("Veto order refers to team "
+              + veto.team()
+              + " but only "
+              + teams
+              + " teams are registered.");
+      }
 
       VetoSettings settings =
           new VetoSettings(id, vetoTime, decider.settings(), 0, false, true, vetoList, options);
       return new VetoRound(format, settings);
     }
 
-    private static List<VetoSettings.Veto> constructVetoList(Element element, int numOptions) {
+    private static List<VetoSettings.Veto> constructVetoList(
+        Element element, int numOptions, int numTeams) {
       ArrayList<VetoSettings.Veto> vetos = new ArrayList<>();
       if (element.getChildren().isEmpty()) {
-        int until = Integer.parseInt(element.getAttributeValue("ban-until", "1"));
-        int startingTeam = Integer.parseInt(element.getAttributeValue("starting-team", "2"));
-        int numTeams = Integer.parseInt(element.getAttributeValue("teams", "2"));
+        int until = parseInt(element, "ban-until", "1");
+        int startingTeam = parseInt(element, "starting-team", "2");
+        if (until < 1 || until > numOptions)
+          throw new IllegalArgumentException("Invalid ban-until "
+              + until
+              + ". It must be between 1 and the number of options ("
+              + numOptions
+              + ").");
+        if (numTeams == 0) throw new IllegalArgumentException("No teams are registered!");
+        if (startingTeam < 1 || startingTeam > numTeams)
+          throw new IllegalArgumentException("Invalid starting-team "
+              + startingTeam
+              + ". It must be between 1 and the number of registered teams ("
+              + numTeams
+              + ").");
 
         int currentTeam = startingTeam;
         for (int i = numOptions; i > until; i--) {
@@ -121,7 +163,7 @@ public class RoundParser {
       if (type == null)
         throw new IllegalArgumentException("Invalid veto order " + element.getName());
 
-      int team = Integer.parseInt(element.getAttributeValue("team", "0"));
+      int team = parseInt(element, "team", "0");
       return new VetoSettings.Veto(type, team, null, true);
     }
 
@@ -157,9 +199,7 @@ public class RoundParser {
       String name = element.getAttributeValue("name", "Format");
       String id = element.getAttributeValue("id", name.toLowerCase());
 
-      String bestOfArgs = element.getAttributeValue("best-of");
-      if (bestOfArgs == null) throw new IllegalArgumentException("No best-of specified on format!");
-      int bestOf = Integer.parseInt(bestOfArgs);
+      int bestOf = parseInt(element, "best-of", null);
 
       List<RoundSettings> rounds = new ArrayList<>();
       for (Element child : element.getChildren()) {

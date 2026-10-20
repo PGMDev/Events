@@ -1,8 +1,10 @@
 package dev.pgm.events.format.rounds.format;
 
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.event.HoverEvent.showText;
+
 import dev.pgm.events.format.rounds.RoundDescription;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 public class FormatRoundDescription implements RoundDescription {
@@ -15,13 +17,12 @@ public class FormatRoundDescription implements RoundDescription {
 
   @Override
   public Component roundInfo() {
-    Component base = Component.text(
+    Component base = text(
         formatRound.settings().name() + " - Best of " + formatRound.settings().bestOf());
     if (formatRound.formatTournament() != null) {
-      return base.hoverEvent(HoverEvent.showText(formatRound.formattedScore().condensed()));
+      return base.hoverEvent(showText(formatRound.formattedScore().condensed()));
     } else {
-      return base.hoverEvent(
-          HoverEvent.showText(Component.text("Loading...", NamedTextColor.YELLOW)));
+      return base.hoverEvent(showText(text("Loading...", NamedTextColor.YELLOW)));
     }
   }
 

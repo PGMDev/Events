@@ -36,25 +36,16 @@ public class VetoController {
   }
 
   public boolean hasMoreVetoing() {
-    // only one map left
-    if (options.size() == 1) return false;
-
-    for (int i = vetoIndex; i < settings.vetoList().size(); i++) {
-      // teams still get to vote
-      if (settings.vetoList().get(i).team > 0) return true;
-    }
-
-    return true;
+    return options.size() > 1;
   }
 
   public VetoSettings.VetoType currentType() {
-    return settings.vetoList().get(vetoIndex).vetoType;
+    return settings.vetoList().get(vetoIndex).vetoType();
   }
 
   public Duration currentVetoDuration() {
-    if (settings.vetoList().get(vetoIndex).vetoDuration != null)
-      return settings.vetoList().get(vetoIndex).vetoDuration;
-    return settings.vetoTime();
+    Duration duration = settings.vetoList().get(vetoIndex).vetoDuration();
+    return duration != null ? duration : settings.vetoTime();
   }
 
   public void completeVetos() {
@@ -63,22 +54,21 @@ public class VetoController {
     for (int i = vetoIndex; i < settings.vetoList().size(); i++) {
       VetoSettings.Veto veto = settings.vetoList().get(i);
       VetoOption option = options.remove(random.nextInt(options.size()));
-      TournamentTeam team = veto.team == 0 ? null : rankedTeams.get(veto.team - 1);
+      TournamentTeam team = veto.team() == 0 ? null : rankedTeams.get(veto.team() - 1);
 
-      doVeto(option, veto.vetoType, team);
+      doVeto(option, veto.vetoType(), team);
     }
   }
 
   public VetoHistory veto(@Nullable TournamentTeam team, int choice) {
-    // maybe throw an exception?
-    if (!hasMoreVetoing()) return null;
+    if (!hasMoreVetoing()) throw new IllegalStateException("No vetoing left");
 
     VetoSettings.Veto veto = settings.vetoList().get(vetoIndex);
     VetoOption vetoOption = options.remove(choice);
 
-    doVeto(vetoOption, veto.vetoType, team);
+    doVeto(vetoOption, veto.vetoType(), team);
 
-    VetoHistory history = new VetoHistory(team, veto.vetoType, vetoOption, veto.shouldAnnounce);
+    VetoHistory history = new VetoHistory(team, veto.vetoType(), vetoOption, veto.shouldAnnounce());
     if (history.shouldAnnounce()) this.history.add(history);
 
     vetoIndex++;
@@ -145,7 +135,7 @@ public class VetoController {
    * @return the current picking team or NULL if no team is picking
    */
   public Optional<TournamentTeam> picking() {
-    int picker = settings.vetoList().get(vetoIndex).team;
+    int picker = settings.vetoList().get(vetoIndex).team();
     if (picker == 0) return Optional.empty();
 
     return Optional.of(rankedTeams.get(picker - 1));
